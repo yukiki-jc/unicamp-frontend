@@ -1,10 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@mui/material'
+import {styled} from "@mui/material/styles";
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -13,15 +11,18 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
+
+const MainPageCardContainer = styled((props) => (
+  <Container maxWidth="xl" {...props} />))(({theme,}) => ({
+  padding: "128px 0",
+}));
 
 const MainPageCard = props => {
   const {courseList} = props;
   return (
-    <Container sx={{ py: 8 }} maxWidth="md">
+    <MainPageCardContainer>
           {/* End hero unit */}
           <Grid container spacing={4}>
             {courseList.map((card) => (
@@ -31,10 +32,6 @@ const MainPageCard = props => {
                 >
                   <CardMedia
                     component="img"
-                    sx={{
-                      // 16:9
-                      pt: '56.25%',
-                    }}
                     image="https://source.unsplash.com/random"
                     alt="random"
                   />
@@ -55,7 +52,7 @@ const MainPageCard = props => {
               </Grid>
             ))}
           </Grid>
-        </Container>
+        </MainPageCardContainer>
   )
 }
 
@@ -63,6 +60,7 @@ const MainPageCard = props => {
 class MainPage extends React.Component {
   render () {
     return (
+      <ThemeProvider theme={theme}>
       <div>
         Main Page
         <br/>
@@ -75,6 +73,46 @@ class MainPage extends React.Component {
           </Button>
         </Link>
       </div>
+      <main>
+        {/* Hero unit */}
+        <Box
+          sx={{
+            bgcolor: 'background.paper',
+            pt: 8,
+            pb: 6,
+          }}
+        >
+          <Container maxWidth="sm">
+            <Typography
+              component="h1"
+              variant="h2"
+              align="left"
+              color="text.primary"
+              gutterBottom
+            >
+              Hello, CJC!
+            </Typography>
+            <Typography variant="h5" align="center" color="text.secondary" paragraph>
+              Something short and leading about the collection below—its contents,
+              the creator, etc. Make it short and sweet, but not too short so folks
+              don&apos;t simply skip over it entirely.
+            </Typography>
+            <Stack
+              sx={{ pt: 4 }}
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+            >
+              <Button variant="contained">Main call to action</Button>
+              <Button variant="outlined">Secondary action</Button>
+            </Stack>
+          </Container>
+        </Box>
+        <MainPageCard courseList={[1, 2, 3]} />
+      </main>
+    
+    </ThemeProvider>
+      
     )
   }
 }
