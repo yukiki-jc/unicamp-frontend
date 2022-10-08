@@ -11,6 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import SchoolIcon from '@mui/icons-material/School';
+import { NestedMenuItem } from 'mui-nested-menu';
 
 const NavBar = () => {
   const [anchorElCategory, setAnchorElCategory] = React.useState(null);
@@ -74,7 +75,7 @@ const NavBar = () => {
                 vertical: 'top',
                 horizontal: 'left',
               }}
-              open={Boolean(anchorElCategory)}
+              open={!!anchorElCategory}
               onClose={handleCloseCategoryMenu}
               sx={{
                 display: { xs: 'block', md: 'none' },
@@ -125,7 +126,13 @@ const NavBar = () => {
             onClose={handleCloseCategoryMenu}
             MenuListProps={{ onMouseLeave: handleCloseCategoryMenu }}
           >
-            <MenuItem> First </MenuItem>
+            <NestedMenuItem
+              label="First"
+              parentMenuOpen={!!anchorElCategory}
+            >
+              <MenuItem> Sub-First </MenuItem>
+              <MenuItem> Sub-Second </MenuItem>
+            </NestedMenuItem>
             <MenuItem> Second </MenuItem>
           </Menu>
 
@@ -149,7 +156,7 @@ const NavBar = () => {
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={Boolean(anchorElUser)}
+              open={!!anchorElUser}
               onClose={handleCloseUserMenu}
               MenuListProps={{ onMouseLeave: handleCloseUserMenu }}
             >
