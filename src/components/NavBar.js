@@ -13,24 +13,20 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import SchoolIcon from '@mui/icons-material/School';
 
-const pages = ['Category', 'Collection'];
-const settings = ['Profile', 'Setting', 'Logout'];
-
 const NavBar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElCategory, setAnchorElCategory] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+  const handleOpenCategoryMenu = (event) => {
+    setAnchorElCategory(event.currentTarget);
   };
+  const handleCloseCategoryMenu = () => {
+    setAnchorElCategory(null);
+  };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -62,14 +58,14 @@ const NavBar = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              onClick={handleOpenCategoryMenu}
               color="inherit"
             >
               <MenuIcon />
             </IconButton>
             <Menu
               id="menu-appbar"
-              anchorEl={anchorElNav}
+              anchorEl={anchorElCategory}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -79,16 +75,16 @@ const NavBar = () => {
                 vertical: 'top',
                 horizontal: 'left',
               }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              open={Boolean(anchorElCategory)}
+              onClose={handleCloseCategoryMenu}
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem onClick={handleCloseNavMenu}>
+              <MenuItem onClick={handleCloseCategoryMenu}>
                 <Typography textAlign="center"> CATEGORY </Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
+              <MenuItem onClick={handleCloseCategoryMenu}>
                 <Typography textAlign="center"> COLLECTION </Typography>
               </MenuItem>
             </Menu>
@@ -112,18 +108,26 @@ const NavBar = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
-              onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'white', display: 'block', marginLeft: "8px" }}
+              onMouseEnter={handleOpenCategoryMenu}
             >
               CATEGORY
             </Button>
             <Button
-              onClick={handleCloseNavMenu}
+              onClick={handleCloseCategoryMenu}
               sx={{ my: 2, color: 'white', display: 'block', marginLeft: "8px" }}
             >
               COLLECTION
             </Button>
           </Box>
+          <Menu
+            open={!!anchorElCategory}
+            anchorEl={anchorElCategory}
+            onClose={handleCloseCategoryMenu}
+          >
+            <MenuItem> First </MenuItem>
+            <MenuItem> Second </MenuItem>
+          </Menu>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
@@ -147,11 +151,15 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center"> Profile </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center"> Setting </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center"> Logout </Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
