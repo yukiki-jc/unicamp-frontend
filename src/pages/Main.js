@@ -1,67 +1,59 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button } from '@mui/material'
-import {styled} from "@mui/material/styles";
-import { Link } from 'react-router-dom'
-import classNames from 'classnames'
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
+
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import CourseThumbnailLine from '../components/CourseThunbnailLine';
+import { styled } from '@mui/material/styles'
+import { Link as MUILink } from '@mui/material';
+const courseList = [
+  {
+    "id": 29,
+    "category_id": 6,
+    "name": "明的知酸证花",
+    "provider": "83",
+    "difficulty": 63,
+    "est_hour": 3
+  },
+  {
+    "id": 95,
+    "category_id": 97,
+    "name": "还会量六东",
+    "provider": "5",
+    "difficulty": 24,
+    "est_hour": 54
+  },
+  {
+    "id": 84,
+    "category_id": 26,
+    "name": "小级改活龙清",
+    "provider": "97",
+    "difficulty": 3,
+    "est_hour": 68
+  },
+  {
+    "id": 80,
+    "category_id": 75,
+    "name": "养容边我",
+    "provider": "20",
+    "difficulty": 57,
+    "est_hour": 98
+  }
+]
 
-const MainPageCardContainer = styled((props) => (
-  <Container maxWidth="xl" {...props} />))(({theme,}) => ({
-  padding: "128px 0",
-}));
-
-const MainPageCard = props => {
-  const {courseList} = props;
-  return (
-    <MainPageCardContainer>
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {courseList.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                >
-                  <CardMedia
-                    component="img"
-                    image="https://source.unsplash.com/random"
-                    alt="random"
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Heading
-                    </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe the
-                      content.
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">View</Button>
-                    <Button size="small">Edit</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </MainPageCardContainer>
-  )
-}
+const MainPageCardContainer = styled(props => (
+  <Container maxWidth='md' {...props} />
+))(({ theme }) => ({
+  padding: theme.spacing(4, 0)
+}))
 
 
-class MainPage extends React.Component {
-  render () {
+const MainPage = (props) => {
     return (
-      <ThemeProvider theme={theme}>
       <div>
+      {/* <div>
         Main Page
         <br/>
         <Link
@@ -72,7 +64,7 @@ class MainPage extends React.Component {
           Turn to Login Page
           </Button>
         </Link>
-      </div>
+      </div> */}
       <main>
         {/* Hero unit */}
         <Box
@@ -82,7 +74,7 @@ class MainPage extends React.Component {
             pb: 6,
           }}
         >
-          <Container maxWidth="sm">
+          <Container maxWidth="xl">
             <Typography
               component="h1"
               variant="h2"
@@ -92,29 +84,43 @@ class MainPage extends React.Component {
             >
               Hello, CJC!
             </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Something short and leading about the collection below—its contents,
-              the creator, etc. Make it short and sweet, but not too short so folks
-              don&apos;t simply skip over it entirely.
-            </Typography>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              <Button variant="contained">Main call to action</Button>
-              <Button variant="outlined">Secondary action</Button>
-            </Stack>
           </Container>
         </Box>
-        <MainPageCard courseList={[1, 2, 3]} />
+        <MainPageCardContainer>
+        <Stack
+          // sx={{ pt: 1 }}
+          direction='row'
+          spacing={85}
+          justifyContent='left'
+        >
+          <Typography gutterBottom variant="h6">Hot Courses</Typography>
+          <MUILink href="#" underline="hover" sx={{pt:1}}>
+            More
+          </MUILink>
+        </Stack>
+        <CourseThumbnailLine courseList={courseList} />
+        </MainPageCardContainer>
+        
+        <MainPageCardContainer>
+        <Stack
+          // sx={{ pt: 1 }}
+          direction='row'
+          spacing={85}
+          justifyContent='left'
+        >
+          <Typography gutterBottom variant="h6">My Favorites</Typography>
+          <MUILink href="#" underline="hover" sx={{pt:1}}>
+            More
+          </MUILink>
+        </Stack>
+        <CourseThumbnailLine courseList={courseList} />
+        </MainPageCardContainer>
+
       </main>
     
-    </ThemeProvider>
+    </div>
       
     )
-  }
-}
+ }
 
 export default MainPage
