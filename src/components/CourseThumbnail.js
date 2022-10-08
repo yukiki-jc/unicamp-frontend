@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
+import fetchCourseDetail from '../utils/fetchCourseDetail'
 
 export default function CourseThumbnail (props) {
   const { card } = props
@@ -28,7 +29,7 @@ export default function CourseThumbnail (props) {
           <Typography gutterBottom>Provider: {card.provider}</Typography>
           <Typography gutterBottom>Difficulty: {card.difficulty}</Typography>
           <Typography gutterBottom>Learning Time: {card.est_hour}</Typography>
-          <Button size='small' variant='contained'>
+          <Button size='small' variant='contained' onClick={fetchCourseDetail}>
             View Details
           </Button>
         </Stack>

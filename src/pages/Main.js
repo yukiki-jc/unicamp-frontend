@@ -12,7 +12,7 @@ const courseList = [
   {
     "id": 29,
     "category_id": 6,
-    "name": "明的知酸证花",
+    "name": "Course 1",
     "provider": "83",
     "difficulty": 63,
     "est_hour": 3
@@ -20,7 +20,7 @@ const courseList = [
   {
     "id": 95,
     "category_id": 97,
-    "name": "还会量六东",
+    "name": "Course 2",
     "provider": "5",
     "difficulty": 24,
     "est_hour": 54
@@ -28,7 +28,7 @@ const courseList = [
   {
     "id": 84,
     "category_id": 26,
-    "name": "小级改活龙清",
+    "name": "Course 3",
     "provider": "97",
     "difficulty": 3,
     "est_hour": 68
@@ -36,7 +36,7 @@ const courseList = [
   {
     "id": 80,
     "category_id": 75,
-    "name": "养容边我",
+    "name": "Course 4",
     "provider": "20",
     "difficulty": 57,
     "est_hour": 98
@@ -74,7 +74,7 @@ const MainPage = (props) => {
             pb: 6,
           }}
         >
-          <Container maxWidth="xl">
+          <Container maxWidth="md">
             <Typography
               component="h1"
               variant="h2"
