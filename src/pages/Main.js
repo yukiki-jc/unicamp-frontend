@@ -9,6 +9,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { ThemeProvider } from '@mui/material/styles';
+import globalTheme from '../Theme';
 
 const MainPageCard = props => {
   const {courseList} = props;
@@ -55,7 +57,7 @@ const MainPageCard = props => {
 class MainPage extends React.Component {
   render () {
     return (
-      <div>
+      <ThemeProvider theme={globalTheme}>
         Main Page
         <br/>
         <Link
@@ -66,7 +68,7 @@ class MainPage extends React.Component {
           Turn to Login Page
           </Button>
         </Link>
-      </div>
+      </ThemeProvider>
     )
   }
 }
