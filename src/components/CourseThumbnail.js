@@ -29,7 +29,7 @@ export default function CourseThumbnail (props) {
           <Typography gutterBottom>Provider: {card.provider}</Typography>
           <Typography gutterBottom>Difficulty: {card.difficulty}</Typography>
           <Typography gutterBottom>Learning Time: {card.est_hour}</Typography>
-          <Button size='small' variant='contained' onClick={fetchCourseDetail}>
+          <Button size='small' variant='contained' onClick={() => { fetchCourseDetail(card.id); }}>
             View Details
           </Button>
         </Stack>
