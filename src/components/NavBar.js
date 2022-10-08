@@ -9,7 +9,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import SchoolIcon from '@mui/icons-material/School';
 
@@ -109,7 +108,7 @@ const NavBar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
               sx={{ my: 2, color: 'white', display: 'block', marginLeft: "8px" }}
-              onMouseEnter={handleOpenCategoryMenu}
+              onMouseOver={handleOpenCategoryMenu}
             >
               CATEGORY
             </Button>
@@ -124,17 +123,19 @@ const NavBar = () => {
             open={!!anchorElCategory}
             anchorEl={anchorElCategory}
             onClose={handleCloseCategoryMenu}
+            MenuListProps={{ onMouseLeave: handleCloseCategoryMenu }}
           >
             <MenuItem> First </MenuItem>
             <MenuItem> Second </MenuItem>
           </Menu>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              onMouseOver={handleOpenUserMenu}
+              sx={{ p: 0 }}
+            >
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            </IconButton>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -150,6 +151,7 @@ const NavBar = () => {
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
+              MenuListProps={{ onMouseLeave: handleCloseUserMenu }}
             >
               <MenuItem onClick={handleCloseUserMenu}>
                 <Typography textAlign="center"> Profile </Typography>
