@@ -2,6 +2,7 @@ import MainPage from './pages/Main'
 import LoginPage from './pages/Login'
 import { Routes, Route } from 'react-router-dom'
 
+
 function App () {
   return (
     <Routes>
