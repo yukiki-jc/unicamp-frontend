@@ -8,7 +8,10 @@ const globalTheme = createTheme({
     secondary: {
       main: "#ff6977"
     }
-  }
+  },
+  typography: {
+    htmlFontSize: 10,
+  },
 });
 
 export default globalTheme;

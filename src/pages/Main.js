@@ -7,6 +7,7 @@ import Container from '@mui/material/Container';
 import CourseThumbnailLine from '../components/CourseThunbnailLine';
 import { styled } from '@mui/material/styles'
 import { Link as MUILink } from '@mui/material';
+
 const courseList = [
   {
     "id": 29,
@@ -48,10 +49,9 @@ const MainPageCardContainer = styled(props => (
   padding: theme.spacing(4, 0)
 }))
 
-
 const MainPage = (props) => {
-    return (
-      <div>
+  return (
+    <div>
       {/* <div>
         Main Page
         <br/>
@@ -86,41 +86,41 @@ const MainPage = (props) => {
           </Container>
         </Box>
         <MainPageCardContainer>
-        <Stack
-          // sx={{ pt: 1 }}
-          direction='row'
-          spacing={85}
-          justifyContent='left'
-        >
-          <Typography gutterBottom variant="h6">Hot Courses</Typography>
-          <MUILink href="#" underline="hover" sx={{pt:1}}>
-            More
-          </MUILink>
-        </Stack>
-        <CourseThumbnailLine courseList={courseList} />
+          <Stack
+            // sx={{ pt: 1 }}
+            direction='row'
+            spacing={85}
+            justifyContent='left'
+          >
+            <Typography gutterBottom variant="h6">Hot Courses</Typography>
+            <MUILink href="#" underline="hover" sx={{ pt: 1 }}>
+              More
+            </MUILink>
+          </Stack>
+          <CourseThumbnailLine courseList={courseList} />
         </MainPageCardContainer>
-        
+
         <MainPageCardContainer>
-        <Stack
-          // sx={{ pt: 1 }}
-          direction='row'
-          spacing={85}
-          justifyContent='left'
-        >
-          <Typography gutterBottom variant="h6">My Favorites</Typography>
-          <MUILink href="#" underline="hover" sx={{pt:1}}>
-            More
-          </MUILink>
-        </Stack>
-        <CourseThumbnailLine courseList={courseList} />
+          <Stack
+            // sx={{ pt: 1 }}
+            direction='row'
+            spacing={85}
+            justifyContent='left'
+          >
+            <Typography gutterBottom variant="h6">My Favorites</Typography>
+            <MUILink href="#" underline="hover" sx={{ pt: 1 }}>
+              More
+            </MUILink>
+          </Stack>
+          <CourseThumbnailLine courseList={courseList} />
         </MainPageCardContainer>
 
       </main>
-    
+
     </div>
-      
-    )
- }
+
+  )
+}
 
 
 
