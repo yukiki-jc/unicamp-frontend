@@ -2,8 +2,8 @@ import { Card, CardContent, Chip, Grid, Rating, Typography } from "@mui/material
 import { styled, alpha } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import { LevelMappings } from "../utils/commonData";
 
-const LevelMappings = ["all level", "beginner", "intermediate", "advanced", "expert"];
 
 const CourseCardContainer = styled((props) => (
     <Card variant="outlined" sx={(theme) => ({
