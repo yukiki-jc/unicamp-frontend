@@ -6,9 +6,16 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import SchoolIcon from '@mui/icons-material/School';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Copyright from '../components/Copyright';
 
 export default function SignUp() {
@@ -21,8 +28,10 @@ export default function SignUp() {
     });
   };
 
+  const [showPassword, setShowPassword] = React.useState(false);
+
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" sx={{ userSelect: "none" }}>
       <CssBaseline />
       <Box
         sx={{
@@ -51,15 +60,25 @@ export default function SignUp() {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-              />
+              <FormControl sx={{ width: '100%' }} variant="outlined">
+                <InputLabel required htmlFor="outlined-adornment-password">Password</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword((showPassword) => !showPassword)}
+                        onMouseDown={(event) => event.preventDefault()}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
             </Grid>
           </Grid>
           <Button
@@ -70,7 +89,7 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container>
             <Grid item>
               <Link href="/login" variant="body2">
                 Already have an account? Sign in
