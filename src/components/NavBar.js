@@ -59,17 +59,30 @@ const NavBar = props => {
       ]
 
   const categoryMenuItems = props.categoryList.map(category => {
+    const subCategoryMenuItems = category.subCategory.map(subCate => {
+      return (
+        <MenuItem>
+          <MUILink
+            href={joinPaths([
+              apiPath.category.info,
+              subCate.subCategoryId.toString()
+            ])}
+            underline='none'
+          >
+            <Typography textAlign='center' color='gray'>
+              {subCate.subCategoryName}
+            </Typography>
+          </MUILink>
+        </MenuItem>
+      )
+    })
     return (
-      <MenuItem>
-        <MUILink
-          href={joinPaths([apiPath.category.info, category.id.toString()])}
-          underline='none'
-        >
-          <Typography textAlign='center' color='gray'>
-            {category.name}
-          </Typography>
-        </MUILink>
-      </MenuItem>
+      <NestedMenuItem
+        label={category.categoryName}
+        parentMenuOpen={!!anchorElCategory}
+      >
+        {subCategoryMenuItems}
+      </NestedMenuItem>
     )
   })
 
@@ -178,11 +191,6 @@ const NavBar = props => {
             onClose={handleCloseCategoryMenu}
             MenuListProps={{ onMouseLeave: handleCloseCategoryMenu }}
           >
-            {/* <NestedMenuItem label='First' parentMenuOpen={!!anchorElCategory} onClick={}>
-              <MenuItem> Sub-First </MenuItem>
-              <MenuItem> Sub-Second </MenuItem>
-            </NestedMenuItem> */}
-            {/* <MenuItem> Second </MenuItem> */}
             {categoryMenuItems}
           </Menu>
 

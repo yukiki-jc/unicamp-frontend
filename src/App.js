@@ -19,6 +19,7 @@ import { backend, apiPath } from './utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { getRequest } from './utils/requests'
 import { courseList } from './utils/testData'
+import stylizeObject from './utils/functions'
 
 export const PageContext = createContext({})
 
@@ -26,6 +27,8 @@ export default function App () {
   const [loading, setLoading] = useState(false);
   const [login, setLogin] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
+  const [subCategoryList, setSubCategoryList] = useState([]);
+  const [courseList, setCourseList] = useState([]);
   // const [pageNo, setPageNo] = useState(0);
   // 0: mainpage
   // 1:
@@ -91,11 +94,21 @@ export default function App () {
 
   useLayoutEffect(() => {
     const categoryListURL = joinPaths([backend, apiPath.category.list]);
+    const courseListURL = joinPaths([backend, apiPath.course.list]);
     setLoading(true);
-    getRequest(categoryListURL)
-      .then(data => {
-        console.log(data)
-        setCategoryList(data);
+    Promise.all([
+      getRequest(categoryListURL),
+      getRequest(courseListURL)
+    ])
+      .then(datas => {
+        const stylizedCategoryList = stylizeObject(datas[0]);
+        let stylizedSubCategoryList = [];
+        for (let i = 0; i < stylizedCategoryList.length; i++) {
+          stylizedSubCategoryList = stylizedSubCategoryList.concat(stylizedCategoryList[i].subCategory);
+        }
+        setCategoryList(stylizedCategoryList);
+        setCourseList(stylizeObject(datas[1]));
+        setSubCategoryList(stylizedSubCategoryList);
         setLoading(false);
       })
       .catch(e => {
@@ -140,16 +153,16 @@ export default function App () {
             element={<CourseListPage />}
           />
           <Route
-            path='/course/info/:courseid'
+            path='/course/info/:courseId'
             element={<CourseDetailPage />}
           />
           <Route
-            path='/category/info/:categoryid'
-            element={<CourseListPage title='Category' categoryList={categoryList} />}
+            path='/category/info/:categoryId'
+            element={<CourseListPage title='Category' categoryList={subCategoryList} courseList={courseList} />}
           />
           <Route
             path='/search'
-            element={<CourseListPage title='Search Results'/>}
+            element={<CourseListPage title='Search Results' courseList={courseList} />}
           />
         </Routes>
         <Snackbar
