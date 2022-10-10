@@ -14,8 +14,10 @@ import SchoolIcon from '@mui/icons-material/School'
 import { NestedMenuItem } from 'mui-nested-menu'
 import { PageContext } from '../App'
 import { Link as MUILink } from '@mui/material'
+import { apiPath } from '../utils/urls'
+import { joinPaths } from '@remix-run/router'
 
-const NavBar = (props) => {
+const NavBar = props => {
   const [anchorElCategory, setAnchorElCategory] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
@@ -32,9 +34,7 @@ const NavBar = (props) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
   }
-  const pageContextValue = React.useContext(PageContext);
-  console.log("In Nav Bar");
-  console.log(pageContextValue);
+  const pageContextValue = React.useContext(PageContext)
   const loginMenuItem = pageContextValue.state.login
     ? [
         <MenuItem onClick={handleCloseUserMenu}>
@@ -50,10 +50,28 @@ const NavBar = (props) => {
     : [
         <MenuItem onClick={handleCloseUserMenu}>
           <MUILink href='/login' underline='none'>
-            <Typography textAlign='center'> Login </Typography>
+            <Typography textAlign='center' color='gray'>
+              {' '}
+              Login{' '}
+            </Typography>
           </MUILink>
         </MenuItem>
       ]
+
+  const categoryMenuItems = props.categoryList.map(category => {
+    return (
+      <MenuItem>
+        <MUILink
+          href={joinPaths([apiPath.category.info, category.id.toString()])}
+          underline='none'
+        >
+          <Typography textAlign='center' color='gray'>
+            {category.name}
+          </Typography>
+        </MUILink>
+      </MenuItem>
+    )
+  })
 
   return (
     <AppBar position='static'>
@@ -160,11 +178,12 @@ const NavBar = (props) => {
             onClose={handleCloseCategoryMenu}
             MenuListProps={{ onMouseLeave: handleCloseCategoryMenu }}
           >
-            <NestedMenuItem label='First' parentMenuOpen={!!anchorElCategory}>
+            {/* <NestedMenuItem label='First' parentMenuOpen={!!anchorElCategory} onClick={}>
               <MenuItem> Sub-First </MenuItem>
               <MenuItem> Sub-Second </MenuItem>
-            </NestedMenuItem>
-            <MenuItem> Second </MenuItem>
+            </NestedMenuItem> */}
+            {/* <MenuItem> Second </MenuItem> */}
+            {categoryMenuItems}
           </Menu>
 
           <Box sx={{ flexGrow: 0 }}>

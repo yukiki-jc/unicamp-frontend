@@ -11,16 +11,21 @@ import {
   CircularProgress
 } from '@mui/material'
 import globalTheme from './Theme'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState, useLayoutEffect } from 'react'
 import { deleteUser, saveUser } from './utils/storeUser'
 import CourseDetailPage from './pages/CourseDetail'
 import NavBar from './components/NavBar'
+import { backend, apiPath } from './utils/urls'
+import { joinPaths } from '@remix-run/router'
+import { getRequest } from './utils/requests'
+import { courseList } from './utils/testData'
 
 export const PageContext = createContext({})
 
 export default function App () {
-  const [loading, setLoading] = useState(false)
-  const [login, setLogin] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [login, setLogin] = useState(false);
+  const [categoryList, setCategoryList] = useState([]);
   // const [pageNo, setPageNo] = useState(0);
   // 0: mainpage
   // 1:
@@ -84,6 +89,21 @@ export default function App () {
     }
   }, [login])
 
+  useLayoutEffect(() => {
+    const categoryListURL = joinPaths([backend, apiPath.category.list]);
+    setLoading(true);
+    getRequest(categoryListURL)
+      .then(data => {
+        console.log(data)
+        setCategoryList(data);
+        setLoading(false);
+      })
+      .catch(e => {
+        setErrorBox(e);
+        setLoading(false);
+      })
+  }, [])
+
   return (
     <ThemeProvider theme={globalTheme}>
       <PageContext.Provider
@@ -94,17 +114,17 @@ export default function App () {
             login: login
           },
           handler: {
-            setLoading: setLoading,
-            setSuccessBox: setSuccessBox,
-            setInfoBox: setInfoBox,
-            setWarningBox: setWarningBox,
-            setErrorBox: setErrorBox,
-            setLogin: setLogin
+            "setLoading": setLoading,
+            "setSuccessBox": setSuccessBox,
+            "setInfoBox": setInfoBox,
+            "setWarningBox": setWarningBox,
+            "setErrorBox": setErrorBox,
+            "setLogin": setLogin
           }
         }}
       >
         <CssBaseline enableColorScheme />
-          <NavBar handleLogout={handleLogout}/>
+          <NavBar handleLogout={handleLogout} categoryList={categoryList}/>
         <Routes>
           <Route
             exact
@@ -122,6 +142,14 @@ export default function App () {
           <Route
             path='/course/info/:courseid'
             element={<CourseDetailPage />}
+          />
+          <Route
+            path='/category/info/:categoryid'
+            element={<CourseListPage title='Category' categoryList={categoryList} />}
+          />
+          <Route
+            path='/search'
+            element={<CourseListPage title='Search Results'/>}
           />
         </Routes>
         <Snackbar

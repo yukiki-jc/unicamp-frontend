@@ -6,5 +6,9 @@ export const apiPath = {
     course: {
         list: '/course/list',
         info: '/course/info'
+    },
+    category: {
+        list: '/category/list',
+        info: '/category/info'
     }
 }
