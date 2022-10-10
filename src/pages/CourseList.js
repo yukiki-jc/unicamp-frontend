@@ -1,12 +1,11 @@
 import { Container } from '@mui/system'
 import React from 'react'
 import CourseCard from '../components/CourseCard'
-import NavBar from '../components/NavBar'
 
 const CourseListPage = props => {
   return (
     <div>
-      <NavBar />
+      
       <main>
         <Container maxWidth='lg'>
         <div style={{ padding: '8px 4vw' }}>

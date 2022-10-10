@@ -12,7 +12,10 @@ import Box from '@mui/material/Box';
 import SchoolIcon from '@mui/icons-material/School';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import globalTheme from '../Theme';
+import { postRequest } from '../utils/requests';
+import { backend, apiPath } from '../utils/urls';
+import { PageContext } from '../App';
+import { joinPaths } from '@remix-run/router';
 
 function Copyright(props) {
   return (
@@ -28,13 +31,33 @@ function Copyright(props) {
 }
 
 
-export default function SignIn() {
+export default function SignIn(props) {
+  const pageContextValue = React.useContext(PageContext);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
+    });
+    const loginBody = {
+      name: data.get('email'),
+      password: data.get('password'),
+    }
+    const loginURL = joinPaths([backend, apiPath.login]);
+    postRequest(loginBody, loginURL).then(json => {
+      if (json.state === true) {
+        props.handleLoginSuccess({
+          ...loginBody,
+          token: json.token
+        });
+      } else {
+        console.log("post failed")
+        pageContextValue.handler.setErrorBox(json.message);
+      }
+    })
+    .catch(e => {
+      pageContextValue.handler.setErrorBox(e);
     });
   };
 
