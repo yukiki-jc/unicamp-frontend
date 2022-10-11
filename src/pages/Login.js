@@ -12,23 +12,7 @@ import Box from '@mui/material/Box';
 import SchoolIcon from '@mui/icons-material/School';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { postRequest } from '../utils/requests';
-import { backend, apiPath } from '../utils/urls';
-import { PageContext } from '../App';
-import { joinPaths } from '@remix-run/router';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="/">
-        Unicamp
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import Copyright from '../components/Copyright';
 
 
 export default function SignIn(props) {
@@ -113,7 +97,7 @@ export default function SignIn(props) {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -124,4 +108,3 @@ export default function SignIn(props) {
     </Container>
   );
 }
-

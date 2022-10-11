@@ -1,5 +1,6 @@
 import MainPage from './pages/Main'
 import LoginPage from './pages/Login'
+
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import CourseListPage from './pages/CourseList'
 import {
@@ -116,6 +117,7 @@ export default function App () {
         setLoading(false);
       })
   }, [])
+
 
   return (
     <ThemeProvider theme={globalTheme}>
