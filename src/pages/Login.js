@@ -13,9 +13,12 @@ import SchoolIcon from '@mui/icons-material/School';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Copyright from '../components/Copyright';
+import { postRequest } from '../utils/requests';
+import { backend, apiPath } from '../utils/urls';
+import { PageContext } from '../App';
+import { joinPaths } from '@remix-run/router';
 
-
-export default function SignIn(props) {
+export default function LoginPage(props) {
   const pageContextValue = React.useContext(PageContext);
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,13 +33,13 @@ export default function SignIn(props) {
     }
     const loginURL = joinPaths([backend, apiPath.login]);
     postRequest(loginBody, loginURL).then(json => {
+      console.log(json);
       if (json.state === true) {
         props.handleLoginSuccess({
           ...loginBody,
           token: json.token
         });
       } else {
-        console.log("post failed")
         pageContextValue.handler.setErrorBox(json.message);
       }
     })
@@ -98,7 +101,7 @@ export default function SignIn(props) {
           <Grid container>
             <Grid item>
               <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {"Don't have an account? Sign Up now!"}
               </Link>
             </Grid>
           </Grid>

@@ -21,6 +21,7 @@ import { joinPaths } from '@remix-run/router'
 import { getRequest } from './utils/requests'
 import { courseList } from './utils/testData'
 import stylizeObject from './utils/functions'
+import SignUpPage from './pages/SignUp'
 
 export const PageContext = createContext({})
 
@@ -97,11 +98,13 @@ export default function App () {
     const categoryListURL = joinPaths([backend, apiPath.category.list]);
     const courseListURL = joinPaths([backend, apiPath.course.list]);
     setLoading(true);
+    console.log("Loading App");
     Promise.all([
       getRequest(categoryListURL),
       getRequest(courseListURL)
     ])
       .then(datas => {
+        // console.log(datas);
         const stylizedCategoryList = stylizeObject(datas[0]);
         let stylizedSubCategoryList = [];
         for (let i = 0; i < stylizedCategoryList.length; i++) {
@@ -117,7 +120,7 @@ export default function App () {
         setLoading(false);
       })
   }, [])
-
+  console.log(messageBox);
 
   return (
     <ThemeProvider theme={globalTheme}>
@@ -149,6 +152,10 @@ export default function App () {
           <Route
             path='login'
             element={<LoginPage handleLoginSuccess={handleLoginSuccess} />}
+          />
+          <Route
+            path='signup'
+            element={<SignUpPage handleLoginSuccess={handleLoginSuccess} />}
           />
           <Route
             path='list'

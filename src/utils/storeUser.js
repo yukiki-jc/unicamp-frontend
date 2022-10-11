@@ -10,5 +10,5 @@ export const getUser = () => {
 }
 //删除
 export const deleteUser = () => {
-  localStorage.deleteItem(USER_KEY)
+  localStorage.removeItem(USER_KEY)
 }

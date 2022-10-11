@@ -17,14 +17,39 @@ import Container from '@mui/material/Container';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Copyright from '../components/Copyright';
+import { PageContext } from '../App';
+import { backend, apiPath } from '../utils/urls';
+import { postRequest } from '../utils/requests';
+import { joinPaths } from '@remix-run/router';
 
-export default function SignUp() {
+export default function SignUpPage(props) {
+  const pageContextValue = React.useContext(PageContext);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
+    });
+    const signUpBody = {
+      name: data.get('email'),
+      password: data.get('password'),
+    }
+    const signUpURL = joinPaths([backend, apiPath.register]);
+    postRequest(signUpBody, signUpURL).then(json => {
+      if (json.state === true) {
+        props.handleLoginSuccess({
+          ...signUpBody,
+          token: json.token
+        });
+      } else if (json.state === false) {
+        pageContextValue.handler.setErrorBox(json.message);
+      }
+      else 
+        throw "Connect Error";
+    })
+    .catch(e => {
+      pageContextValue.handler.setErrorBox(e);
     });
   };
 
@@ -92,7 +117,7 @@ export default function SignUp() {
           <Grid container>
             <Grid item>
               <Link href="/login" variant="body2">
-                Already have an account? Sign in
+                Already have an account? Sign in!
               </Link>
             </Grid>
           </Grid>

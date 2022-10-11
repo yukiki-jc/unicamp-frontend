@@ -10,5 +10,6 @@ export const apiPath = {
     category: {
         list: '/category/list',
         info: '/category/info'
-    }
+    },
+    register: '/register'
 }
