@@ -23,12 +23,14 @@ const SideLogo = styled("img")(({ theme }) => ({
     display: "none"
   },
   [theme.breakpoints.up("sm")]: {
+    display: "block",
     height: 64
   },
 }));
 
 const CenterLogo = styled("img")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
+    display: "block",
     height: 56
   },
   [theme.breakpoints.up("sm")]: {
@@ -118,7 +120,7 @@ const NavBar = props => {
     <AppBar position="fixed" color="background" sx={{ userSelect: "none" }}>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
-          <SideLogo src={UnicampIcon} alt='' />
+          <MUILink href='/' children={<SideLogo src={UnicampIcon} alt=''/>}/>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size='large'
@@ -156,7 +158,7 @@ const NavBar = props => {
               </MenuItem>
             </Menu>
           </Box>
-          <CenterLogo src={UnicampIcon} alt=''/>
+          <MUILink href='/' children={<CenterLogo src={UnicampIcon} alt=''/>}/>
           <CenterBox />
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
