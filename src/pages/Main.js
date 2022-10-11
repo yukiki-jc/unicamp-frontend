@@ -6,7 +6,6 @@ import Container from '@mui/material/Container'
 import CourseThumbnailLine from '../components/CourseThunbnailLine'
 import { styled } from '@mui/material/styles'
 import { Link as MUILink } from '@mui/material'
-import NavBar from '../components/NavBar'
 import { courseList } from '../utils/testData'
 
 
@@ -19,19 +18,6 @@ const MainPageCardContainer = styled(props => (
 const MainPage = props => {
   return (
     <div>
-      <NavBar />
-      {/* <div>
-        Main Page
-        <br/>
-        <Link
-          className={classNames('nav-link')}
-          to={'/login'} 
-        > 
-          <Button variant="contained">
-          Turn to Login Page
-          </Button>
-        </Link>
-      </div> */}
       <main>
         {/* Hero unit */}
         <Box

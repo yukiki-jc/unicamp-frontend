@@ -14,13 +14,34 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Copyright from '../components/Copyright';
 
-export default function SignIn() {
+
+export default function SignIn(props) {
+  const pageContextValue = React.useContext(PageContext);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
+    });
+    const loginBody = {
+      name: data.get('email'),
+      password: data.get('password'),
+    }
+    const loginURL = joinPaths([backend, apiPath.login]);
+    postRequest(loginBody, loginURL).then(json => {
+      if (json.state === true) {
+        props.handleLoginSuccess({
+          ...loginBody,
+          token: json.token
+        });
+      } else {
+        console.log("post failed")
+        pageContextValue.handler.setErrorBox(json.message);
+      }
+    })
+    .catch(e => {
+      pageContextValue.handler.setErrorBox(e);
     });
   };
 
