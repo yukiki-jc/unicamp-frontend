@@ -10,12 +10,40 @@ import Container from '@mui/material/Container'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
-import SchoolIcon from '@mui/icons-material/School'
+import UnicampIcon from '../unicamp.png';
 import { NestedMenuItem } from 'mui-nested-menu'
 import { PageContext } from '../App'
 import { Link as MUILink } from '@mui/material'
 import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
+import { styled } from "@mui/material/styles";
+
+const SideLogo = styled("img")(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    display: "none"
+  },
+  [theme.breakpoints.up("sm")]: {
+    height: 64
+  },
+}));
+
+const CenterLogo = styled("img")(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    height: 56
+  },
+  [theme.breakpoints.up("sm")]: {
+    display: "none"
+  },
+}));
+
+const CenterBox = styled(Box)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    flexGrow: 1
+  },
+  [theme.breakpoints.up("sm")]: {
+    display: "none"
+  },
+}));
 
 const NavBar = props => {
   const [anchorElCategory, setAnchorElCategory] = React.useState(null)
@@ -87,26 +115,10 @@ const NavBar = props => {
   })
 
   return (
-    <AppBar position="fixed" sx={{ userSelect: "none" }}>
+    <AppBar position="fixed" color="background" sx={{ userSelect: "none" }}>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
-          <SchoolIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant='h6'
-            noWrap
-            component='a'
-            href='/'
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontWeight: 500,
-              color: 'inherit',
-              textDecoration: 'none'
-            }}
-          >
-            UNICAMP
-          </Typography>
-
+          <SideLogo src={UnicampIcon} alt='' />
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size='large'
@@ -144,30 +156,17 @@ const NavBar = props => {
               </MenuItem>
             </Menu>
           </Box>
-          <SchoolIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant='h5'
-            noWrap
-            component='a'
-            href=''
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontWeight: 500,
-              color: 'inherit',
-              textDecoration: 'none'
-            }}
-          >
-            UNICAMP
-          </Typography>
+          <CenterLogo src={UnicampIcon} alt=''/>
+          <CenterBox />
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
               sx={{
                 my: 2,
-                color: 'white',
+                color: 'black',
                 display: 'block',
-                marginLeft: '8px'
+                marginLeft: '8px',
+                margin: '0',
+                height: '100%'
               }}
               onMouseOver={handleOpenCategoryMenu}
             >
@@ -177,9 +176,11 @@ const NavBar = props => {
               onClick={handleCloseCategoryMenu}
               sx={{
                 my: 2,
-                color: 'white',
+                color: 'black',
                 display: 'block',
-                marginLeft: '8px'
+                marginLeft: '8px',
+                margin: '0',
+                height: '100%'
               }}
             >
               COLLECTION
