@@ -20,10 +20,12 @@ import { backend, apiPath } from './utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { getRequest } from './utils/requests'
 import { courseList } from './utils/testData'
+import { styled } from "@mui/material/styles";
 import stylizeObject from './utils/functions'
 import SignUpPage from './pages/SignUp'
 
 export const PageContext = createContext({})
+const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 export default function App () {
   const [loading, setLoading] = useState(false);
@@ -143,6 +145,7 @@ export default function App () {
       >
         <CssBaseline enableColorScheme />
           <NavBar handleLogout={handleLogout} categoryList={categoryList}/>
+          <Offset />
         <Routes>
           <Route
             exact

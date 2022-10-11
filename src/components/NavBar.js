@@ -87,7 +87,7 @@ const NavBar = props => {
   })
 
   return (
-    <AppBar position='static'>
+    <AppBar position="fixed" sx={{ userSelect: "none" }}>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <SchoolIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
