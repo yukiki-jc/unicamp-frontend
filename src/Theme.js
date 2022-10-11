@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles';
+import { InterFont } from './utils/commonData';
 
 const globalTheme = createTheme({
   palette: {
@@ -14,6 +15,7 @@ const globalTheme = createTheme({
   },
   typography: {
     htmlFontSize: 10,
+    fontFamily: InterFont,
   },
 });
 

@@ -16,7 +16,8 @@ import { PageContext } from '../App'
 import { Link as MUILink } from '@mui/material'
 import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
-import { styled } from "@mui/material/styles";
+import { styled, alpha } from "@mui/material/styles";
+import { LatoFont } from '../utils/commonData'
 
 const SideLogo = styled("img")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
@@ -47,6 +48,17 @@ const CenterBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const NavbarLinkButton = styled((props) => (
+  <Button disableFocusRipple disableTouchRipple {...props} />
+))(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  fontWeight: 700,
+  fontSize: "1.75rem",
+  fontFamily: LatoFont,
+  textTransform: "capitalize",
+  margin: theme.spacing(0, 1),
+}));
+
 const NavBar = props => {
   const [anchorElCategory, setAnchorElCategory] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
@@ -67,26 +79,26 @@ const NavBar = props => {
   const pageContextValue = React.useContext(PageContext)
   const loginMenuItem = pageContextValue.state.login
     ? [
-        <MenuItem onClick={handleCloseUserMenu}>
-          <Typography textAlign='center'> Profile </Typography>
-        </MenuItem>,
-        <MenuItem onClick={handleCloseUserMenu}>
-          <Typography textAlign='center'> Setting </Typography>
-        </MenuItem>,
-        <MenuItem onClick={props.handleLogout}>
-          <Typography textAlign='center'> Logout </Typography>
-        </MenuItem>
-      ]
+      <MenuItem onClick={handleCloseUserMenu}>
+        <Typography textAlign='center'> Profile </Typography>
+      </MenuItem>,
+      <MenuItem onClick={handleCloseUserMenu}>
+        <Typography textAlign='center'> Setting </Typography>
+      </MenuItem>,
+      <MenuItem onClick={props.handleLogout}>
+        <Typography textAlign='center'> Logout </Typography>
+      </MenuItem>
+    ]
     : [
-        <MenuItem onClick={handleCloseUserMenu}>
-          <MUILink href='/login' underline='none'>
-            <Typography textAlign='center' color='gray'>
-              {' '}
-              Login{' '}
-            </Typography>
-          </MUILink>
-        </MenuItem>
-      ]
+      <MenuItem onClick={handleCloseUserMenu}>
+        <MUILink href='/login' underline='none'>
+          <Typography textAlign='center' color='gray'>
+            {' '}
+            Login{' '}
+          </Typography>
+        </MUILink>
+      </MenuItem>
+    ]
 
   const categoryMenuItems = props.categoryList.map(category => {
     const subCategoryMenuItems = category.subCategory.map(subCate => {
@@ -117,112 +129,96 @@ const NavBar = props => {
   })
 
   return (
-    <AppBar position="fixed" color="background" sx={{ userSelect: "none" }}>
-      <Container maxWidth='xl'>
-        <Toolbar disableGutters>
-          <MUILink href='/' children={<SideLogo src={UnicampIcon} alt=''/>}/>
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size='large'
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              onClick={handleOpenCategoryMenu}
-              color='inherit'
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id='menu-appbar'
-              anchorEl={anchorElCategory}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left'
-              }}
-              open={!!anchorElCategory}
-              onClose={handleCloseCategoryMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' }
-              }}
-            >
-              <MenuItem onClick={handleCloseCategoryMenu}>
-                <Typography textAlign='center'> CATEGORY </Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseCategoryMenu}>
-                <Typography textAlign='center'> COLLECTION </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-          <MUILink href='/' children={<CenterLogo src={UnicampIcon} alt=''/>}/>
-          <CenterBox />
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button
-              sx={{
-                my: 2,
-                color: 'black',
-                display: 'block',
-                marginLeft: '8px',
-                margin: '0',
-                height: '100%'
-              }}
-              onMouseOver={handleOpenCategoryMenu}
-            >
-              CATEGORY
-            </Button>
-            <Button
-              onClick={handleCloseCategoryMenu}
-              sx={{
-                my: 2,
-                color: 'black',
-                display: 'block',
-                marginLeft: '8px',
-                margin: '0',
-                height: '100%'
-              }}
-            >
-              COLLECTION
-            </Button>
-          </Box>
-          <Menu
-            open={!!anchorElCategory}
-            anchorEl={anchorElCategory}
-            onClose={handleCloseCategoryMenu}
-            MenuListProps={{ onMouseLeave: handleCloseCategoryMenu }}
+    <AppBar elevation={0} position="fixed" color="inherit" sx={(theme) => ({
+      userSelect: "none",
+      background: "linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)",
+    })}>
+      <Toolbar>
+        <MUILink href='/' children={<SideLogo src={UnicampIcon} alt='' />} />
+        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <IconButton
+            size='large'
+            aria-label='account of current user'
+            aria-controls='menu-appbar'
+            aria-haspopup='true'
+            onClick={handleOpenCategoryMenu}
+            color='inherit'
           >
-            {categoryMenuItems}
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            id='menu-appbar'
+            anchorEl={anchorElCategory}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left'
+            }}
+            open={!!anchorElCategory}
+            onClose={handleCloseCategoryMenu}
+            sx={{
+              display: { xs: 'block', md: 'none' }
+            }}
+          >
+            <MenuItem onClick={handleCloseCategoryMenu}>
+              <Typography textAlign='center'> Category </Typography>
+            </MenuItem>
+            <MenuItem onClick={handleCloseCategoryMenu}>
+              <Typography textAlign='center'> Collection </Typography>
+            </MenuItem>
           </Menu>
+        </Box>
+        <MUILink href='/' children={<CenterLogo src={UnicampIcon} alt='' />} />
+        <CenterBox />
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, marginLeft: 1 }}>
+          <NavbarLinkButton onMouseOver={handleOpenCategoryMenu}>
+            Category
+          </NavbarLinkButton>
+          <NavbarLinkButton onClick={handleCloseCategoryMenu}>
+            Collection
+          </NavbarLinkButton>
+        </Box>
+        <Menu
+          open={!!anchorElCategory}
+          anchorEl={anchorElCategory}
+          onClose={handleCloseCategoryMenu}
+          MenuListProps={{ onMouseLeave: handleCloseCategoryMenu }}
+        >
+          {categoryMenuItems}
+        </Menu>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <IconButton onMouseOver={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
-            </IconButton>
-            <Menu
-              sx={{ mt: '45px' }}
-              id='menu-appbar'
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              open={!!anchorElUser}
-              onClose={handleCloseUserMenu}
-              MenuListProps={{ onMouseLeave: handleCloseUserMenu }}
-            >
-              {loginMenuItem}
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
+        <Box sx={{ flexGrow: 0 }}>
+          <IconButton onMouseOver={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' sx={{
+              height: "3.6rem",
+              width: "3.6rem",
+            }} />
+          </IconButton>
+          <Menu
+            sx={{ mt: '45px' }}
+            id='menu-appbar'
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            open={!!anchorElUser}
+            onClose={handleCloseUserMenu}
+            MenuListProps={{ onMouseLeave: handleCloseUserMenu }}
+          >
+            {loginMenuItem}
+          </Menu>
+        </Box>
+      </Toolbar>
     </AppBar>
   )
 }

@@ -17,64 +17,62 @@ const MainPageCardContainer = styled(props => (
 
 const MainPage = props => {
   return (
-    <div>
-      <main>
-        {/* Hero unit */}
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            pt: 8,
-            pb: 6
-          }}
+    <main>
+      {/* Hero unit */}
+      <Box
+        sx={{
+          bgcolor: 'background.paper',
+          pt: 8,
+          pb: 6
+        }}
+      >
+        <Container maxWidth='md'>
+          <Typography
+            component='h1'
+            variant='h2'
+            align='left'
+            color='text.primary'
+            gutterBottom
+          >
+            Hello, CJC!
+          </Typography>
+        </Container>
+      </Box>
+      <MainPageCardContainer>
+        <Stack
+          // sx={{ pt: 1 }}
+          direction='row'
+          spacing={85}
+          justifyContent='left'
         >
-          <Container maxWidth='md'>
-            <Typography
-              component='h1'
-              variant='h2'
-              align='left'
-              color='text.primary'
-              gutterBottom
-            >
-              Hello, CJC!
-            </Typography>
-          </Container>
-        </Box>
-        <MainPageCardContainer>
-          <Stack
-            // sx={{ pt: 1 }}
-            direction='row'
-            spacing={85}
-            justifyContent='left'
-          >
-            <Typography gutterBottom variant='h6' zIndex={1}>
-              Hot Courses
-            </Typography>
-            <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
-              More
-            </MUILink>
-          </Stack>
-          <CourseThumbnailLine courseList={courseList} />
-        </MainPageCardContainer>
+          <Typography gutterBottom variant='h6' zIndex={1}>
+            Hot Courses
+          </Typography>
+          <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
+            More
+          </MUILink>
+        </Stack>
+        <CourseThumbnailLine courseList={courseList} />
+      </MainPageCardContainer>
 
-        <MainPageCardContainer>
-          <Stack
-            // sx={{ pt: 1 }}
-            direction='row'
-            spacing={85}
-            justifyContent='left'
-          >
-            <Typography gutterBottom variant='h6' zIndex={1}>
-              My Favorites
-            </Typography>
-            <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
-              More
-            </MUILink>
-          </Stack>
-          <CourseThumbnailLine courseList={courseList} />
-        </MainPageCardContainer>
-      </main>
-    </div>
-  )
+      <MainPageCardContainer>
+        <Stack
+          // sx={{ pt: 1 }}
+          direction='row'
+          spacing={85}
+          justifyContent='left'
+        >
+          <Typography gutterBottom variant='h6' zIndex={1}>
+            My Favorites
+          </Typography>
+          <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
+            More
+          </MUILink>
+        </Stack>
+        <CourseThumbnailLine courseList={courseList} />
+      </MainPageCardContainer>
+    </main>
+  );
 }
 
 export default MainPage

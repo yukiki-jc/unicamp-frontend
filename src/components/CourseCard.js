@@ -1,180 +1,164 @@
-import { Card, CardContent, Chip, Grid, Rating, Typography } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
+import { Card, Chip, Link, Rating, Stack, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { Box } from "@mui/system";
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
-import { LevelMappings } from "../utils/commonData";
-
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import SchoolIcon from '@mui/icons-material/School';
+import StartIcon from '@mui/icons-material/East';
+import { LatoFont, LevelMappings } from "../utils/commonData";
+import { Link as RouterLink } from "react-router-dom";
 
 const CourseCardContainer = styled((props) => (
-    <Card variant="outlined" sx={(theme) => ({
-        borderRadius: "1.2rem",
-        // transition: "transform 0.2s",
-        // "&:hover": {
-        //     transform: "scale(1.01)",
-        //     borderColor: theme.palette.secondary.main,
-        // },
-    })}>
-        <CardContent {...props} />
-    </Card>
+    <Card elevation={0} {...props} />
 ))(({ theme }) => ({
-    backgroundColor: alpha(theme.palette.primary.main, 0.08),
-    display: "flex",
-    cursor: "pointer",
+    cursor: "default",
+    borderRadius: 0,
+    padding: theme.spacing(2.5, 1),
+    borderBottom: "1px solid #dadada",
     "&:hover": {
-        backgroundColor: alpha(theme.palette.primary.main, 0.16),
-    },
-    [theme.breakpoints.up("sm")]: {
-        padding: theme.spacing(2.5, 3),
-    },
-    [theme.breakpoints.up("md")]: {
-        padding: theme.spacing(2.5, 3.5),
-    },
-}));
-
-const CourseCardImage = styled("img")(({ theme }) => ({
-    objectFit: "cover",
-    borderRadius: theme.shape.borderRadius * 5,
-    width: "14.4rem",
-    height: "14.4rem",
-    display: "block",
-    [theme.breakpoints.up("sm")]: {
-        width: "16.2rem",
-        height: "16.2rem",
-    },
-    [theme.breakpoints.up("md")]: {
-        width: "28.8rem",
-        height: "16.2rem",
+        "& .course-description": {
+            transition: "max-height 1s",
+            maxHeight: "64rem",
+            color: "#5a5a5a",
+            "&::after": {
+                bottom: "-50%",
+            },
+        },
     },
 }));
 
-const CourseCardContent = styled(Box)(({ theme }) => ({
-    padding: theme.spacing(0.25, 0, 0, 1.5),
-    overflowY: "hidden",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    [theme.breakpoints.up("sm")]: {
-        paddingLeft: theme.spacing(2),
-    },
-    [theme.breakpoints.up("md")]: {
-        paddingLeft: theme.spacing(2.5),
-    },
-}));
-
-const CourseCardTitleContainer = styled(Box)(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    overflow: "hidden",
-}));
-
-const CourseCardTitle = styled(Typography)(({ theme }) => ({
-    marginRight: theme.spacing(1.5),
-    lineHeight: 1.15,
-    fontWeight: 700,
-    display: "-webkit-box",
-    WebkitLineClamp: 2,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "normal",
-    [theme.breakpoints.up("md")]: {
-        fontSize: "1.75rem",
-    },
-}));
-
-const CourseCardRow = styled((props) => (
-    <Grid container columnSpacing={2} {...props} />
+const CourseCardStack = styled((props) => (
+    <Stack direction="row" spacing={2.5} {...props} />
 ))(({ theme }) => ({
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(0.5),
-    overflow: "hidden",
-    alignItems: "center",
+    fontWeight: 500,
 }));
 
-const CourseCardRating = styled((props) => (
-    <Grid item xs={12} sm={6.5} md={6} {...props} />
-), { shouldForwardProp: (prop) => prop !== "rating" && prop !== "number" })(({ theme, rating, number }) => ({
+const CourseCardStackItem = styled(({ icon, title, ...props }) => (
+    <Box {...props}>
+        {icon} {title}
+    </Box>
+))(({ theme }) => ({
     display: "flex",
     alignItems: "center",
+    fontSize: "1.2rem",
+    color: theme.palette.text.secondary,
     whiteSpace: "nowrap",
-    "&::before": {
-        content: `"${rating}"`,
-        fontWeight: 600,
-        fontSize: "1.3rem",
-        marginRight: "3px",
-    },
-    "&::after": {
-        content: `"(${number} ratings)"`,
-        fontSize: "1.1rem",
-        marginLeft: "3px",
-        color: "#6a6a6a",
+    "& svg": {
+        fontSize: "1.8rem",
+        marginRight: theme.spacing(0.5),
     },
 }));
 
-const CourseCardLevel = styled((props) => (
-    <Grid item xs={12} sm={4} md={3} {...props} />
+const CourseCardStackChip = styled((props) => (
+    <Chip color="primary" variant="outlined" size="small" {...props} />
 ))(({ theme }) => ({
-    fontSize: "1.1rem",
-    textTransform: "capitalize",
-    fontWeight: 600,
-    whiteSpace: "nowrap",
-    "&::before": {
-        content: '"level: "',
-        fontWeight: 400,
-    },
-}));
-
-const CourseCardDescription = styled(Typography)(({ theme }) => ({
-    fontSize: "1.1rem",
-    color: "#555",
-    display: "-webkit-box",
-    WebkitLineClamp: 3,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "normal",
-    [theme.breakpoints.up("sm")]: {
-        fontSize: "1.2rem",
-    },
-}));
-
-const CourseCardTimeChip = styled((props) => (
-    <Chip color="primary" {...props} />
-))(({ theme }) => ({
-    fontWeight: 800,
+    fontSize: "1.2rem",
+    padding: theme.spacing(1.7, 0.5),
 }));
 
 export default function CourseCard({
-    src, title, rating, voters, difficulty, time, description,
+    name, rating, voters, difficulty, time, description, provider, href,
 }) {
     return (
         <CourseCardContainer>
-            <CourseCardImage src={src} />
-            <CourseCardContent>
-                <CourseCardTitleContainer>
-                    <CourseCardTitle>{title}</CourseCardTitle>
-                    <CourseCardTimeChip label={(
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <AccessAlarmIcon sx={{ marginRight: 0.5 }} /> {time} hrs.
-                        </Box>
-                    )} />
-                </CourseCardTitleContainer>
-                <CourseCardRow>
-                    <CourseCardRating rating={rating} number={voters}>
-                        <Rating
-                            size="small"
-                            value={rating}
-                            precision={0.5}
-                            readOnly
-                        />
-                    </CourseCardRating>
-                    <CourseCardLevel>{LevelMappings[difficulty - 1]}</CourseCardLevel>
-                </CourseCardRow>
-                <CourseCardDescription className="course-description">
-                    {description}
-                </CourseCardDescription>
-            </CourseCardContent>
+            <CourseCardStack sx={{ marginBottom: 1.3 }}>
+                <CourseCardStackItem title={provider} icon={<SchoolIcon />} />
+                <CourseCardStackItem title={`${voters} camper${voters > 1 ? "s" : ""}`} icon={<SupervisorAccountIcon />} />
+            </CourseCardStack>
+            <Typography sx={{
+                fontSize: "1.8rem",
+                fontWeight: 700,
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+                lineHeight: 1.3,
+                marginBottom: 1,
+                fontFamily: LatoFont,
+                color: "inherit",
+                textDecoration: "none",
+            }} component={RouterLink} to={href}>
+                {name}
+            </Typography>
+            <Box sx={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: "1.3rem",
+                fontWeight: 600,
+                marginBottom: 1.5,
+            }}>
+                <Typography sx={{
+                    fontSize: "1.5rem",
+                    fontWeight: 600,
+                    color: "#666",
+                }}>
+                    {rating}
+                </Typography>
+                <Rating
+                    size="small"
+                    value={rating}
+                    precision={0.5}
+                    readOnly
+                    sx={{
+                        marginLeft: 0.5,
+                        '& .MuiRating-iconFilled': {
+                            color: '#b27c66',
+                        },
+                    }}
+                />
+            </Box>
+            <Box sx={(theme) => ({
+                height: "100%",
+                maxHeight: "6.4rem",
+                overflow: "hidden",
+                fontSize: "1.4rem",
+                lineHeight: 1.5,
+                color: "#777",
+                transition: "max-height 0.2s",
+                position: "relative",
+                marginBottom: 2,
+                display: "-webkit-box",
+                WebkitLineClamp: 5,
+                WebkitBoxOrient: "vertical",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+                "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    height: "50%",
+                    bottom: 0,
+                    background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
+                },
+            })} className="course-description">
+                {description}
+            </Box>
+            <Box sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+            }}>
+                <CourseCardStack>
+                    <CourseCardStackItem icon={<CourseCardStackChip label={LevelMappings[difficulty]} />} />
+                    <CourseCardStackItem icon={<CourseCardStackChip label={`${time} hrs.`} />} />
+                </CourseCardStack>
+                <Link
+                    // color="inherit"
+                    href="#"
+                    sx={{
+                        textTransform: "capitalize",
+                        fontWeight: 500,
+                        fontSize: "1.3rem",
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                >
+                    Learn more
+                    <StartIcon sx={{ fontSize: "1.6rem", marginLeft: 0.5 }} />
+                </Link>
+            </Box>
         </CourseCardContainer>
     );
 };

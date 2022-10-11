@@ -27,7 +27,7 @@ import SignUpPage from './pages/SignUp'
 export const PageContext = createContext({})
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
-export default function App () {
+export default function App() {
   const [loading, setLoading] = useState(false);
   const [login, setLogin] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
@@ -144,8 +144,8 @@ export default function App () {
         }}
       >
         <CssBaseline enableColorScheme />
-          <NavBar handleLogout={handleLogout} categoryList={categoryList}/>
-          <Offset />
+        <NavBar handleLogout={handleLogout} categoryList={categoryList} />
+        <Offset />
         <Routes>
           <Route
             exact

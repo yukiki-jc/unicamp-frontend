@@ -29,14 +29,9 @@ const CourseDetailPage = props => {
   }, []);
 
   return (
-    <div>
-      <main>
-        Course Detail Page
-        <Typography>
-          {JSON.stringify(courseDetail)}
-        </Typography>
-      </main>
-    </div>
+    <main>
+      Course Detail Page
+    </main>
   )
 }
 
