@@ -90,6 +90,7 @@ export default function SignUpPage(props) {
                 <OutlinedInput
                   id="outlined-adornment-password"
                   type={showPassword ? "text" : "password"}
+                  name='password'
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
