@@ -48,7 +48,7 @@ export default function CourseThumbnail (props) {
         >
           <StyledTypography>Provider: {card.provider}</StyledTypography>
           <StyledTypography>
-            Difficulty: {LevelMappings[card.difficulty - 1]}
+            Difficulty: {LevelMappings[card.difficulty]}
           </StyledTypography>
           <StyledTypography>
             Learning Time: {card.est_hour} hrs

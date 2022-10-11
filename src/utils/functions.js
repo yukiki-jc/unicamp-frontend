@@ -10,6 +10,9 @@ export default function stylizeObject(obj) {
         delete obj[key]
         obj[new_key] = stylizeObject(obj[new_key])
       }
+      else {
+        obj[key] = stylizeObject(obj[key])
+      }
     })
   }
   return obj

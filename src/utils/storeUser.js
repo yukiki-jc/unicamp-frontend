@@ -6,7 +6,7 @@ export const saveUser = user => {
 }
 
 export const getUser = () => {
-  return localStorage.getItem(USER_KEY)
+  return JSON.parse(localStorage.getItem(USER_KEY))
 }
 //删除
 export const deleteUser = () => {

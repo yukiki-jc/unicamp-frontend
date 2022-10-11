@@ -6,22 +6,38 @@ import { Box } from '@mui/material'
 import { useParams } from 'react-router-dom'
 
 const CourseListPage = props => {
-  const { title, courseList = [], categoryList = [] } = props
-  const { categoryId } = useParams()
+  const { title, courseList = [], subcategoryList = [] } = props
+  const { subcategoryId } = useParams()
   let newTitle = title;
   let courseListShow = courseList;
   // console.log(categoryList);
   if (title === 'Category') {
-    console.log(categoryId);
-    for (let i = 0; i < categoryList.length; i++) {
-      if (categoryList[i].subCategoryId.toString() === categoryId)
-        newTitle = categoryList[i].subCategoryName
+    console.log(subcategoryId);
+    for (let i = 0; i < subcategoryList.length; i++) {
+      if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
+        newTitle = subcategoryList[i].subcategoryName
     }
     courseListShow = courseList.filter(course => {
-      return (course.subcategoryId.toString() === categoryId)
+      return (course.subcategoryId.toString() === subcategoryId)
     })
   }
 
+  const courseCards = courseListShow.map(course => {
+    return (
+      <CourseCard
+            src='https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg'
+            name={course.name}
+            rating={3.7}
+            voters={2023}
+            difficulty={course.difficulty}
+            time={course.estHour}
+            description={course.description}
+            provider={course.provider}
+            id={course.id}
+          />
+    )
+  })
+  
   return (
     <div>
       <main>
@@ -45,16 +61,7 @@ const CourseListPage = props => {
           </Container>
         </Box>
         <Container maxWidth='lg'>
-          <CourseCard
-            src='https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg'
-            name={"hello"}
-            rating={3.7}
-            voters={2023}
-            difficulty={5}
-            time={64}
-            description="Ea reprehenderit ex proident fugiat ea do aute ea dolor deserunt ipsum. Eiusmod mollit laborum consequat minim. Minim ea Lorem cillum mollit duis laboris eu labore ut fugiat commodo mollit eu proident. Ullamco eu quis nulla cillum pariatur amet officia minim consectetur magna est culpa. Tempor voluptate minim aliqua est enim qui laborum incididunt mollit occaecat."
-            provider={"Stanford University"}
-          />
+          {courseCards}
         </Container>
       </main>
     </div>

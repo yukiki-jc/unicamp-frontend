@@ -6,6 +6,8 @@ import SchoolIcon from '@mui/icons-material/School';
 import StartIcon from '@mui/icons-material/East';
 import { LatoFont, LevelMappings } from "../utils/commonData";
 import { Link as RouterLink } from "react-router-dom";
+import { joinPaths } from "@remix-run/router";
+import { apiPath } from "../utils/urls";
 
 const CourseCardContainer = styled((props) => (
     <Card elevation={0} {...props} />
@@ -56,7 +58,7 @@ const CourseCardStackChip = styled((props) => (
 }));
 
 export default function CourseCard({
-    name, rating, voters, difficulty, time, description, provider, href,
+    name, rating, voters, difficulty, time, description, provider, href, id
 }) {
     return (
         <CourseCardContainer>
@@ -146,7 +148,7 @@ export default function CourseCard({
                 </CourseCardStack>
                 <Link
                     // color="inherit"
-                    href="#"
+                    href={joinPaths([apiPath.course.info, id.toString()])}
                     sx={{
                         textTransform: "capitalize",
                         fontWeight: 500,

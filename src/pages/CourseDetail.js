@@ -8,10 +8,10 @@ import { getRequest } from '../utils/requests'
 import { joinPaths } from '@remix-run/router'
 
 const CourseDetailPage = props => {
-  const { courseid } = useParams();
+  const { courseId } = useParams();
   const [courseDetail, setCourseDetail] = useState({});
   const pageContextValue = useContext(PageContext);
-  const courseDetailURL = joinPaths([backend, apiPath.course.info, courseid]);
+  const courseDetailURL = joinPaths([backend, apiPath.course.info, courseId]);
   const componentDidMount = () => {
     pageContextValue.handler.setLoading(true);
     getRequest(courseDetailURL)
@@ -31,6 +31,7 @@ const CourseDetailPage = props => {
   return (
     <main>
       Course Detail Page
+      {JSON.stringify(courseDetail)}
     </main>
   )
 }

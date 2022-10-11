@@ -7,6 +7,7 @@ import CourseThumbnailLine from '../components/CourseThunbnailLine'
 import { styled } from '@mui/material/styles'
 import { Link as MUILink } from '@mui/material'
 import { courseList } from '../utils/testData'
+import { getUser } from '../utils/storeUser'
 
 
 const MainPageCardContainer = styled(props => (
@@ -15,7 +16,29 @@ const MainPageCardContainer = styled(props => (
   padding: theme.spacing(4, 0)
 }))
 
+const MainPageCardHeadline = (props) => {
+  return (
+    <Stack
+          // sx={{ pt: 1 }}
+          direction='row'
+          spacing={85}
+          justifyContent='left'
+        >
+          <Typography gutterBottom variant='h6' zIndex={1}>
+            {props.title}
+          </Typography>
+          <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
+            More
+          </MUILink>
+        </Stack>
+  )
+}
+
 const MainPage = props => {
+  const user = getUser();
+  let name = 'Future Engineerer';
+  if (user !== null)
+    name = user.name;
   return (
     <main>
       {/* Hero unit */}
@@ -34,41 +57,17 @@ const MainPage = props => {
             color='text.primary'
             gutterBottom
           >
-            Hello, CJC!
+            Hello, {name}!
           </Typography>
         </Container>
       </Box>
       <MainPageCardContainer>
-        <Stack
-          // sx={{ pt: 1 }}
-          direction='row'
-          spacing={85}
-          justifyContent='left'
-        >
-          <Typography gutterBottom variant='h6' zIndex={1}>
-            Hot Courses
-          </Typography>
-          <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
-            More
-          </MUILink>
-        </Stack>
+        <MainPageCardHeadline title='Hot Courses' />
         <CourseThumbnailLine courseList={courseList} />
       </MainPageCardContainer>
 
       <MainPageCardContainer>
-        <Stack
-          // sx={{ pt: 1 }}
-          direction='row'
-          spacing={85}
-          justifyContent='left'
-        >
-          <Typography gutterBottom variant='h6' zIndex={1}>
-            My Favorites
-          </Typography>
-          <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
-            More
-          </MUILink>
-        </Stack>
+        <MainPageCardHeadline title='My Favorites' />
         <CourseThumbnailLine courseList={courseList} />
       </MainPageCardContainer>
     </main>

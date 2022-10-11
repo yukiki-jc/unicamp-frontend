@@ -18,6 +18,7 @@ import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { styled, alpha } from "@mui/material/styles";
 import { LatoFont } from '../utils/commonData'
+import { Pageview } from '@mui/icons-material'
 
 const SideLogo = styled("img")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
@@ -101,18 +102,18 @@ const NavBar = props => {
     ]
 
   const categoryMenuItems = props.categoryList.map(category => {
-    const subCategoryMenuItems = category.subCategory.map(subCate => {
+    const subcategoryMenuItems = category.subcategory.map(subCate => {
       return (
         <MenuItem>
           <MUILink
             href={joinPaths([
               apiPath.category.info,
-              subCate.subCategoryId.toString()
+              subCate.subcategoryId.toString()
             ])}
             underline='none'
           >
             <Typography textAlign='center' color='gray'>
-              {subCate.subCategoryName}
+              {subCate.subcategoryName}
             </Typography>
           </MUILink>
         </MenuItem>
@@ -123,11 +124,16 @@ const NavBar = props => {
         label={category.categoryName}
         parentMenuOpen={!!anchorElCategory}
       >
-        {subCategoryMenuItems}
+        {subcategoryMenuItems}
       </NestedMenuItem>
     )
   })
-
+  const collectionMenuForXs = pageContextValue.state.login ? (<MenuItem onClick={handleCloseCategoryMenu}>
+    <Typography textAlign='center'> Collection </Typography>
+  </MenuItem>) : null;
+  const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseCategoryMenu}>
+    Collection
+  </NavbarLinkButton>) : null;
   return (
     <AppBar elevation={0} position="fixed" color="inherit" sx={(theme) => ({
       userSelect: "none",
@@ -167,9 +173,7 @@ const NavBar = props => {
             <MenuItem onClick={handleCloseCategoryMenu}>
               <Typography textAlign='center'> Category </Typography>
             </MenuItem>
-            <MenuItem onClick={handleCloseCategoryMenu}>
-              <Typography textAlign='center'> Collection </Typography>
-            </MenuItem>
+            {collectionMenuForXs}
           </Menu>
         </Box>
         <MUILink href='/' children={<CenterLogo src={UnicampIcon} alt='' />} />
@@ -178,9 +182,7 @@ const NavBar = props => {
           <NavbarLinkButton onMouseOver={handleOpenCategoryMenu}>
             Category
           </NavbarLinkButton>
-          <NavbarLinkButton onClick={handleCloseCategoryMenu}>
-            Collection
-          </NavbarLinkButton>
+          {collectionMenuForMd}
         </Box>
         <Menu
           open={!!anchorElCategory}

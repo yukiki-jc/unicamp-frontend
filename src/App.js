@@ -13,16 +13,16 @@ import {
 } from '@mui/material'
 import globalTheme from './Theme'
 import { createContext, useEffect, useState, useLayoutEffect } from 'react'
-import { deleteUser, saveUser } from './utils/storeUser'
+import { deleteUser, getUser, saveUser } from './utils/storeUser'
 import CourseDetailPage from './pages/CourseDetail'
 import NavBar from './components/NavBar'
 import { backend, apiPath } from './utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { getRequest } from './utils/requests'
-import { courseList } from './utils/testData'
 import { styled } from "@mui/material/styles";
 import stylizeObject from './utils/functions'
 import SignUpPage from './pages/SignUp'
+import Copyright from './components/Copyright'
 
 export const PageContext = createContext({})
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
@@ -31,7 +31,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [login, setLogin] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
-  const [subCategoryList, setSubCategoryList] = useState([]);
+  const [subcategoryList, setSubcategoryList] = useState([]);
   const [courseList, setCourseList] = useState([]);
   // const [pageNo, setPageNo] = useState(0);
   // 0: mainpage
@@ -97,24 +97,25 @@ export default function App() {
   }, [login])
 
   useLayoutEffect(() => {
+    if (getUser() !== null) {
+      setLogin(true);
+    }
     const categoryListURL = joinPaths([backend, apiPath.category.list]);
     const courseListURL = joinPaths([backend, apiPath.course.list]);
     setLoading(true);
-    console.log("Loading App");
     Promise.all([
       getRequest(categoryListURL),
       getRequest(courseListURL)
     ])
       .then(datas => {
-        // console.log(datas);
         const stylizedCategoryList = stylizeObject(datas[0]);
-        let stylizedSubCategoryList = [];
+        let stylizedSubcategoryList = [];
         for (let i = 0; i < stylizedCategoryList.length; i++) {
-          stylizedSubCategoryList = stylizedSubCategoryList.concat(stylizedCategoryList[i].subCategory);
+          stylizedSubcategoryList = stylizedSubcategoryList.concat(stylizedCategoryList[i].subcategory);
         }
         setCategoryList(stylizedCategoryList);
         setCourseList(stylizeObject(datas[1]));
-        setSubCategoryList(stylizedSubCategoryList);
+        setSubcategoryList(stylizedSubcategoryList);
         setLoading(false);
       })
       .catch(e => {
@@ -122,7 +123,6 @@ export default function App() {
         setLoading(false);
       })
   }, [])
-  console.log(messageBox);
 
   return (
     <ThemeProvider theme={globalTheme}>
@@ -169,8 +169,8 @@ export default function App() {
             element={<CourseDetailPage />}
           />
           <Route
-            path='/category/info/:categoryId'
-            element={<CourseListPage title='Category' categoryList={subCategoryList} courseList={courseList} />}
+            path='/category/info/:subcategoryId'
+            element={<CourseListPage title='Category' subcategoryList={subcategoryList} courseList={courseList} />}
           />
           <Route
             path='/search'
@@ -197,6 +197,7 @@ export default function App() {
         >
           <CircularProgress color='inherit' />
         </Backdrop>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
       </PageContext.Provider>
     </ThemeProvider>
   )

@@ -12,7 +12,6 @@ import Box from '@mui/material/Box';
 import SchoolIcon from '@mui/icons-material/School';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Copyright from '../components/Copyright';
 import { postRequest } from '../utils/requests';
 import { backend, apiPath } from '../utils/urls';
 import { PageContext } from '../App';
@@ -107,7 +106,7 @@ export default function LoginPage(props) {
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
+      
     </Container>
   );
 }
