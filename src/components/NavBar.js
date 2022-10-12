@@ -54,7 +54,7 @@ const NavbarLinkButton = styled((props) => (
 ))(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontWeight: 700,
-  fontSize: "1.75rem",
+  fontSize: "1.6rem",
   fontFamily: LatoFont,
   textTransform: "capitalize",
   margin: theme.spacing(0, 1),
@@ -138,6 +138,7 @@ const NavBar = props => {
     <AppBar elevation={0} position="fixed" color="inherit" sx={(theme) => ({
       userSelect: "none",
       background: "linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)",
+      paddingY: { xs: 1, sm: 0.5 },
     })}>
       <Toolbar>
         <MUILink href='/' children={<SideLogo src={UnicampIcon} alt='' />} />
