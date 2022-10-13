@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
-import Container from '@mui/material/Container'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
@@ -16,9 +15,8 @@ import { PageContext } from '../App'
 import { Link as MUILink } from '@mui/material'
 import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { LatoFont } from '../utils/commonData'
-import { Pageview } from '@mui/icons-material'
 
 const SideLogo = styled("img")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
@@ -54,7 +52,7 @@ const NavbarLinkButton = styled((props) => (
 ))(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontWeight: 700,
-  fontSize: "1.75rem",
+  fontSize: "1.6rem",
   fontFamily: LatoFont,
   textTransform: "capitalize",
   margin: theme.spacing(0, 1),
@@ -138,6 +136,8 @@ const NavBar = props => {
     <AppBar elevation={0} position="fixed" color="inherit" sx={(theme) => ({
       userSelect: "none",
       background: "linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)",
+      paddingX: { xs: 0, md: "1vw", lg: "4vw" },
+      paddingY: 1,
     })}>
       <Toolbar>
         <MUILink href='/' children={<SideLogo src={UnicampIcon} alt='' />} />
