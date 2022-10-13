@@ -25,7 +25,10 @@ import SignUpPage from './pages/SignUp'
 import Copyright from './components/Copyright'
 
 export const PageContext = createContext({})
-const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
+const Offset = styled('div')(({ theme }) => ({
+  ...theme.mixins.toolbar,
+  margin: theme.spacing(1, 0),
+}));
 
 export default function App() {
   const [loading, setLoading] = useState(false);
@@ -166,7 +169,7 @@ export default function App() {
           />
           <Route
             path='/course/info/:courseId'
-            element={<CourseDetailPage />}
+            element={<CourseDetailPage subcategoryList={subcategoryList} />}
           />
           <Route
             path='/category/info/:subcategoryId'
