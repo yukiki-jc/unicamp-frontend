@@ -10,60 +10,60 @@ import Container from '@mui/material/Container'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
-import UnicampIcon from '../unicamp.png';
+import UnicampIcon from '../unicamp.png'
 import { NestedMenuItem } from 'mui-nested-menu'
 import { PageContext } from '../App'
 import { Link as MUILink } from '@mui/material'
 import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
-import { styled, alpha } from "@mui/material/styles";
+import { styled, alpha } from '@mui/material/styles'
 import { LatoFont } from '../utils/commonData'
 import { Pageview } from '@mui/icons-material'
 
-const SideLogo = styled("img")(({ theme }) => ({
-  [theme.breakpoints.down("sm")]: {
-    display: "none"
+const SideLogo = styled('img')(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    display: 'none'
   },
-  [theme.breakpoints.up("sm")]: {
-    display: "block",
+  [theme.breakpoints.up('sm')]: {
+    display: 'block',
     height: 64
-  },
-}));
+  }
+}))
 
-const CenterLogo = styled("img")(({ theme }) => ({
-  [theme.breakpoints.down("sm")]: {
-    display: "block",
+const CenterLogo = styled('img')(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    display: 'block',
     height: 56
   },
-  [theme.breakpoints.up("sm")]: {
-    display: "none"
-  },
-}));
+  [theme.breakpoints.up('sm')]: {
+    display: 'none'
+  }
+}))
 
 const CenterBox = styled(Box)(({ theme }) => ({
-  [theme.breakpoints.down("sm")]: {
+  [theme.breakpoints.down('sm')]: {
     flexGrow: 1
   },
-  [theme.breakpoints.up("sm")]: {
-    display: "none"
-  },
-}));
+  [theme.breakpoints.up('sm')]: {
+    display: 'none'
+  }
+}))
 
-const NavbarLinkButton = styled((props) => (
+const NavbarLinkButton = styled(props => (
   <Button disableFocusRipple disableTouchRipple {...props} />
 ))(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontWeight: 700,
-  fontSize: "1.75rem",
+  fontSize: '1.75rem',
   fontFamily: LatoFont,
-  textTransform: "capitalize",
-  margin: theme.spacing(0, 1),
-}));
+  textTransform: 'capitalize',
+  margin: theme.spacing(0, 1)
+}))
 
 const NavBar = props => {
   const [anchorElCategory, setAnchorElCategory] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
-
+  const { admin, handleLogout, categoryList } = props;
   const handleOpenCategoryMenu = event => {
     setAnchorElCategory(event.currentTarget)
   }
@@ -80,28 +80,28 @@ const NavBar = props => {
   const pageContextValue = React.useContext(PageContext)
   const loginMenuItem = pageContextValue.state.login
     ? [
-      <MenuItem onClick={handleCloseUserMenu}>
-        <Typography textAlign='center'> Profile </Typography>
-      </MenuItem>,
-      <MenuItem onClick={handleCloseUserMenu}>
-        <Typography textAlign='center'> Setting </Typography>
-      </MenuItem>,
-      <MenuItem onClick={props.handleLogout}>
-        <Typography textAlign='center'> Logout </Typography>
-      </MenuItem>
-    ]
+        <MenuItem onClick={handleCloseUserMenu}>
+          <Typography textAlign='center'> Profile </Typography>
+        </MenuItem>,
+        <MenuItem onClick={handleCloseUserMenu}>
+          <Typography textAlign='center'> Setting </Typography>
+        </MenuItem>,
+        <MenuItem onClick={handleLogout}>
+          <Typography textAlign='center'> Logout </Typography>
+        </MenuItem>
+      ]
     : [
-      <MenuItem onClick={handleCloseUserMenu}>
-        <MUILink href='/login' underline='none'>
-          <Typography textAlign='center' color='gray'>
-            {' '}
-            Login{' '}
-          </Typography>
-        </MUILink>
-      </MenuItem>
-    ]
+        <MenuItem onClick={handleCloseUserMenu}>
+          <MUILink href='/login' underline='none'>
+            <Typography textAlign='center' color='gray'>
+              {' '}
+              Login{' '}
+            </Typography>
+          </MUILink>
+        </MenuItem>
+      ]
 
-  const categoryMenuItems = props.categoryList.map(category => {
+  const categoryMenuItems = categoryList.map(category => {
     const subcategoryMenuItems = category.subcategory.map(subCate => {
       return (
         <MenuItem>
@@ -128,17 +128,39 @@ const NavBar = props => {
       </NestedMenuItem>
     )
   })
-  const collectionMenuForXs = pageContextValue.state.login ? (<MenuItem onClick={handleCloseCategoryMenu}>
-    <Typography textAlign='center'> Collection </Typography>
-  </MenuItem>) : null;
-  const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseCategoryMenu}>
-    Collection
-  </NavbarLinkButton>) : null;
+  const collectionMenuForXs = pageContextValue.state.login ? (
+    <MenuItem onClick={handleCloseCategoryMenu}>
+      <Typography textAlign='center'> Collection </Typography>
+    </MenuItem>
+  ) : null
+  const collectionMenuForMd = pageContextValue.state.login ? (
+    <NavbarLinkButton onMouseOver={handleCloseCategoryMenu}>
+      Collection
+    </NavbarLinkButton>
+  ) : null
+
+  const managementForXs = admin ? (
+    <MenuItem onClick={handleCloseCategoryMenu}>
+      <MUILink href='/coursemanagement' underline='none'><Typography textAlign='center'> Course Management</Typography></MUILink>
+    </MenuItem>
+  ) : null;
+  const managementForMd = admin ? (
+    <NavbarLinkButton onMouseOver={handleCloseCategoryMenu}>
+      <MUILink href='/coursemanagement' underline='none'>Course Management</MUILink>
+    </NavbarLinkButton>
+  ) : null;
+
   return (
-    <AppBar elevation={0} position="fixed" color="inherit" sx={(theme) => ({
-      userSelect: "none",
-      background: "linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)",
-    })}>
+    <AppBar
+      elevation={0}
+      position='fixed'
+      color='inherit'
+      sx={theme => ({
+        userSelect: 'none',
+        background:
+          'linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)'
+      })}
+    >
       <Toolbar>
         <MUILink href='/' children={<SideLogo src={UnicampIcon} alt='' />} />
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -174,15 +196,23 @@ const NavBar = props => {
               <Typography textAlign='center'> Category </Typography>
             </MenuItem>
             {collectionMenuForXs}
+            {managementForXs}
           </Menu>
         </Box>
         <MUILink href='/' children={<CenterLogo src={UnicampIcon} alt='' />} />
         <CenterBox />
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, marginLeft: 1 }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: { xs: 'none', md: 'flex' },
+            marginLeft: 1
+          }}
+        >
           <NavbarLinkButton onMouseOver={handleOpenCategoryMenu}>
             Category
           </NavbarLinkButton>
           {collectionMenuForMd}
+          {managementForMd}
         </Box>
         <Menu
           open={!!anchorElCategory}
@@ -195,10 +225,14 @@ const NavBar = props => {
 
         <Box sx={{ flexGrow: 0 }}>
           <IconButton onMouseOver={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' sx={{
-              height: "3.6rem",
-              width: "3.6rem",
-            }} />
+            <Avatar
+              alt='Remy Sharp'
+              src='/static/images/avatar/2.jpg'
+              sx={{
+                height: '3.6rem',
+                width: '3.6rem'
+              }}
+            />
           </IconButton>
           <Menu
             sx={{ mt: '45px' }}

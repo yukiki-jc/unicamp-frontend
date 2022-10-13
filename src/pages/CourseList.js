@@ -4,6 +4,7 @@ import React from 'react'
 import CourseCard from '../components/CourseCard'
 import { Box } from '@mui/material'
 import { useParams } from 'react-router-dom'
+import TitleBox from '../components/TitleBox'
 
 const CourseListPage = props => {
   const { title, courseList = [], subcategoryList = [] } = props
@@ -41,13 +42,7 @@ const CourseListPage = props => {
   return (
     <div>
       <main>
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            pt: 8,
-            pb: 6
-          }}
-        >
+        <TitleBox>
           <Container maxWidth='lg'>
             <Typography
               component='h1'
@@ -59,7 +54,7 @@ const CourseListPage = props => {
               {newTitle}
             </Typography>
           </Container>
-        </Box>
+        </TitleBox>
         <Container maxWidth='lg'>
           {courseCards}
         </Container>

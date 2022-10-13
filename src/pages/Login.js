@@ -32,10 +32,10 @@ export default function LoginPage(props) {
     }
     const loginURL = joinPaths([backend, apiPath.login]);
     postRequest(loginBody, loginURL).then(json => {
-      console.log(json);
       if (json.state === true) {
         props.handleLoginSuccess({
           ...loginBody,
+          admin: json.admin,
           token: json.token
         });
       } else {
@@ -49,7 +49,6 @@ export default function LoginPage(props) {
 
   return (
     <Container component="main" maxWidth="xs" sx={{ userSelect: "none" }}>
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,

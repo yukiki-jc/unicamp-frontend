@@ -40,6 +40,7 @@ export default function SignUpPage(props) {
       if (json.state === true) {
         props.handleLoginSuccess({
           ...signUpBody,
+          admin: false,
           token: json.token
         });
       } else if (json.state === false) {
