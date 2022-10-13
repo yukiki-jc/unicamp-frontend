@@ -102,12 +102,12 @@ export default function CourseCard({
                     value={rating}
                     precision={0.5}
                     readOnly
-                    sx={{
+                    sx={(theme) => ({
                         marginLeft: 0.5,
-                        '& .MuiRating-iconFilled': {
-                            color: '#b27c66',
+                        "& .MuiRating-iconFilled": {
+                            color: theme.palette.secondary.main,
                         },
-                    }}
+                    })}
                 />
             </Box>
             <Box sx={(theme) => ({

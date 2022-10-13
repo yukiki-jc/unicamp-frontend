@@ -136,7 +136,7 @@ const NavBar = props => {
     <AppBar elevation={0} position="fixed" color="inherit" sx={(theme) => ({
       userSelect: "none",
       background: "linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)",
-      paddingX: { xs: 0, md: "1vw", lg: "4vw" },
+      paddingX: { xs: 0, md: "1vw", lg: "2vw" },
       paddingY: 1,
     })}>
       <Toolbar>
@@ -148,7 +148,6 @@ const NavBar = props => {
             aria-controls='menu-appbar'
             aria-haspopup='true'
             onClick={handleOpenCategoryMenu}
-            color='inherit'
           >
             <MenuIcon />
           </IconButton>
