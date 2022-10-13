@@ -6,8 +6,9 @@ export async function postRequest (
 ) {
   var myHeaders = new Headers();
   const userInfo = getUser();
-  if (userInfo !== null) 
+  if (userInfo !== null) {
     myHeaders.set('token', userInfo.token);
+  }
   url = 'http://' + url;
   myHeaders.append('Content-Type', 'application/json; charset=utf-8');
   return fetch(url, {
@@ -20,6 +21,7 @@ export async function postRequest (
       if (response.status === 200) 
         return response.json()
       else {
+        console.log(response);
         throw 'Connect Error'
       }
     })

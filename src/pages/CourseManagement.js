@@ -10,8 +10,8 @@ import { apiPath, backend } from '../utils/urls'
 import { PageContext } from '../App'
 import CourseInfoModal from '../components/CourseInfoModal'
 import { emptyCourse, emptyCourseThumbnail } from '../utils/commonData'
-import stylizeObject from '../utils/functions'
 import { getRequest } from '../utils/requests'
+import { reStylizeObject, stylizeObject } from '../utils/functions'
 const columns = [
   {
     field: 'id',
@@ -75,18 +75,13 @@ export default function CourseManagementPage (props) {
   const { subcategoryList, courseList, setCourseList } = props
 
   const [selectedCourses, setSelectedCourses] = React.useState([])
-  React.useEffect(() => {
-    console.log(selectedCourses)
-  }, [selectedCourses])
-  React.useLayoutEffect(() => {
-    console.log('Loading Management')
-  }, [])
+ 
   const pageContextValue = React.useContext(PageContext)
 
   const [courseInfoModal, setCourseInfoModal] = React.useState({
     show: false,
     type: 'Add Course',
-    currentCourseDetail: emptyCourse
+    currentCourseDetail: { ...emptyCourse }
   })
   const handleCloseModal = () => {
     setCourseInfoModal({
@@ -98,7 +93,7 @@ export default function CourseManagementPage (props) {
     setCourseInfoModal({
       show: true,
       type: 'Add',
-      currentCourseDetail: emptyCourse
+      currentCourseDetail: { ...emptyCourse }
     })
   }
   const handleEditCourse = () => {
@@ -163,6 +158,7 @@ export default function CourseManagementPage (props) {
           pageContextValue.handler.setErrorBox(message)
           pageContextValue.handler.setLoading(false)
         } else {
+          pageContextValue.handler.setSuccessBox("successfully deleted")
           pageContextValue.handler.setLoading(false)
           setCourseList(newCourseList)
         }
@@ -176,55 +172,47 @@ export default function CourseManagementPage (props) {
   const handleSubmit = event => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    let todoCourse = emptyCourse
-    let todoCourseThumbnail = emptyCourseThumbnail
+    let todoCourse = { ...emptyCourse }
+    let todoCourseThumbnail = { ...emptyCourseThumbnail }
     data.forEach(function (value, key) {
       todoCourse[key] = value
     })
     Object.keys(todoCourseThumbnail).forEach(key => {
       todoCourseThumbnail[key] = data.get(key)
     })
-    console.log('Submit Course')
-    console.log(todoCourse)
-    // pageContextValue.handler.setLoading(true);
-    // if (courseInfoModal.type === 'Add') {
-    //   const addCourseURL = joinPaths([backend, apiPath.course.add])
-    //   postRequest(todoCourse, addCourseURL).then(json => {
-    //     if (json.state === true) {
-    //       const newCourseList = courseList.filter(course => {
-    //         return course.id !== todoCourse.id;
-    //       })
-    //       newCourseList.append(todoCourse);
-    //       pageContextValue.handler.setSuccessBox(json.message);
-    //       setCourseList(newCourseList);
-    //     }
-    //     else {
-    //       pageContextValue.handler.setErrorBox(json.message);
-    //     }
-    //   }).catch(e => {
-    //     pageContextValue.handler.setErrorBox(e);
-    //   });
-    //   }
-    //   else {
-    //     const updateCourseURL = joinPaths([backend, apiPath.course.update])
-    //     postRequest(todoCourse, updateCourseURL).then(json => {
-    //       if (json.state === true) {
-    //         const newCourseList = courseList.filter(course => {
-    //           return course.id !== todoCourse.id;
-    //         })
-    //         newCourseList.append(todoCourse);
-    //         pageContextValue.handler.setSuccessBox(json.message);
-    //         setCourseList(newCourseList);
-    //       }
-    //       else {
-    //         pageContextValue.handler.setErrorBox(json.message);
-    //       }
-    //     }).catch(e => {
-    //       pageContextValue.handler.setErrorBox(e);
-    //     });
-    //   }
-    //   pageContextValue.handler.setLoading(false);
+    let addEditURL = ''
+    pageContextValue.handler.setLoading(true)
+    if (courseInfoModal.type === 'Add') {
+      addEditURL = joinPaths([backend, apiPath.course.add])
+      delete todoCourse['id'];
+    } else {
+      addEditURL = joinPaths([backend, apiPath.course.update])
+    }
+    todoCourse = reStylizeObject(todoCourse);
+    postRequest(todoCourse, addEditURL)
+      .then(json => {
+        if (json.state === true) {
+          const courseListURL = joinPaths([backend, apiPath.course.list]);
+          pageContextValue.handler.setSuccessBox(json.message);
+          return getRequest(courseListURL)
+        } else {
+          pageContextValue.handler.setErrorBox(json.message)
+        }
+      }).then(json => {
+        setCourseList(stylizeObject(json));
+        setCourseInfoModal({
+          ...courseInfoModal,
+          show: false
+        })
+        pageContextValue.handler.setLoading(false)
+      })
+      .catch(e => {
+        console.log(e)
+        pageContextValue.handler.setErrorBox(e)
+        pageContextValue.handler.setLoading(false)
+      })
   }
+
   return (
     <main>
       <TitleBox>
@@ -266,7 +254,6 @@ export default function CourseManagementPage (props) {
             setSelectedCourses(newSelectedCourses)
           }}
           selectionModel={selectedCourses}
-          autoHeight
           checkboxSelection
         />
       </Container>

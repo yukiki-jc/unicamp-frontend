@@ -11,9 +11,7 @@ const CourseListPage = props => {
   const { subcategoryId } = useParams()
   let newTitle = title;
   let courseListShow = courseList;
-  // console.log(categoryList);
   if (title === 'Category') {
-    console.log(subcategoryId);
     for (let i = 0; i < subcategoryList.length; i++) {
       if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
         newTitle = subcategoryList[i].subcategoryName

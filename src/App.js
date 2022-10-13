@@ -20,7 +20,7 @@ import { backend, apiPath } from './utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { getRequest } from './utils/requests'
 import { styled } from "@mui/material/styles";
-import stylizeObject from './utils/functions'
+import { stylizeObject, reStylizeObject} from './utils/functions'
 import SignUpPage from './pages/SignUp'
 import Copyright from './components/Copyright'
 import CourseManagementPage from './pages/CourseManagement'
@@ -81,13 +81,12 @@ export default function App() {
 
   const handleLoginSuccess = user => {
     saveUser(user);
-    console.log(user);
     setLogin(true);
     setAdmin(user.admin);
-    console.log("Navigating!");
     navigate('/')
   }
-
+  
+  const navigate = useNavigate()
   const handleLogout = () => {
     deleteUser();
     setLogin(false);
@@ -95,14 +94,6 @@ export default function App() {
     navigate('/')
   }
 
-  const navigate = useNavigate()
-  console.log('Loading App');
-  // useEffect(() => {
-    
-  //   if (login) {
-      
-  //   }
-  // }, [login])
 
   useLayoutEffect(() => {
     const user = getUser()
@@ -161,12 +152,16 @@ export default function App() {
           categoryList: categoryList,
           courseList: courseList
         } } handler={{
-          handleLoginSuccess: handleLoginSuccess
+          handleLoginSuccess: handleLoginSuccess,
+          setCourseList: setCourseList
         }}/>
         <Snackbar
           open={messageBox.show}
           autoHideDuration={6000}
           onClose={messageBoxClose}
+          sx={{
+            zIndex: 3000
+          }}
         >
           <Alert
             onClose={messageBoxClose}

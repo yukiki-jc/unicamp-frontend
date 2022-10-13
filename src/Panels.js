@@ -44,7 +44,7 @@ export default function Panel (props) {
           element={
             <CourseManagementPage
               courseList={state.courseList}
-              setCourseList={state.setCourseList}
+              setCourseList={handler.setCourseList}
               subcategoryList={state.subcategoryList}
             />
           }

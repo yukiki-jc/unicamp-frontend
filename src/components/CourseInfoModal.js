@@ -69,13 +69,12 @@ export default function CourseInfoModal (props) {
           <Grid item xs={2}>
             <TextField
               required
-              id='courseId'
-              name='courseId'
+              id='id'
+              name='id'
               label='Course ID'
               fullWidth
-              defaultValue={currentCourseDetail.id}
+              value={currentCourseDetail.id}
               variant='standard'
-              disabled
             />
           </Grid>,
           <Grid item xs={10}>
@@ -139,6 +138,7 @@ export default function CourseInfoModal (props) {
                 id='estHour'
                 name='estHour'
                 label='Hours'
+                type='number'
                 fullWidth
                 defaultValue={currentCourseDetail.estHour}
                 variant='standard'
