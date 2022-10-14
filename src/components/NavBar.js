@@ -79,10 +79,7 @@ const NavBar = props => {
   const loginMenuItem = pageContextValue.state.login
     ? [
       <MenuItem onClick={handleCloseUserMenu}>
-        <Typography textAlign='center'> Profile </Typography>
-      </MenuItem>,
-      <MenuItem onClick={handleCloseUserMenu}>
-        <Typography textAlign='center'> Setting </Typography>
+        <Typography textAlign='center'> Profile & Setting </Typography>
       </MenuItem>,
       <MenuItem onClick={props.handleLogout}>
         <Typography textAlign='center'> Logout </Typography>
@@ -141,7 +138,7 @@ const NavBar = props => {
     })}>
       <Toolbar>
         <MUILink href='/' children={<SideLogo src={UnicampIcon} alt='' />} />
-        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+        <Box sx={{ flexGrow: 1, display: { xs: 'flex', sm: 'none' } }}>
           <IconButton
             size='large'
             aria-label='account of current user'
@@ -177,7 +174,7 @@ const NavBar = props => {
         </Box>
         <MUILink href='/' children={<CenterLogo src={UnicampIcon} alt='' />} />
         <CenterBox />
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, marginLeft: 1 }}>
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' }, marginLeft: 1 }}>
           <NavbarLinkButton onMouseOver={handleOpenCategoryMenu}>
             Category
           </NavbarLinkButton>
