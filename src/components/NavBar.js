@@ -47,6 +47,10 @@ const CenterBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const AlignMenuItem = styled(MenuItem)(({ theme }) => ({
+  padding: "6px 12px"
+}));
+
 const NavbarLinkButton = styled((props) => (
   <Button disableFocusRipple disableTouchRipple {...props} />
 ))(({ theme }) => ({
@@ -131,9 +135,9 @@ const NavBar = props => {
       </NestedMenuItem>
     )
   })
-  const collectionMenuForXs = pageContextValue.state.login ? (<MenuItem onClick={handleCloseMenuCategory}>
-    <Typography textAlign='left'> Collection </Typography>
-  </MenuItem>) : null;
+  const collectionMenuForXs = pageContextValue.state.login ? (<AlignMenuItem onClick={handleCloseMenuCategory}>
+    <Typography textAlign='center'> Collection </Typography>
+  </AlignMenuItem>) : null;
   const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
     Collection
   </NavbarLinkButton>) : null;
