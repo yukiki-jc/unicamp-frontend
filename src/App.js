@@ -19,9 +19,10 @@ import NavBar from './components/NavBar'
 import { backend, apiPath } from './utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { getRequest } from './utils/requests'
-import { styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles"
 import stylizeObject from './utils/functions'
 import SignUpPage from './pages/SignUp'
+import SettingPage from './pages/Setting'
 import Copyright from './components/Copyright'
 
 export const PageContext = createContext({})
@@ -166,6 +167,10 @@ export default function App() {
           <Route
             path='list'
             element={<CourseListPage />}
+          />
+          <Route
+            path='setting'
+            element={<SettingPage />}
           />
           <Route
             path='/course/info/:courseId'
