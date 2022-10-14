@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SettingPage = (props) => {
+const SettingPage = props => {
   return (
     <main>
     </main>

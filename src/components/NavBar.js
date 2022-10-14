@@ -9,13 +9,13 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
-import UnicampIcon from '../unicamp.png';
+import UnicampIcon from '../unicamp.png'
 import { NestedMenuItem } from 'mui-nested-menu'
 import { PageContext } from '../App'
 import { Link as MUILink } from '@mui/material'
 import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
-import { styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles"
 import { LatoFont } from '../utils/commonData'
 
 const SideLogo = styled("img")(({ theme }) => ({
@@ -59,26 +59,34 @@ const NavbarLinkButton = styled((props) => (
 }));
 
 const NavBar = props => {
-  const [anchorElCategory, setAnchorElCategory] = React.useState(null)
+  const [anchorElMenu, setAnchorElMenu] = React.useState(null)
+  const [anchorElMenuCategory, setAnchorElMenuCategory] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
-  const handleOpenCategoryMenu = event => {
-    setAnchorElCategory(event.currentTarget)
+  const handleOpenMenu = event => {
+    setAnchorElMenu(event.currentTarget)
   }
-  const handleCloseCategoryMenu = () => {
-    setAnchorElCategory(null)
+  const handleCloseMenu = () => {
+    setAnchorElMenu(null)
   }
 
-  const handleOpenUserMenu = event => {
+  const handleOpenMenuCategory = event => {
+    setAnchorElMenuCategory(event.currentTarget)
+  }
+  const handleCloseMenuCategory = () => {
+    setAnchorElMenuCategory(null)
+  }
+
+  const handleOpenUser = event => {
     setAnchorElUser(event.currentTarget)
   }
-  const handleCloseUserMenu = () => {
+  const handleCloseUser = () => {
     setAnchorElUser(null)
   }
   const pageContextValue = React.useContext(PageContext)
   const loginMenuItem = pageContextValue.state.login
     ? [
-      <MenuItem onClick={handleCloseUserMenu}>
+      <MenuItem onClick={handleCloseUser}>
         <Typography textAlign='center'> Profile & Setting </Typography>
       </MenuItem>,
       <MenuItem onClick={props.handleLogout}>
@@ -86,7 +94,7 @@ const NavBar = props => {
       </MenuItem>
     ]
     : [
-      <MenuItem onClick={handleCloseUserMenu}>
+      <MenuItem onClick={handleCloseUser}>
         <MUILink href='/login' underline='none'>
           <Typography textAlign='center' color='gray'>
             {' '}
@@ -117,16 +125,16 @@ const NavBar = props => {
     return (
       <NestedMenuItem
         label={category.categoryName}
-        parentMenuOpen={!!anchorElCategory}
+        parentMenuOpen={!!anchorElMenuCategory}
       >
         {subcategoryMenuItems}
       </NestedMenuItem>
     )
   })
-  const collectionMenuForXs = pageContextValue.state.login ? (<MenuItem onClick={handleCloseCategoryMenu}>
+  const collectionMenuForXs = pageContextValue.state.login ? (<MenuItem onClick={handleCloseMenuCategory}>
     <Typography textAlign='center'> Collection </Typography>
   </MenuItem>) : null;
-  const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseCategoryMenu}>
+  const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
     Collection
   </NavbarLinkButton>) : null;
   return (
@@ -144,13 +152,13 @@ const NavBar = props => {
             aria-label='account of current user'
             aria-controls='menu-appbar'
             aria-haspopup='true'
-            onClick={handleOpenCategoryMenu}
+            onClick={handleOpenMenu}
           >
             <MenuIcon />
           </IconButton>
           <Menu
             id='menu-appbar'
-            anchorEl={anchorElCategory}
+            anchorEl={anchorElMenu}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left'
@@ -160,13 +168,13 @@ const NavBar = props => {
               vertical: 'top',
               horizontal: 'left'
             }}
-            open={!!anchorElCategory}
-            onClose={handleCloseCategoryMenu}
+            open={!!anchorElMenu}
+            onClose={handleCloseMenu}
             sx={{
               display: { xs: 'block', md: 'none' }
             }}
           >
-            <MenuItem onClick={handleCloseCategoryMenu}>
+            <MenuItem onClick={handleCloseMenuCategory}>
               <Typography textAlign='center'> Category </Typography>
             </MenuItem>
             {collectionMenuForXs}
@@ -175,22 +183,22 @@ const NavBar = props => {
         <MUILink href='/' children={<CenterLogo src={UnicampIcon} alt='' />} />
         <CenterBox />
         <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' }, marginLeft: 1 }}>
-          <NavbarLinkButton onMouseOver={handleOpenCategoryMenu}>
+          <NavbarLinkButton onMouseOver={handleOpenMenuCategory}>
             Category
           </NavbarLinkButton>
           {collectionMenuForMd}
         </Box>
         <Menu
-          open={!!anchorElCategory}
-          anchorEl={anchorElCategory}
-          onClose={handleCloseCategoryMenu}
-          MenuListProps={{ onMouseLeave: handleCloseCategoryMenu }}
+          open={!!anchorElMenuCategory}
+          anchorEl={anchorElMenuCategory}
+          onClose={handleCloseMenuCategory}
+          MenuListProps={{ onMouseLeave: handleCloseMenuCategory }}
         >
           {categoryMenuItems}
         </Menu>
 
         <Box sx={{ flexGrow: 0 }}>
-          <IconButton onMouseOver={handleOpenUserMenu} sx={{ p: 0 }}>
+          <IconButton onMouseOver={handleOpenUser} sx={{ p: 0 }}>
             <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' sx={{
               height: "3.6rem",
               width: "3.6rem",
@@ -210,8 +218,8 @@ const NavBar = props => {
               horizontal: 'right'
             }}
             open={!!anchorElUser}
-            onClose={handleCloseUserMenu}
-            MenuListProps={{ onMouseLeave: handleCloseUserMenu }}
+            onClose={handleCloseUser}
+            MenuListProps={{ onMouseLeave: handleCloseUser }}
           >
             {loginMenuItem}
           </Menu>
