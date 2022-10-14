@@ -104,7 +104,7 @@ const NavBar = props => {
       </MenuItem>
     ]
 
-  const categoryMenuItems = props.categoryList.map(category => {
+  const categoryMenuItems = parentOpen => props.categoryList.map(category => {
     const subcategoryMenuItems = category.subcategory.map(subCate => {
       return (
         <MenuItem>
@@ -115,7 +115,7 @@ const NavBar = props => {
             ])}
             underline='none'
           >
-            <Typography textAlign='center' color='gray'>
+            <Typography textAlign='center' color='black'>
               {subCate.subcategoryName}
             </Typography>
           </MUILink>
@@ -125,14 +125,14 @@ const NavBar = props => {
     return (
       <NestedMenuItem
         label={category.categoryName}
-        parentMenuOpen={!!anchorElMenuCategory}
+        parentMenuOpen={parentOpen}
       >
         {subcategoryMenuItems}
       </NestedMenuItem>
     )
   })
   const collectionMenuForXs = pageContextValue.state.login ? (<MenuItem onClick={handleCloseMenuCategory}>
-    <Typography textAlign='center'> Collection </Typography>
+    <Typography textAlign='left'> Collection </Typography>
   </MenuItem>) : null;
   const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
     Collection
@@ -174,9 +174,12 @@ const NavBar = props => {
               display: { xs: 'block', md: 'none' }
             }}
           >
-            <MenuItem onClick={handleCloseMenuCategory}>
-              <Typography textAlign='center'> Category </Typography>
-            </MenuItem>
+            <NestedMenuItem
+              label={"Category"}
+              parentMenuOpen={!!anchorElMenu}
+            >
+              {categoryMenuItems(!!anchorElMenu)}
+            </NestedMenuItem>
             {collectionMenuForXs}
           </Menu>
         </Box>
@@ -194,7 +197,7 @@ const NavBar = props => {
           onClose={handleCloseMenuCategory}
           MenuListProps={{ onMouseLeave: handleCloseMenuCategory }}
         >
-          {categoryMenuItems}
+          {categoryMenuItems(!!anchorElMenuCategory)}
         </Menu>
 
         <Box sx={{ flexGrow: 0 }}>
