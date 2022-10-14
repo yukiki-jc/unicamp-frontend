@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useLayoutEffect, useState } from 'react';
 import { PageContext } from '../App';
 import { apiPath, backend } from '../utils/urls';
 import { useParams, Link as RouterLink } from 'react-router-dom';
@@ -9,6 +9,7 @@ import Iframe from 'react-iframe';
 import { Box } from '@mui/system';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
 import { LatoFont, LevelMappings } from '../utils/commonData';
+import stylizeObject from '../utils/functions';
 
 const MainContainer = styled((props) => (
     <Box component="main" {...props} />
@@ -246,33 +247,41 @@ export default function CourseDetailPage({ subcategoryList }) {
     const pageContextValue = useContext(PageContext);
 
     const {
-        subcategory_id,
+        subcategoryId = 0,
         name,
         website,
         difficulty,
-        est_hour,
+        estHour,
         provider,
         video,
         assignment,
         description,
     } = courseData || {};
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const courseDataURL = joinPaths([backend, apiPath.course.info, courseId]);
+        pageContextValue.handler.setLoading(true);
         getRequest(courseDataURL)
-            .then((data) => setCourseData(data))
-            .catch((e) => pageContextValue.handler.setErrorBox(e));
-    }, [courseId, pageContextValue.handler]);
-
+            .then((data) => { 
+                console.log(data);
+                setCourseData(stylizeObject(data))
+                pageContextValue.handler.setLoading(false);
+            })
+            .catch((e) => {
+                pageContextValue.handler.setErrorBox(e)
+                pageContextValue.handler.setLoading(false);
+            });
+    }, []);
+    
     return (
         <MainContainer>
             <Breadcrumbs sx={{ width: "100%", flexShrink: 0, marginBottom: 3 }}>
                 <LinkRouter to="/">
                     Home
                 </LinkRouter>
-                <LinkRouter to="/">
-                    {(subcategory_id && subcategoryList.length > 0) ?
-                        subcategoryList[subcategory_id].subcategoryName :
+                <LinkRouter to={joinPaths([apiPath.category.info, subcategoryId.toString()])}>
+                    {(subcategoryId && subcategoryList.length > 0) ?
+                        subcategoryList[subcategoryId].subcategoryName :
                         <Skeleton variant="text" width="5rem" />
                     }
                 </LinkRouter>
@@ -309,10 +318,10 @@ export default function CourseDetailPage({ subcategoryList }) {
                         {LevelMappings[difficulty]}
                     </CourseTagGridItem>
                     <CourseTagGridItem label="Category" sm={7} lg={7}>
-                        {subcategory_id && subcategoryList.length && subcategoryList[subcategory_id].subcategoryName}
+                        {subcategoryId && subcategoryList.length && subcategoryList[subcategoryId].subcategoryName}
                     </CourseTagGridItem>
                     <CourseTagGridItem label="Time Cost" sm={5} lg={5}>
-                        {est_hour} hrs.
+                        {estHour} hrs.
                     </CourseTagGridItem>
                 </CourseTagGrid>
                 <CourseDetailButtonStack>
