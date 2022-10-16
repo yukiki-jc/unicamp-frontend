@@ -35,13 +35,14 @@ export async function getRequest (
   const userInfo = getUser();
   if (userInfo !== null) 
     myHeaders.set('token', userInfo.token);
+  console.log(userInfo.token);
   url = 'http://' + url;
   return fetch(url, {
     credentials: 'include',
+    headers: myHeaders,
     method: 'GET'
   })
     .then(response => {
-      console.log(response.status);
       if (response.status === 200) {
         return response.json()
       }

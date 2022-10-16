@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useLayoutEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -10,7 +10,11 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { styled } from '@mui/material/styles';
-
+import { getRequest, postRequest } from '../utils/requests';
+import { apiPath, backend } from '../utils/urls';
+import { joinPaths } from '@remix-run/router';
+import { getUser } from '../utils/storeUser';
+import { PageContext } from '../App';
 const Base = styled('main')(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -128,6 +132,7 @@ const NoneFormHelperText = styled(FormHelperText)(({ theme }) => ({
 
 const SettingPage = props => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const user = getUser();
   const [form, dispatchForm] = React.useReducer((form, action) => {
     switch (action.type) {
       case "oldPassword":
@@ -165,7 +170,25 @@ const SettingPage = props => {
             }
           }
         };
-
+      
+      case "applySuccess":
+        return {
+          ...form,
+          account: {
+            ...form.account,
+            password: {
+              ...form.account.password,
+              oldValue: '',
+              newValue: '',
+            }
+          },
+          info: {
+            ...form.info,
+            about: {
+              ...form.info.about
+            }
+          }
+        };
       default:
         throw new Error();
     }
@@ -185,10 +208,61 @@ const SettingPage = props => {
     }
   });
 
+  const pageContextValue = useContext(PageContext);
+  useLayoutEffect(() => {
+    const profileURL = joinPaths([backend, apiPath.profile.myprofile]);
+    getRequest(profileURL).then((json) => {
+      dispatchForm({type: 'about', value: json.description})
+    }).catch(e => {
+      pageContextValue.handler.setErrorBox(e);
+    })
+  }, []);
+
   const applyChange = React.useCallback(() => {
-    console.log(JSON.stringify(form));
-    // TODO: fill this function
-    window.history.back();
+    let toPost = []
+    pageContextValue.handler.setLoading(true);
+    if (form.account.password.oldValue !== "" && form.account.password.newValue !== "") {
+      console.log("Here");
+      // console.log(form.account)
+      const password = {
+        "oldPassword": form.account.password.oldValue,
+        'newPassword': form.account.password.newValue
+      }
+      const changePasswordURL = joinPaths([backend, apiPath.reset.password])
+      toPost.push(postRequest(password, changePasswordURL));
+    }
+    if (form.info.about.initValue !== form.info.about.value) {
+      console.log('Changing description')
+      const about = {
+        "name": user.name,
+        'description': form.info.about.value,
+      }
+      const changeProfileURL = joinPaths([backend, apiPath.profile.update])
+      toPost.push(postRequest(about, changeProfileURL));
+    }
+    Promise.all(toPost).then((results => {
+      let state = true;
+      let message = '';
+      console.log(results)
+      results.forEach(result =>{
+        if (result.state === false) {
+          state = false;
+          message = result.message;
+        }
+      })
+      if (state === false) {
+        pageContextValue.handler.setErrorBox(message);
+        pageContextValue.handler.setLoading(false);
+      }
+      else {
+        dispatchForm({ type: "applySuccess" });
+        pageContextValue.handler.setSuccessBox("Succesfully Updated");
+        pageContextValue.handler.setLoading(false);
+      }
+    })).catch(e => {
+      pageContextValue.handler.setErrorBox(e);
+    })
+    // window.history.back();
   }, [form]);
 
   return (
@@ -238,7 +312,7 @@ const SettingPage = props => {
           <SubformItem>
             <HalfTextField variant="outlined" sx={{ paddingRight: { sm: 0, md: "6px" } }}>
               <OutlinedInput
-                placeholder='这个 Placeholder 里要写些啥呢'
+                placeholder=''
                 type="password"
                 value={form.account.password.oldValue}
                 onChange={ event => dispatchForm({ type: "oldPassword", value: event.target.value }) }
@@ -247,7 +321,7 @@ const SettingPage = props => {
             </HalfTextField>
             <HalfTextField variant="outlined" sx={{ paddingLeft: { sm: 0, md: "6px" } }}>
               <OutlinedInput
-                placeholder='这个 Placeholder 里又要写些啥呢'
+                placeholder=''
                 type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
