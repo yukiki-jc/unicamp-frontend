@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom'
 import CourseListPage from './pages/CourseList'
 import CourseDetailPage from './pages/CourseDetail'
 import SignUpPage from './pages/SignUp'
+import SettingPage from './pages/Setting'
 import CourseManagementPage from './pages/CourseManagement'
 
 export default function Panel (props) {
@@ -21,6 +22,7 @@ export default function Panel (props) {
           path='signup'
           element={<SignUpPage handleLoginSuccess={handler.handleLoginSuccess} />}
         />
+        <Route path='setting' element={<SettingPage />} />
         <Route path='list' element={<CourseListPage />} />
         <Route path='/course/info/:courseId' element={<CourseDetailPage subcategoryList={state.subcategoryList} />} />
         <Route

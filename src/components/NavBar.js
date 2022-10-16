@@ -94,7 +94,14 @@ const NavBar = props => {
   const loginMenuItem = pageContextValue.state.login
     ? [
       <MenuItem onClick={handleCloseUser}>
-        <Typography textAlign='center'> Profile & Setting </Typography>
+        <MUILink
+          href={"/setting"}
+          underline='none'
+        >
+          <Typography textAlign='center' color='black'>
+            Profile & Setting
+          </Typography>
+        </MUILink>
       </MenuItem>,
       <MenuItem onClick={handleLogout}>
         <Typography textAlign='center'> Logout </Typography>
