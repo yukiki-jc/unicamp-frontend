@@ -6,10 +6,10 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
-import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import UnicampIcon from '../unicamp.png'
+import RoundAvatar from './RoundAvatar'
 import { NestedMenuItem } from 'mui-nested-menu'
 import { PageContext } from '../App'
 import { Link as MUILink } from '@mui/material'
@@ -232,10 +232,7 @@ const NavBar = props => {
 
         <Box sx={{ flexGrow: 0 }}>
           <IconButton onMouseOver={handleOpenUser} sx={{ p: 0 }}>
-            <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' sx={{
-              height: "3.6rem",
-              width: "3.6rem",
-            }} />
+            <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} />
           </IconButton>
           <Menu
             sx={{ mt: '45px' }}
