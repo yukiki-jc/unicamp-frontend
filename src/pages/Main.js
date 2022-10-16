@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles'
 import { Link as MUILink } from '@mui/material'
 import { courseList } from '../utils/testData'
 import { getUser } from '../utils/storeUser'
-
+import TitleBox from '../components/TitleBox'
 
 const MainPageCardContainer = styled(props => (
   <Container maxWidth='md' {...props} />
@@ -16,25 +16,26 @@ const MainPageCardContainer = styled(props => (
   padding: theme.spacing(4, 0)
 }))
 
-const MainPageCardHeadline = (props) => {
+const MainPageCardHeadline = props => {
   return (
     <Stack
-          // sx={{ pt: 1 }}
-          direction='row'
-          spacing={85}
-          justifyContent='left'
-        >
-          <Typography gutterBottom variant='h6' zIndex={1}>
-            {props.title}
-          </Typography>
-          <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
-            More
-          </MUILink>
-        </Stack>
+      // sx={{ pt: 1 }}
+      direction='row'
+      spacing={85}
+      justifyContent='left'
+    >
+      <Typography gutterBottom variant='h6' zIndex={1}>
+        {props.title}
+      </Typography>
+      <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
+        More
+      </MUILink>
+    </Stack>
   )
 }
 
 const MainPage = props => {
+
   const user = getUser();
   let name = 'Future Engineer';
   if (user !== null)
@@ -42,13 +43,7 @@ const MainPage = props => {
   return (
     <main>
       {/* Hero unit */}
-      <Box
-        sx={{
-          bgcolor: 'background.paper',
-          pt: 8,
-          pb: 6
-        }}
-      >
+      <TitleBox>
         <Container maxWidth='md'>
           <Typography
             component='h1'
@@ -69,7 +64,7 @@ const MainPage = props => {
             Your journey to Computer Science starts here.
           </Typography>
         </Container>
-      </Box>
+      </TitleBox>
       <MainPageCardContainer>
         <MainPageCardHeadline title='Hot Courses' />
         <CourseThumbnailLine courseList={courseList} />
@@ -80,7 +75,7 @@ const MainPage = props => {
         <CourseThumbnailLine courseList={courseList} />
       </MainPageCardContainer>
     </main>
-  );
+  )
 }
 
 export default MainPage

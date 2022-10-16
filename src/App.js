@@ -19,12 +19,13 @@ import NavBar from './components/NavBar'
 import { backend, apiPath } from './utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { getRequest } from './utils/requests'
-import { styled } from "@mui/material/styles"
-import stylizeObject from './utils/functions'
+import { styled } from "@mui/material/styles";
+import { stylizeObject, reStylizeObject} from './utils/functions'
 import SignUpPage from './pages/SignUp'
 import SettingPage from './pages/Setting'
 import Copyright from './components/Copyright'
-
+import CourseManagementPage from './pages/CourseManagement'
+import Panel from './Panels'
 export const PageContext = createContext({})
 const Offset = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
@@ -34,6 +35,7 @@ const Offset = styled('div')(({ theme }) => ({
 export default function App() {
   const [loading, setLoading] = useState(false);
   const [login, setLogin] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [subcategoryList, setSubcategoryList] = useState([]);
   const [courseList, setCourseList] = useState([]);
@@ -82,27 +84,26 @@ export default function App() {
   }
 
   const handleLoginSuccess = user => {
-    saveUser(user)
-    console.log(user)
-    setLogin(true)
+    saveUser(user);
+    setLogin(true);
+    setAdmin(user.admin);
+    navigate('/')
   }
-
-  const handleLogout = user => {
-    deleteUser()
-    setLogin(false)
-  }
-
+  
   const navigate = useNavigate()
+  const handleLogout = () => {
+    deleteUser();
+    setLogin(false);
+    setAdmin(false);
+    navigate('/')
+  }
 
-  useEffect(() => {
-    if (login) {
-      navigate('/')
-    }
-  }, [login])
 
   useLayoutEffect(() => {
-    if (getUser() !== null) {
+    const user = getUser()
+    if (user !== null) {
       setLogin(true);
+      setAdmin(user.admin);
     }
     const categoryListURL = joinPaths([backend, apiPath.category.list]);
     const courseListURL = joinPaths([backend, apiPath.course.list]);
@@ -148,47 +149,25 @@ export default function App() {
         }}
       >
         <CssBaseline enableColorScheme />
-        <NavBar handleLogout={handleLogout} categoryList={categoryList} />
+        <NavBar handleLogout={handleLogout} categoryList={categoryList} admin={admin} />
         <Offset />
-        <Routes>
-          <Route
-            exact
-            path='/'
-            element={<MainPage />}
-          />
-          <Route
-            path='login'
-            element={<LoginPage handleLoginSuccess={handleLoginSuccess} />}
-          />
-          <Route
-            path='signup'
-            element={<SignUpPage handleLoginSuccess={handleLoginSuccess} />}
-          />
-          <Route
-            path='list'
-            element={<CourseListPage />}
-          />
-          <Route
-            path='setting'
-            element={<SettingPage />}
-          />
-          <Route
-            path='/course/info/:courseId'
-            element={<CourseDetailPage subcategoryList={subcategoryList} />}
-          />
-          <Route
-            path='/category/info/:subcategoryId'
-            element={<CourseListPage title='Category' subcategoryList={subcategoryList} courseList={courseList} />}
-          />
-          <Route
-            path='/search'
-            element={<CourseListPage title='Search Results' courseList={courseList} />}
-          />
-        </Routes>
+
+        <Panel state={{
+          subcategoryList: subcategoryList,
+          categoryList: categoryList,
+          courseList: courseList
+        } } handler={{
+          handleLoginSuccess: handleLoginSuccess,
+          setCourseList: setCourseList
+        }}/>
+
         <Snackbar
           open={messageBox.show}
           autoHideDuration={6000}
           onClose={messageBoxClose}
+          sx={{
+            zIndex: 3000
+          }}
         >
           <Alert
             onClose={messageBoxClose}

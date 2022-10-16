@@ -22,20 +22,16 @@ export default function LoginPage(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
     const loginBody = {
       name: data.get('email'),
       password: data.get('password'),
     }
     const loginURL = joinPaths([backend, apiPath.login]);
     postRequest(loginBody, loginURL).then(json => {
-      console.log(json);
       if (json.state === true) {
         props.handleLoginSuccess({
           ...loginBody,
+          admin: json.admin,
           token: json.token
         });
       } else {
@@ -49,7 +45,6 @@ export default function LoginPage(props) {
 
   return (
     <Container component="main" maxWidth="xs" sx={{ userSelect: "none" }}>
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,

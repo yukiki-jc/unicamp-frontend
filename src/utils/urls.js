@@ -5,11 +5,15 @@ export const apiPath = {
     login: '/login',
     course: {
         list: '/course/list',
-        info: '/course/info'
+        info: '/course/info',
+        delete: '/course/delete',
+        add: '/course/add',
+        update: '/course/update'
     },
     category: {
         list: '/category/list',
         info: '/category/info'
     },
-    register: '/register'
+    register: '/register',
+    
 }
