@@ -22,11 +22,15 @@ import { getRequest } from './utils/requests'
 import { styled } from "@mui/material/styles";
 import { stylizeObject, reStylizeObject} from './utils/functions'
 import SignUpPage from './pages/SignUp'
+import SettingPage from './pages/Setting'
 import Copyright from './components/Copyright'
 import CourseManagementPage from './pages/CourseManagement'
 import Panel from './Panels'
 export const PageContext = createContext({})
-const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
+const Offset = styled('div')(({ theme }) => ({
+  ...theme.mixins.toolbar,
+  margin: theme.spacing(1, 0),
+}));
 
 export default function App() {
   const [loading, setLoading] = useState(false);
@@ -147,6 +151,7 @@ export default function App() {
         <CssBaseline enableColorScheme />
         <NavBar handleLogout={handleLogout} categoryList={categoryList} admin={admin} />
         <Offset />
+
         <Panel state={{
           subcategoryList: subcategoryList,
           categoryList: categoryList,
@@ -155,6 +160,7 @@ export default function App() {
           handleLoginSuccess: handleLoginSuccess,
           setCourseList: setCourseList
         }}/>
+
         <Snackbar
           open={messageBox.show}
           autoHideDuration={6000}

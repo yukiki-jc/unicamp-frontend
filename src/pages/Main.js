@@ -35,9 +35,11 @@ const MainPageCardHeadline = props => {
 }
 
 const MainPage = props => {
-  const user = getUser()
-  let name = 'Future Engineerer'
-  if (user !== null) name = user.name
+
+  const user = getUser();
+  let name = 'Future Engineer';
+  if (user !== null)
+    name = user.name;
   return (
     <main>
       {/* Hero unit */}
@@ -51,6 +53,15 @@ const MainPage = props => {
             gutterBottom
           >
             Hello, {name}!
+          </Typography>
+          <Typography
+            component='h1'
+            variant='h5'
+            align='left'
+            color='text.primary'
+            gutterBottom
+          >
+            Your journey to Computer Science starts here.
           </Typography>
         </Container>
       </TitleBox>

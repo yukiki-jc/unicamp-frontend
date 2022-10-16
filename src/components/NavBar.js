@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
-import Container from '@mui/material/Container'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
@@ -18,7 +17,6 @@ import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { styled, alpha } from '@mui/material/styles'
 import { LatoFont } from '../utils/commonData'
-import { Pageview } from '@mui/icons-material'
 
 const SideLogo = styled('img')(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
@@ -49,59 +47,71 @@ const CenterBox = styled(Box)(({ theme }) => ({
   }
 }))
 
-const NavbarLinkButton = styled(props => (
+
+const AlignMenuItem = styled(MenuItem)(({ theme }) => ({
+  padding: "6px 12px"
+}));
+
+const NavbarLinkButton = styled((props) => (
   <Button disableFocusRipple disableTouchRipple {...props} />
 ))(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontWeight: 700,
-  fontSize: '1.75rem',
+  fontSize: "1.6rem",
   fontFamily: LatoFont,
   textTransform: 'capitalize',
   margin: theme.spacing(0, 1)
 }))
 
 const NavBar = props => {
-  const [anchorElCategory, setAnchorElCategory] = React.useState(null)
+  const [anchorElMenu, setAnchorElMenu] = React.useState(null)
+  const [anchorElMenuCategory, setAnchorElMenuCategory] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
+
   const { admin, handleLogout, categoryList } = props;
-  const handleOpenCategoryMenu = event => {
-    setAnchorElCategory(event.currentTarget)
+
+  const handleOpenMenu = event => {
+    setAnchorElMenu(event.currentTarget)
   }
-  const handleCloseCategoryMenu = () => {
-    setAnchorElCategory(null)
+  const handleCloseMenu = () => {
+    setAnchorElMenu(null)
   }
 
-  const handleOpenUserMenu = event => {
+  const handleOpenMenuCategory = event => {
+    setAnchorElMenuCategory(event.currentTarget)
+  }
+  const handleCloseMenuCategory = () => {
+    setAnchorElMenuCategory(null)
+  }
+
+  const handleOpenUser = event => {
     setAnchorElUser(event.currentTarget)
   }
-  const handleCloseUserMenu = () => {
+  const handleCloseUser = () => {
     setAnchorElUser(null)
   }
   const pageContextValue = React.useContext(PageContext)
   const loginMenuItem = pageContextValue.state.login
     ? [
-        <MenuItem onClick={handleCloseUserMenu}>
-          <Typography textAlign='center'> Profile </Typography>
-        </MenuItem>,
-        <MenuItem onClick={handleCloseUserMenu}>
-          <Typography textAlign='center'> Setting </Typography>
-        </MenuItem>,
-        <MenuItem onClick={handleLogout}>
-          <Typography textAlign='center'> Logout </Typography>
-        </MenuItem>
-      ]
+      <MenuItem onClick={handleCloseUser}>
+        <Typography textAlign='center'> Profile & Setting </Typography>
+      </MenuItem>,
+      <MenuItem onClick={props.handleLogout}>
+        <Typography textAlign='center'> Logout </Typography>
+      </MenuItem>
+    ]
     : [
-        <MenuItem onClick={handleCloseUserMenu}>
-          <MUILink href='/login' underline='none'>
-            <Typography textAlign='center' color='gray'>
-              {' '}
-              Login{' '}
-            </Typography>
-          </MUILink>
-        </MenuItem>
-      ]
+      <MenuItem onClick={handleCloseUser}>
+        <MUILink href='/login' underline='none'>
+          <Typography textAlign='center' color='gray'>
+            {' '}
+            Login{' '}
+          </Typography>
+        </MUILink>
+      </MenuItem>
+    ]
 
-  const categoryMenuItems = categoryList.map(category => {
+  const categoryMenuItems = parentOpen => props.categoryList.map(category => {
     const subcategoryMenuItems = category.subcategory.map(subCate => {
       return (
         <MenuItem>
@@ -112,7 +122,7 @@ const NavBar = props => {
             ])}
             underline='none'
           >
-            <Typography textAlign='center' color='gray'>
+            <Typography textAlign='center' color='black'>
               {subCate.subcategoryName}
             </Typography>
           </MUILink>
@@ -122,22 +132,13 @@ const NavBar = props => {
     return (
       <NestedMenuItem
         label={category.categoryName}
-        parentMenuOpen={!!anchorElCategory}
+        parentMenuOpen={parentOpen}
       >
         {subcategoryMenuItems}
       </NestedMenuItem>
     )
   })
-  const collectionMenuForXs = pageContextValue.state.login ? (
-    <MenuItem onClick={handleCloseCategoryMenu}>
-      <Typography textAlign='center'> Collection </Typography>
-    </MenuItem>
-  ) : null
-  const collectionMenuForMd = pageContextValue.state.login ? (
-    <NavbarLinkButton onMouseOver={handleCloseCategoryMenu}>
-      Collection
-    </NavbarLinkButton>
-  ) : null
+
 
   const managementForXs = admin ? (
     <MenuItem onClick={handleCloseCategoryMenu}>
@@ -161,22 +162,35 @@ const NavBar = props => {
           'linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)'
       })}
     >
+
+  const collectionMenuForXs = pageContextValue.state.login ? (<AlignMenuItem onClick={handleCloseMenuCategory}>
+    <Typography textAlign='center'> Collection </Typography>
+  </AlignMenuItem>) : null;
+  const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
+    Collection
+  </NavbarLinkButton>) : null;
+  return (
+    <AppBar elevation={0} position="fixed" color="inherit" sx={(theme) => ({
+      userSelect: "none",
+      background: "linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)",
+      paddingX: { xs: 0, md: "1vw", lg: "2vw" },
+      paddingY: 1,
+    })}>
       <Toolbar>
         <MUILink href='/' children={<SideLogo src={UnicampIcon} alt='' />} />
-        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+        <Box sx={{ flexGrow: 1, display: { xs: 'flex', sm: 'none' } }}>
           <IconButton
             size='large'
             aria-label='account of current user'
             aria-controls='menu-appbar'
             aria-haspopup='true'
-            onClick={handleOpenCategoryMenu}
-            color='inherit'
+            onClick={handleOpenMenu}
           >
             <MenuIcon />
           </IconButton>
           <Menu
             id='menu-appbar'
-            anchorEl={anchorElCategory}
+            anchorEl={anchorElMenu}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left'
@@ -186,53 +200,47 @@ const NavBar = props => {
               vertical: 'top',
               horizontal: 'left'
             }}
-            open={!!anchorElCategory}
-            onClose={handleCloseCategoryMenu}
+            open={!!anchorElMenu}
+            onClose={handleCloseMenu}
             sx={{
               display: { xs: 'block', md: 'none' }
             }}
           >
-            <MenuItem onClick={handleCloseCategoryMenu}>
-              <Typography textAlign='center'> Category </Typography>
-            </MenuItem>
+            <NestedMenuItem
+              label={"Category"}
+              parentMenuOpen={!!anchorElMenu}
+            >
+              {categoryMenuItems(!!anchorElMenu)}
+            </NestedMenuItem>
             {collectionMenuForXs}
             {managementForXs}
           </Menu>
         </Box>
         <MUILink href='/' children={<CenterLogo src={UnicampIcon} alt='' />} />
         <CenterBox />
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: { xs: 'none', md: 'flex' },
-            marginLeft: 1
-          }}
-        >
-          <NavbarLinkButton onMouseOver={handleOpenCategoryMenu}>
+
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' }, marginLeft: 1 }}>
+          <NavbarLinkButton onMouseOver={handleOpenMenuCategory}>
             Category
           </NavbarLinkButton>
           {collectionMenuForMd}
           {managementForMd}
         </Box>
         <Menu
-          open={!!anchorElCategory}
-          anchorEl={anchorElCategory}
-          onClose={handleCloseCategoryMenu}
-          MenuListProps={{ onMouseLeave: handleCloseCategoryMenu }}
+          open={!!anchorElMenuCategory}
+          anchorEl={anchorElMenuCategory}
+          onClose={handleCloseMenuCategory}
+          MenuListProps={{ onMouseLeave: handleCloseMenuCategory }}
         >
-          {categoryMenuItems}
+          {categoryMenuItems(!!anchorElMenuCategory)}
         </Menu>
 
         <Box sx={{ flexGrow: 0 }}>
-          <IconButton onMouseOver={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar
-              alt='Remy Sharp'
-              src='/static/images/avatar/2.jpg'
-              sx={{
-                height: '3.6rem',
-                width: '3.6rem'
-              }}
-            />
+          <IconButton onMouseOver={handleOpenUser} sx={{ p: 0 }}>
+            <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' sx={{
+              height: "3.6rem",
+              width: "3.6rem",
+            }} />
           </IconButton>
           <Menu
             sx={{ mt: '45px' }}
@@ -248,8 +256,8 @@ const NavBar = props => {
               horizontal: 'right'
             }}
             open={!!anchorElUser}
-            onClose={handleCloseUserMenu}
-            MenuListProps={{ onMouseLeave: handleCloseUserMenu }}
+            onClose={handleCloseUser}
+            MenuListProps={{ onMouseLeave: handleCloseUser }}
           >
             {loginMenuItem}
           </Menu>
