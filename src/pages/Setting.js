@@ -128,6 +128,68 @@ const NoneFormHelperText = styled(FormHelperText)(({ theme }) => ({
 
 const SettingPage = props => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [form, dispatchForm] = React.useReducer((form, action) => {
+    switch (action.type) {
+      case "oldPassword":
+        return {
+          ...form,
+          account: {
+            ...form.account,
+            password: {
+              ...form.account.password,
+              oldValue: action.value,
+            }
+          }
+        };
+
+      case "newPassword":
+        return {
+          ...form,
+          account: {
+            ...form.account,
+            password: {
+              ...form.account.password,
+              newValue: action.value,
+            }
+          }
+        };
+
+      case "about":
+        return {
+          ...form,
+          info: {
+            ...form.info,
+            about: {
+              ...form.info.about,
+              value: action.value,
+            }
+          }
+        };
+
+      default:
+        throw new Error();
+    }
+  }, {
+    // TODO: fill correct initial value
+    account: {
+      password: {
+        oldValue: "",
+        newValue: "",
+      }
+    },
+    info: {
+      about: {
+        initValue: "",
+        value: "",
+      }
+    }
+  });
+
+  const applyChange = React.useCallback(() => {
+    console.log(JSON.stringify(form));
+    // TODO: fill this function
+    window.history.back();
+  }, [form]);
 
   return (
     <Base>
@@ -147,7 +209,12 @@ const SettingPage = props => {
             >
               CANCEL
             </Button>
-            <Button variant="outlined"> APPLY </Button>
+            <Button
+              variant="outlined"
+              onClick={applyChange}
+            >
+              APPLY
+            </Button>
           </Stack>
         </Confirm>
       </Title>
@@ -173,6 +240,8 @@ const SettingPage = props => {
               <OutlinedInput
                 placeholder='这个 Placeholder 里要写些啥呢'
                 type="password"
+                value={form.account.password.oldValue}
+                onChange={ event => dispatchForm({ type: "oldPassword", value: event.target.value }) }
               />
               <NoneFormHelperText> Old Password </NoneFormHelperText>
             </HalfTextField>
@@ -191,6 +260,8 @@ const SettingPage = props => {
                     </IconButton>
                   </InputAdornment>
                 }
+                value={form.account.password.newValue}
+                onChange={ event => dispatchForm({ type: "newPassword", value: event.target.value }) }
               />
               <NoneFormHelperText> New Password </NoneFormHelperText>
             </HalfTextField>
@@ -211,6 +282,8 @@ const SettingPage = props => {
                 multiline
                 rows={6}
                 placeholder="Write something about yourself ..."
+                value={form.info.about.value}
+                onChange={ event => dispatchForm({ type: "about", value: event.target.value }) }
               />
               <NoneFormHelperText> About </NoneFormHelperText>
             </SingleTextField>
