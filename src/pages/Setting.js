@@ -1,11 +1,15 @@
-import React from 'react'
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField';
+import React from 'react';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
-import { styled } from '@mui/material/styles'
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { styled } from '@mui/material/styles';
 
 const Base = styled('main')(({ theme }) => ({
   display: "flex",
@@ -22,7 +26,28 @@ const Base = styled('main')(({ theme }) => ({
 }));
 
 const Title = styled('div')(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  [theme.breakpoints.down('md')]: {
+    flexDirection: "column",
+  },
+  [theme.breakpoints.up('md')]: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+  },
+  paddingBottom: "32px",
+}));
 
+const Confirm = styled('div')(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    marginTop: "8px",
+    display: "flex",
+    flexDirection: "row-reverse",
+  },
+  [theme.breakpoints.up('md')]: {
+  },
 }));
 
 const FormItem = styled('div')(({ theme }) => ({
@@ -69,7 +94,6 @@ const SubformItem = styled('div')(({ theme }) => ({
 
 const Caption = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
-  paddingBottom: "32px",
 }));
 
 const SingleTextField = styled(FormControl)(({ theme }) => ({
@@ -103,14 +127,30 @@ const NoneFormHelperText = styled(FormHelperText)(({ theme }) => ({
 }));
 
 const SettingPage = props => {
+  const [showPassword, setShowPassword] = React.useState(false);
+
   return (
     <Base>
-      <div>
-        <Typography variant='h2' children='Profile & Setting' />
-        <Caption variant='subtitle2'>
-          Click Apply Button to Save Changes
-        </Caption>
-      </div>
+      <Title>
+        <div>
+          <Typography variant='h2' children='Profile & Setting' />
+          <Caption variant='subtitle2'>
+            Click APPLY Button to Save Changes
+          </Caption>
+        </div>
+        <Confirm>
+          <Stack spacing={2} direction="row">
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => window.history.back()}
+            >
+              CANCEL
+            </Button>
+            <Button variant="outlined"> APPLY </Button>
+          </Stack>
+        </Confirm>
+      </Title>
       <FormItem>
         <LeftFormItem>
           <Typography variant='h6' children='Account' />
@@ -125,16 +165,33 @@ const SettingPage = props => {
                 disabled
                 value="abc@xyz.com"
               />
-              <NoneFormHelperText> Email Address </NoneFormHelperText>
+              <NoneFormHelperText> Email Address (Immutable) </NoneFormHelperText>
             </SingleTextField>
           </SubformItem>
           <SubformItem>
             <HalfTextField variant="outlined" sx={{ paddingRight: { sm: 0, md: "6px" } }}>
-              <OutlinedInput placeholder='这个 Placeholder 里要写些啥呢'/>
+              <OutlinedInput
+                placeholder='这个 Placeholder 里要写些啥呢'
+                type="password"
+              />
               <NoneFormHelperText> Old Password </NoneFormHelperText>
             </HalfTextField>
             <HalfTextField variant="outlined" sx={{ paddingLeft: { sm: 0, md: "6px" } }}>
-              <OutlinedInput placeholder='这个 Placeholder 里又要写些啥呢'/>
+              <OutlinedInput
+                placeholder='这个 Placeholder 里又要写些啥呢'
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword((showPassword) => !showPassword)}
+                      onMouseDown={(event) => event.preventDefault()}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
               <NoneFormHelperText> New Password </NoneFormHelperText>
             </HalfTextField>
           </SubformItem>
