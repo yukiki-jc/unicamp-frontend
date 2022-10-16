@@ -10,7 +10,7 @@ import Iframe from 'react-iframe';
 import { Box } from '@mui/system';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
 import { LatoFont, LevelMappings } from '../utils/commonData';
-import stylizeObject from '../utils/functions';
+import { stylizeObject, reStylizeObject } from '../utils/functions';
 
 const MainContainer = styled((props) => (
     <Box component="main" {...props} />

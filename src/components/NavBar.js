@@ -15,7 +15,7 @@ import { PageContext } from '../App'
 import { Link as MUILink } from '@mui/material'
 import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
-import { styled, alpha } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import { LatoFont } from '../utils/commonData'
 
 const SideLogo = styled('img')(({ theme }) => ({
@@ -96,7 +96,7 @@ const NavBar = props => {
       <MenuItem onClick={handleCloseUser}>
         <Typography textAlign='center'> Profile & Setting </Typography>
       </MenuItem>,
-      <MenuItem onClick={props.handleLogout}>
+      <MenuItem onClick={handleLogout}>
         <Typography textAlign='center'> Logout </Typography>
       </MenuItem>
     ]
@@ -111,7 +111,7 @@ const NavBar = props => {
       </MenuItem>
     ]
 
-  const categoryMenuItems = parentOpen => props.categoryList.map(category => {
+  const categoryMenuItems = parentOpen => categoryList.map(category => {
     const subcategoryMenuItems = category.subcategory.map(subCate => {
       return (
         <MenuItem>
@@ -141,27 +141,15 @@ const NavBar = props => {
 
 
   const managementForXs = admin ? (
-    <MenuItem onClick={handleCloseCategoryMenu}>
+    <MenuItem onClick={handleCloseMenuCategory}>
       <MUILink href='/coursemanagement' underline='none'><Typography textAlign='center'> Course Management</Typography></MUILink>
     </MenuItem>
   ) : null;
   const managementForMd = admin ? (
-    <NavbarLinkButton onMouseOver={handleCloseCategoryMenu}>
+    <NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
       <MUILink href='/coursemanagement' underline='none'>Course Management</MUILink>
     </NavbarLinkButton>
   ) : null;
-
-  return (
-    <AppBar
-      elevation={0}
-      position='fixed'
-      color='inherit'
-      sx={theme => ({
-        userSelect: 'none',
-        background:
-          'linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 30%)'
-      })}
-    >
 
   const collectionMenuForXs = pageContextValue.state.login ? (<AlignMenuItem onClick={handleCloseMenuCategory}>
     <Typography textAlign='center'> Collection </Typography>

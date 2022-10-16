@@ -22,7 +22,7 @@ export default function Panel (props) {
           element={<SignUpPage handleLoginSuccess={handler.handleLoginSuccess} />}
         />
         <Route path='list' element={<CourseListPage />} />
-        <Route path='/course/info/:courseId' element={<CourseDetailPage />} />
+        <Route path='/course/info/:courseId' element={<CourseDetailPage subcategoryList={state.subcategoryList} />} />
         <Route
           path='/category/info/:subcategoryId'
           element={
