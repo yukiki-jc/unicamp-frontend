@@ -232,7 +232,7 @@ export default function CourseManagementPage (props) {
       </TitleBox>
 
       <Container maxWidth='lg' sx={{ height: 1050 }}>
-        <Stack sx={{ m: 1 }} direction='row' spacing={10} justifyContent='left'>
+        <Stack sx={{ m: 1 }} direction='row' spacing={10} justifyContent='center'>
           <Button size='small' onClick={handleAddCourse} variant='contained'>
             Add New Course
           </Button>
