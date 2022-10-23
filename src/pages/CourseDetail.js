@@ -269,7 +269,8 @@ export default function CourseDetailPage({ subcategoryList }) {
                 pageContextValue.handler.setLoading(false);
             })
             .catch((e) => {
-                pageContextValue.handler.setErrorBox(e)
+                console.log(e)
+                pageContextValue.handler.setErrorBox('Connect Error')
                 pageContextValue.handler.setLoading(false);
             });
     }, []);
@@ -282,7 +283,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                 </LinkRouter>
                 <LinkRouter to={joinPaths([apiPath.category.info, subcategoryId.toString()])}>
                     {(subcategoryId && subcategoryList.length > 0) ?
-                        subcategoryList[subcategoryId].subcategoryName :
+                        subcategoryList[subcategoryId - 1].subcategoryName :
                         <Skeleton variant="text" width="5rem" />
                     }
                 </LinkRouter>
@@ -326,6 +327,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     </CourseTagGridItem>
                 </CourseTagGrid>
                 <CourseDetailButtonStack>
+                <CourseDetailButton href={website}>Course Website</CourseDetailButton>
                     <CourseDetailButton href={video}>Watch Lectures</CourseDetailButton>
                     <CourseDetailButton
                         color="inherit"

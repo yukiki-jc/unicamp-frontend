@@ -35,12 +35,12 @@ export default function Panel (props) {
             />
           }
         />
-        <Route
+        {/* <Route
           path='/search'
           element={
             <CourseListPage title='Search Results' courseList={state.courseList} />
           }
-        />
+        /> */}
         <Route
           path='/coursemanagement'
           element={

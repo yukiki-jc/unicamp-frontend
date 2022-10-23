@@ -39,7 +39,8 @@ export default function LoginPage(props) {
       }
     })
     .catch(e => {
-      pageContextValue.handler.setErrorBox(e);
+      console.log(e)
+      pageContextValue.handler.setErrorBox("Connect Error");
     });
   };
 
@@ -65,7 +66,7 @@ export default function LoginPage(props) {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Username"
             name="email"
             autoComplete="email"
             autoFocus
@@ -82,7 +83,7 @@ export default function LoginPage(props) {
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
-            label="Remember my E-Mail"
+            label="Remember my account"
           />
           <Button
             type="submit"

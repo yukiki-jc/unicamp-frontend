@@ -46,7 +46,8 @@ export default function SignUpPage(props) {
         throw "Connect Error";
     })
     .catch(e => {
-      pageContextValue.handler.setErrorBox(e);
+      console.log(e)
+      pageContextValue.handler.setErrorBox("Connect Error");
     });
   };
 
@@ -76,7 +77,7 @@ export default function SignUpPage(props) {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Username"
                 name="email"
                 autoComplete="email"
               />

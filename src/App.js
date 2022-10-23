@@ -124,7 +124,8 @@ export default function App() {
         setLoading(false);
       })
       .catch(e => {
-        setErrorBox(e);
+        console.log(e);
+        setErrorBox('Connect Error');
         setLoading(false);
       })
   }, [])

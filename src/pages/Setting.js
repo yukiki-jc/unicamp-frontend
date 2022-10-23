@@ -214,7 +214,8 @@ const SettingPage = props => {
     getRequest(profileURL).then((json) => {
       dispatchForm({type: 'about', value: json.description})
     }).catch(e => {
-      pageContextValue.handler.setErrorBox(e);
+      console.log(e)
+      pageContextValue.handler.setErrorBox("Connect Error");
     })
   }, []);
 
@@ -260,7 +261,7 @@ const SettingPage = props => {
         pageContextValue.handler.setLoading(false);
       }
     })).catch(e => {
-      pageContextValue.handler.setErrorBox(e);
+      pageContextValue.handler.setErrorBox("Connect Error");
     })
     // window.history.back();
   }, [form]);
@@ -304,9 +305,9 @@ const SettingPage = props => {
             <SingleTextField variant="outlined">
               <OutlinedInput
                 disabled
-                value="abc@xyz.com"
+                value={user.name}
               />
-              <NoneFormHelperText> Email Address (Immutable) </NoneFormHelperText>
+              <NoneFormHelperText> Username (Immutable) </NoneFormHelperText>
             </SingleTextField>
           </SubformItem>
           <SubformItem>

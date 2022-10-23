@@ -125,7 +125,8 @@ export default function CourseManagementPage (props) {
           })
         })
         .catch(e => {
-          pageContextValue.handler.setErrorBox(e)
+          console.log(e)
+          pageContextValue.handler.setErrorBox("Connect Error")
           pageContextValue.handler.setLoading(false)
         })
     }
@@ -164,7 +165,7 @@ export default function CourseManagementPage (props) {
         }
       })
       .catch(e => {
-        pageContextValue.handler.setErrorBox(e)
+        pageContextValue.handler.setErrorBox("Connect Error")
         pageContextValue.handler.setLoading(false)
       })
   }
@@ -208,7 +209,7 @@ export default function CourseManagementPage (props) {
       })
       .catch(e => {
         console.log(e)
-        pageContextValue.handler.setErrorBox(e)
+        pageContextValue.handler.setErrorBox("Connect Error")
         pageContextValue.handler.setLoading(false)
       })
   }
