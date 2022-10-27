@@ -16,7 +16,7 @@ import { postRequest } from '../utils/requests';
 import { backend, apiPath } from '../utils/urls';
 import { PageContext } from '../App';
 import { joinPaths } from '@remix-run/router';
-
+import { errorHandler } from '../utils/functions'
 export default function LoginPage(props) {
   const pageContextValue = React.useContext(PageContext);
   const handleSubmit = (event) => {
@@ -39,8 +39,7 @@ export default function LoginPage(props) {
       }
     })
     .catch(e => {
-      console.log(e)
-      pageContextValue.handler.setErrorBox("Connect Error");
+      errorHandler(e, pageContextValue);
     });
   };
 

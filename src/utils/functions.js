@@ -37,3 +37,9 @@ export const reStylizeObject = (obj) => {
   }
   return obj
 }
+
+export const errorHandler = (e, pageContextValue) => {
+  console.log(e)
+  pageContextValue.handler.setErrorBox("Connect Error")
+  pageContextValue.handler.setLoading(false)
+}

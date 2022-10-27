@@ -6,12 +6,12 @@ import CourseThumbnail from './CourseThumbnail'
 
 
 export default function CourseThumbnailLine (props) {
-    const { courseList } = props;
+    const { thisCourseList } = props;
     return (
 
         <Grid container spacing={4}>
-          {courseList.map(card => (
-            <Grid item key={card.id} xs={12} sm={6} md={3}>
+          {thisCourseList.map(card => (
+            <Grid item key={card.id} xs={12} sm={6} md={6}>
               <CourseThumbnail card={card} />
             </Grid>
           ))}

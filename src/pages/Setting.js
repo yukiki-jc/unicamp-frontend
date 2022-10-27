@@ -15,6 +15,8 @@ import { apiPath, backend } from '../utils/urls';
 import { joinPaths } from '@remix-run/router';
 import { getUser } from '../utils/storeUser';
 import { PageContext } from '../App';
+import { errorHandler } from '../utils/functions'
+
 const Base = styled('main')(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -214,8 +216,7 @@ const SettingPage = props => {
     getRequest(profileURL).then((json) => {
       dispatchForm({type: 'about', value: json.description})
     }).catch(e => {
-      console.log(e)
-      pageContextValue.handler.setErrorBox("Connect Error");
+      errorHandler(e, pageContextValue);
     })
   }, []);
 

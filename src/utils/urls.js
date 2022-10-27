@@ -20,6 +20,13 @@ export const apiPath = {
     profile: {
         'update': '/profile/update',
         'myprofile': '/profile/myprofile'
-    }
+    },
+    recommend: {
+        new: '/recommend/new/main',
+        hot: '/recommend/hot/main',
+        rec: '/recommend/rec/main'
+    },
+    favorite: '/favorite'
+
     
 }

@@ -82,7 +82,8 @@ export default function App() {
       show: false
     })
   }
-
+  
+  const navigate = useNavigate()
   const handleLoginSuccess = user => {
     saveUser(user);
     setLogin(true);
@@ -90,7 +91,6 @@ export default function App() {
     navigate('/')
   }
   
-  const navigate = useNavigate()
   const handleLogout = () => {
     deleteUser();
     setLogin(false);
@@ -130,6 +130,8 @@ export default function App() {
       })
   }, [])
 
+
+ 
   return (
     <ThemeProvider theme={globalTheme}>
       <PageContext.Provider

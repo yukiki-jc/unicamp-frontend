@@ -10,7 +10,8 @@ import Iframe from 'react-iframe';
 import { Box } from '@mui/system';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
 import { LatoFont, LevelMappings } from '../utils/commonData';
-import { stylizeObject, reStylizeObject } from '../utils/functions';
+import { stylizeObject } from '../utils/functions';
+import { errorHandler } from '../utils/functions'
 
 const MainContainer = styled((props) => (
     <Box component="main" {...props} />
@@ -246,9 +247,9 @@ export default function CourseDetailPage({ subcategoryList }) {
     const { courseId } = useParams();
     const [courseData, setCourseData] = useState(null);
     const pageContextValue = useContext(PageContext);
-
+    console.log(subcategoryList);
     const {
-        subcategoryId = 0,
+        subcategoryId = -1,
         name,
         website,
         difficulty,
@@ -264,14 +265,12 @@ export default function CourseDetailPage({ subcategoryList }) {
         pageContextValue.handler.setLoading(true);
         getRequest(courseDataURL)
             .then((data) => { 
-                console.log(data);
+                console.log(data)
                 setCourseData(stylizeObject(data))
                 pageContextValue.handler.setLoading(false);
             })
             .catch((e) => {
-                console.log(e)
-                pageContextValue.handler.setErrorBox('Connect Error')
-                pageContextValue.handler.setLoading(false);
+                errorHandler(e, pageContextValue);
             });
     }, []);
     
@@ -282,7 +281,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     Home
                 </LinkRouter>
                 <LinkRouter to={joinPaths([apiPath.category.info, subcategoryId.toString()])}>
-                    {(subcategoryId && subcategoryList.length > 0) ?
+                    {(subcategoryId >= 0 && subcategoryList.length > 0) ?
                         subcategoryList[subcategoryId - 1].subcategoryName :
                         <Skeleton variant="text" width="5rem" />
                     }
@@ -320,7 +319,8 @@ export default function CourseDetailPage({ subcategoryList }) {
                         {LevelMappings[difficulty]}
                     </CourseTagGridItem>
                     <CourseTagGridItem label="Category" sm={7} lg={7}>
-                        {subcategoryId && subcategoryList.length && subcategoryList[subcategoryId].subcategoryName}
+                    {
+                        (subcategoryId >= -1 && subcategoryList.length && subcategoryList[subcategoryId - 1].subcategoryName)}
                     </CourseTagGridItem>
                     <CourseTagGridItem label="Time Cost" sm={5} lg={5}>
                         {estHour} hrs.

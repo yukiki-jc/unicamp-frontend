@@ -17,6 +17,52 @@ import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { styled } from '@mui/material/styles'
 import { LatoFont } from '../utils/commonData'
+import { alpha } from '@mui/material'
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate, useSearchParams } from 'react-router-dom'
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 const SideLogo = styled('img')(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
@@ -69,7 +115,7 @@ const NavBar = props => {
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
   const { admin, handleLogout, categoryList } = props;
-
+  const [searchValue, setSearchValue] = React.useState("");
   const handleOpenMenu = event => {
     setAnchorElMenu(event.currentTarget)
   }
@@ -159,11 +205,25 @@ const NavBar = props => {
   ) : null;
 
   const collectionMenuForXs = pageContextValue.state.login ? (<AlignMenuItem onClick={handleCloseMenuCategory}>
-    <Typography textAlign='center'> Collection </Typography>
+    <MUILink href='/favorites' underline='none'>
+    <Typography textAlign='center'> My Favorites </Typography>
+    </MUILink>
   </AlignMenuItem>) : null;
   const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
-    Collection
+    <MUILink href='/favorites' underline='none'>
+    My Favorites
+    </MUILink>
   </NavbarLinkButton>) : null;
+
+  const navigate = useNavigate()
+  const handleSearchSubmit = (event) => {
+    if (event.keyCode == 13) {
+      console.log(searchValue);
+      navigate('/search?value=' + searchValue);
+      navigate(0);
+    }
+  }
+
   return (
     <AppBar elevation={0} position="fixed" color="inherit" sx={(theme) => ({
       userSelect: "none",
@@ -229,7 +289,18 @@ const NavBar = props => {
         >
           {categoryMenuItems(!!anchorElMenuCategory)}
         </Menu>
-
+        <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              onKeyDown={handleSearchSubmit}
+              onChange={(event) => { setSearchValue(event.target.value);}}
+              value={searchValue}
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
         <Box sx={{ flexGrow: 0 }}>
           <IconButton onMouseOver={handleOpenUser} sx={{ p: 0 }}>
             <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} />
@@ -254,6 +325,7 @@ const NavBar = props => {
             {loginMenuItem}
           </Menu>
         </Box>
+        
       </Toolbar>
     </AppBar>
   )
