@@ -147,10 +147,10 @@ const CommentsField = styled("div")(({ theme }) => ({
     width: "100%",
     maxWidth: "1200px",
     [theme.breakpoints.down('sm')]: {
-        padding: theme.spacing(4, 0, 0, 0),
+        padding: theme.spacing(1, 0, 0, 0),
     },
     [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(4, 2, 0, 2),
+        padding: theme.spacing(1, 2, 0, 2),
     },
 }));
 
@@ -380,13 +380,22 @@ export default function CourseDetailPage({ subcategoryList }) {
                     })}
                 />
             </IntroContainer>
-            
+            <Typography
+                sx={{
+                    fontSize: "2.2rem",
+                    fontWeight: 700,
+                    marginTop: 6,
+                    marginLeft: 1,
+                    width: "100%"
+                }}
+                children={"Comments"}
+            />
             <CommentsField>
                 <Comment variant="outlined">
                     <CardHeader
                         avatar={<Avatar>您</Avatar>}
                         title="陈璟璨"
-                        action={<IconButton color="error"> <ClearIcon /> </IconButton>}
+                        action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
                     />
                     <CardContent>
                         <Typography>
@@ -409,7 +418,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <CardHeader
                         avatar={<Avatar>哈</Avatar>}
                         title="正义的伙伴"
-                        action={<IconButton color="error"> <ClearIcon /> </IconButton>}
+                        action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
                     />
                     <CardContent>
                         <Typography>
@@ -426,21 +435,17 @@ export default function CourseDetailPage({ subcategoryList }) {
                         <Typography
                             variant="body2"
                             align="right"
-                            sx={{ marginTop: 1, display: expanded ? "none" : "block", }}
+                            sx={{ marginTop: 1 }}
                             children={"(114514 Replies)"}
                         />
                     </CardContent>
                     <Collapse in={expanded} unmountOnExit>
                         <CardContent sx={{ paddingTop: 0 }}>
-                            人之初，性本善。性相近，习相远。苟不教，性乃迁。教之道，贵以专。昔孟母，择邻处。子不学，断机杼。
-                            窦燕山，有义方。教五子，名俱扬。养不教，父之过。教不严，师之惰。子不学，非所宜。幼不学，老何为。
-                            玉不琢，不成器。人不学，不知义。为人子，方少时。亲师友，习礼仪。香九龄，能温席。孝于亲，所当执。
-                            融四岁，能让梨。弟于长，宜先知。首孝悌，次见闻。知某数，识某文。一而十，十而百。百而千，千而万。
-                            三才者，天地人。三光者，日月星。三纲者，君臣义。父子亲，夫妇顺。曰春夏，曰秋冬。此四时，运不穷。
-                            曰南北，曰西东。此四方，应乎中。曰水火，木金土。此五行，本乎数。十干者，甲至癸。十二支，子至亥。
-                            曰黄道，日所躔。曰赤道，当中权。赤道下，温暖极。我中华，在东北。曰江河，曰淮济。此四渎，水之纪。
-                            曰岱华，嵩恒衡。此五岳，山之名。曰士农，曰工商。此四民，国之良。曰仁义，礼智信。此五常，不容紊。
-                            地所生，有草木。此植物，遍水陆。有虫鱼，有鸟兽。此动物，能飞走。稻粱菽，麦黍稷。此六谷，人所食。
+                            还在写
+                            <br/>
+                            快好了
+                            <br/>
+                            你先别急
                         </CardContent>
                     </Collapse>
                 </Comment>
