@@ -8,9 +8,11 @@ import { joinPaths } from '@remix-run/router';
 import { styled } from "@mui/material/styles";
 import Iframe from 'react-iframe';
 import { Box } from '@mui/system';
+import { Avatar, Card, CardHeader, CardActions, CardContent, IconButton } from '@mui/material';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
 import { LatoFont, LevelMappings } from '../utils/commonData';
 import { stylizeObject, reStylizeObject } from '../utils/functions';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const MainContainer = styled((props) => (
     <Box component="main" {...props} />
@@ -139,6 +141,23 @@ const CourseDetailButton = styled((props) => (
 const CourseDetailSubtitle = styled(Typography)(({ theme }) => ({
     fontSize: "2.2rem",
     fontWeight: 700,
+}));
+
+const CommentsField = styled("div")(({ theme }) => ({
+    width: "100%",
+    maxWidth: "1200px",
+    [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(4, 0, 0, 0),
+    },
+    [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(4, 2, 0, 2),
+    },
+}));
+
+const Comment = styled(Card)(({ theme }) => ({
+    marginBottom: 16,
+    borderRadius: 12,
+    // borderColor: theme.palette.primary.main,
 }));
 
 const RatingStar = ({ sx, ...props }) => (
@@ -356,6 +375,47 @@ export default function CourseDetailPage({ subcategoryList }) {
                     })}
                 />
             </IntroContainer>
+            <CommentsField>
+                <Comment variant="outlined">
+                    <CardHeader
+                        avatar={<Avatar>您</Avatar>}
+                        title="陈璟璨"
+                        action={<IconButton color="error"> <ClearIcon /> </IconButton>}
+                    />
+                    <CardContent>
+                        天地玄黄，宇宙洪荒。日月盈昃，辰宿列张。寒来暑往，秋收冬藏。闰余成岁，律吕调阳。
+                        云腾致雨，露结为霜。金生丽水，玉出昆冈。剑号巨阙，珠称夜光。果珍李柰，菜重芥姜。
+                        海咸河淡，鳞潜羽翔。龙师火帝，鸟官人皇。始制文字，乃服衣裳。推位让国，有虞陶唐。
+                        吊民伐罪，周发殷汤。坐朝问道，垂拱平章。爱育黎首，臣伏戎羌。遐迩一体，率宾归王。
+                        鸣凤在竹，白驹食场。化被草木，赖及万方。盖此身发，四大五常。恭惟鞠养，岂敢毁伤。
+                        女慕贞洁，男效才良。知过必改，得能莫忘。罔谈彼短，靡恃己长。信使可覆，器欲难量。
+                        墨悲丝染，诗赞羔羊。景行维贤，克念作圣。德建名立，形端表正。空谷传声，虚堂习听。
+                        祸因恶积，福缘善庆。尺璧非宝，寸阴是竞。资父事君，曰严与敬。孝当竭力，忠则尽命。
+                        临深履薄，夙兴温凊。似兰斯馨，如松之盛。川流不息，渊澄取映。容止若思，言辞安定。
+                        笃初诚美，慎终宜令。荣业所基，籍甚无竟。学优登仕，摄职从政。存以甘棠，去而益咏。
+                        乐殊贵贱，礼别尊卑。上和下睦，夫唱妇随。外受傅训，入奉母仪。诸姑伯叔，犹子比儿。
+                        孔怀兄弟，同气连枝。交友投分，切磨箴规。仁慈隐恻，造次弗离。节义廉退，颠沛匪亏。
+                    </CardContent>
+                </Comment>
+                <Comment variant="outlined">
+                    <CardHeader
+                        avatar={<Avatar>哈</Avatar>}
+                        title="正义的伙伴"
+                        action={<IconButton color="error"> <ClearIcon /> </IconButton>}
+                    />
+                    <CardContent>
+                        人之初，性本善。性相近，习相远。苟不教，性乃迁。教之道，贵以专。昔孟母，择邻处。子不学，断机杼。
+                        窦燕山，有义方。教五子，名俱扬。养不教，父之过。教不严，师之惰。子不学，非所宜。幼不学，老何为。
+                        玉不琢，不成器。人不学，不知义。为人子，方少时。亲师友，习礼仪。香九龄，能温席。孝于亲，所当执。
+                        融四岁，能让梨。弟于长，宜先知。首孝悌，次见闻。知某数，识某文。一而十，十而百。百而千，千而万。
+                        三才者，天地人。三光者，日月星。三纲者，君臣义。父子亲，夫妇顺。曰春夏，曰秋冬。此四时，运不穷。
+                        曰南北，曰西东。此四方，应乎中。曰水火，木金土。此五行，本乎数。十干者，甲至癸。十二支，子至亥。
+                        曰黄道，日所躔。曰赤道，当中权。赤道下，温暖极。我中华，在东北。曰江河，曰淮济。此四渎，水之纪。
+                        曰岱华，嵩恒衡。此五岳，山之名。曰士农，曰工商。此四民，国之良。曰仁义，礼智信。此五常，不容紊。
+                        地所生，有草木。此植物，遍水陆。有虫鱼，有鸟兽。此动物，能飞走。稻粱菽，麦黍稷。此六谷，人所食。
+                    </CardContent>
+                </Comment>
+            </CommentsField>
         </MainContainer >
     )
 };
