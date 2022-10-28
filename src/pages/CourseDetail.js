@@ -11,6 +11,7 @@ import { Box } from '@mui/system';
 import { Avatar, Card, CardHeader, Collapse, CardContent, IconButton } from '@mui/material';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot } from '@mui/lab/';
+import { Link as MUILink } from '@mui/material';
 import { timelineItemClasses } from '@mui/lab/TimelineItem';
 import { LatoFont, LevelMappings } from '../utils/commonData';
 import { stylizeObject, reStylizeObject } from '../utils/functions';
@@ -172,7 +173,7 @@ const ReplyField = styled(Timeline)(({ theme }) => ({
     },
 }));
 
-const Reply = styled(TimelineItem)(({ theme }) => ({
+const ReplyText = styled(TimelineContent)(({ theme }) => ({
     paddingTop: 0,
 }));
 
@@ -185,6 +186,10 @@ const UnifiedHeader = styled((props) => (
     }
 }));
 
+
+const replayAt = (name) => {
+    return <span>Reply <Link underline="none">{`@${name}`}</Link>: </span>
+}
 
 const RatingStar = ({ sx, ...props }) => (
     <Rating
@@ -454,12 +459,12 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <Collapse in={expanded} unmountOnExit>
                         <CardContent sx={{ paddingTop: 0, paddingBottom: "0px !important" }}>
                             <ReplyField>
-                                <Reply>
+                                <TimelineItem>
                                     <TimelineSeparator>
                                         <Avatar>您</Avatar>
                                         <TimelineConnector />
                                     </TimelineSeparator>
-                                    <TimelineContent>
+                                    <ReplyText>
                                         <UnifiedHeader
                                             title="陈璟璨"
                                             subheader="12/32/2022 23:61:07"
@@ -467,20 +472,22 @@ export default function CourseDetailPage({ subcategoryList }) {
                                         <Typography>
                                             别在这💈
                                         </Typography>
-                                    </TimelineContent>
-                                </Reply>
-                                <TimelineItem>
-                                    <TimelineSeparator>
-                                        <Avatar>您</Avatar>
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-                                    <TimelineContent>Code</TimelineContent>
+                                    </ReplyText>
                                 </TimelineItem>
                                 <TimelineItem>
                                     <TimelineSeparator>
-                                        <Avatar>您</Avatar>
+                                        <Avatar>蠢</Avatar>
+                                        <TimelineConnector />
                                     </TimelineSeparator>
-                                    <TimelineContent>Sleep</TimelineContent>
+                                    <ReplyText>
+                                        <UnifiedHeader
+                                            title="永雏塔菲"
+                                            subheader="12/32/2022 23:99:99"
+                                        />
+                                        <Typography>
+                                            {replayAt("陈璟璨")} 好想和啊喵喵结婚啊，他直播养我，我就在家打游戏，像他事业心那么强的人肯定不会放下直播的，嘿嘿🤤🤤这样就能一直花啊喵喵的钱。他要开始直播我就拖着啊喵喵的腿不让他走，让他用他的小脚踹我🤤🤤又踹不动我只能恶狠狠的用性感的嗓音骂我大变态🤤🤤马上要迟到了却只能干着急地用小手砸我脑袋🤤🤤等啊喵喵直播结束我就嚷嚷让他煮饭给我吃🤤🤤睡觉时就抱着啊喵喵睡🤤🤤啊喵喵小小的，凉凉🤤🤤的力气小又挣扎不开​🤤🤤
+                                        </Typography>
+                                    </ReplyText>
                                 </TimelineItem>
                             </ReplyField>
                         </CardContent>
