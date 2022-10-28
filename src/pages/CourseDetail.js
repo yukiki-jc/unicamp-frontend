@@ -11,7 +11,6 @@ import { Box } from '@mui/system';
 import { Avatar, Card, CardHeader, Collapse, CardContent, IconButton } from '@mui/material';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot } from '@mui/lab/';
-import { Link as MUILink } from '@mui/material';
 import { timelineItemClasses } from '@mui/lab/TimelineItem';
 import { LatoFont, LevelMappings } from '../utils/commonData';
 import { stylizeObject, reStylizeObject } from '../utils/functions';
@@ -171,6 +170,11 @@ const Comment = styled(Card)(({ theme }) => ({
     "&:hover": {
         borderColor: theme.palette.primary.main,
     },
+}));
+
+const PointerContent = styled(CardContent)(({ theme }) => ({
+    paddingTop: 0,
+    cursor: "pointer",
 }));
 
 const CollapseField = styled(Typography)(({ theme }) => ({
@@ -442,11 +446,11 @@ export default function CourseDetailPage({ subcategoryList }) {
                         title="陈璟璨"
                         action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
                     />
-                    <CardContent>
+                    <PointerContent>
                         <Typography>
                             你说得对，但是『你说的对』是由你说的对说你说得对的一款全新你说的对。你说的对发生在你说得「你说的对」的你说的对世界，在这里被你说的对选中的你说的对将被授予「你说的对」，引导你说的对之力。你说得对一位名为「你说的对」的你说得对，在你说的对旅行中邂逅你说的对、你说的对的你说的对们，和你说的对一起击败你说的对，寻找失散的你说的对，同时，你说得对「你说的对」的你说的对。
                         </Typography>
-                    </CardContent>
+                    </PointerContent>
                 </Comment>
                 <Comment variant="outlined">
                     <CardHeader
@@ -455,7 +459,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                         subheader="12/32/2022 23:59:59"
                         action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
                     />
-                    <CardContent sx={{ cursor: "pointer" }} onClick={() => setExpanded(!expanded)}>
+                    <PointerContent onClick={() => setExpanded(!expanded)}>
                         <Typography>
                             「最最喜欢你，啊喵喵。」
                             <br />「什么程度？」
@@ -466,7 +470,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                             <br />「我就这么喜欢你。」
                         </Typography>
                         {replyHint(114514)}
-                    </CardContent>
+                    </PointerContent>
                     <Collapse in={expanded} unmountOnExit>
                         <CollapseField>
                             <ReplyField>
