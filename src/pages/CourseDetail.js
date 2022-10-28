@@ -184,6 +184,9 @@ const CollapseField = styled(Typography)(({ theme }) => ({
 
 const ReplyField = styled(Timeline)(({ theme }) => ({
     paddingBottom: 0,
+    [theme.breakpoints.up('md')]: {
+        paddingRight: 48,
+    },
     [`& .${timelineItemClasses.root}:before`]: {
         flex: 0,
         padding: 0,
