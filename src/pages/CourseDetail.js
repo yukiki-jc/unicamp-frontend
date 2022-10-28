@@ -10,6 +10,8 @@ import Iframe from 'react-iframe';
 import { Box } from '@mui/system';
 import { Avatar, Card, CardHeader, Collapse, CardContent, IconButton } from '@mui/material';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
+import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot } from '@mui/lab/';
+import { timelineItemClasses } from '@mui/lab/TimelineItem';
 import { LatoFont, LevelMappings } from '../utils/commonData';
 import { stylizeObject, reStylizeObject } from '../utils/functions';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -159,8 +161,30 @@ const Comment = styled(Card)(({ theme }) => ({
     borderRadius: 12,
     "&:hover": {
         borderColor: theme.palette.primary.main,
-    },                                  
+    },
 }));
+
+const ReplyField = styled(Timeline)(({ theme }) => ({
+    paddingBottom: 0,
+    [`& .${timelineItemClasses.root}:before`]: {
+        flex: 0,
+        padding: 0,
+    },
+}));
+
+const Reply = styled(TimelineItem)(({ theme }) => ({
+    paddingTop: 0,
+}));
+
+const UnifiedHeader = styled((props) => (
+    <CardHeader avatar={<div></div>} {...props} />
+))(({ theme }) => ({
+    padding: theme.spacing(0),
+    "& .MuiCardHeader-avatar": {
+        display: "none"
+    }
+}));
+
 
 const RatingStar = ({ sx, ...props }) => (
     <Rating
@@ -287,7 +311,7 @@ export default function CourseDetailPage({ subcategoryList }) {
         const courseDataURL = joinPaths([backend, apiPath.course.info, courseId]);
         pageContextValue.handler.setLoading(true);
         getRequest(courseDataURL)
-            .then((data) => { 
+            .then((data) => {
                 console.log(data);
                 setCourseData(stylizeObject(data))
                 pageContextValue.handler.setLoading(false);
@@ -298,7 +322,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                 pageContextValue.handler.setLoading(false);
             });
     }, []);
-    
+
     return (
         <MainContainer>
             <Breadcrumbs sx={{ width: "100%", flexShrink: 0, marginBottom: 3 }}>
@@ -351,7 +375,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     </CourseTagGridItem>
                 </CourseTagGrid>
                 <CourseDetailButtonStack>
-                <CourseDetailButton href={website}>Course Website</CourseDetailButton>
+                    <CourseDetailButton href={website}>Course Website</CourseDetailButton>
                     <CourseDetailButton href={video}>Watch Lectures</CourseDetailButton>
                     <CourseDetailButton
                         color="inherit"
@@ -399,38 +423,26 @@ export default function CourseDetailPage({ subcategoryList }) {
                     />
                     <CardContent>
                         <Typography>
-                            天地玄黄，宇宙洪荒。日月盈昃，辰宿列张。寒来暑往，秋收冬藏。闰余成岁，律吕调阳。
-                            云腾致雨，露结为霜。金生丽水，玉出昆冈。剑号巨阙，珠称夜光。果珍李柰，菜重芥姜。
-                            海咸河淡，鳞潜羽翔。龙师火帝，鸟官人皇。始制文字，乃服衣裳。推位让国，有虞陶唐。
-                            吊民伐罪，周发殷汤。坐朝问道，垂拱平章。爱育黎首，臣伏戎羌。遐迩一体，率宾归王。
-                            鸣凤在竹，白驹食场。化被草木，赖及万方。盖此身发，四大五常。恭惟鞠养，岂敢毁伤。
-                            女慕贞洁，男效才良。知过必改，得能莫忘。罔谈彼短，靡恃己长。信使可覆，器欲难量。
-                            墨悲丝染，诗赞羔羊。景行维贤，克念作圣。德建名立，形端表正。空谷传声，虚堂习听。
-                            祸因恶积，福缘善庆。尺璧非宝，寸阴是竞。资父事君，曰严与敬。孝当竭力，忠则尽命。
-                            临深履薄，夙兴温凊。似兰斯馨，如松之盛。川流不息，渊澄取映。容止若思，言辞安定。
-                            笃初诚美，慎终宜令。荣业所基，籍甚无竟。学优登仕，摄职从政。存以甘棠，去而益咏。
-                            乐殊贵贱，礼别尊卑。上和下睦，夫唱妇随。外受傅训，入奉母仪。诸姑伯叔，犹子比儿。
-                            孔怀兄弟，同气连枝。交友投分，切磨箴规。仁慈隐恻，造次弗离。节义廉退，颠沛匪亏。
+                            你说得对，但是『你说的对』是由你说的对说你说得对的一款全新你说的对。你说的对发生在你说得「你说的对」的你说的对世界，在这里被你说的对选中的你说的对将被授予「你说的对」，引导你说的对之力。你说得对一位名为「你说的对」的你说得对，在你说的对旅行中邂逅你说的对、你说的对的你说的对们，和你说的对一起击败你说的对，寻找失散的你说的对，同时，你说得对「你说的对」的你说的对。
                         </Typography>
                     </CardContent>
                 </Comment>
-                <Comment variant="outlined" sx={{ cursor: "pointer" }} onClick={() => setExpanded(!expanded)}>
+                <Comment variant="outlined">
                     <CardHeader
-                        avatar={<Avatar>哈</Avatar>}
-                        title="正义的伙伴"
+                        avatar={<Avatar>蠢</Avatar>}
+                        title="永雏塔菲"
+                        subheader="12/32/2022 23:59:59"
                         action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
                     />
-                    <CardContent>
+                    <CardContent sx={{ cursor: "pointer" }} onClick={() => setExpanded(!expanded)}>
                         <Typography>
-                            人之初，性本善。性相近，习相远。苟不教，性乃迁。教之道，贵以专。昔孟母，择邻处。子不学，断机杼。
-                            窦燕山，有义方。教五子，名俱扬。养不教，父之过。教不严，师之惰。子不学，非所宜。幼不学，老何为。
-                            玉不琢，不成器。人不学，不知义。为人子，方少时。亲师友，习礼仪。香九龄，能温席。孝于亲，所当执。
-                            融四岁，能让梨。弟于长，宜先知。首孝悌，次见闻。知某数，识某文。一而十，十而百。百而千，千而万。
-                            三才者，天地人。三光者，日月星。三纲者，君臣义。父子亲，夫妇顺。曰春夏，曰秋冬。此四时，运不穷。
-                            曰南北，曰西东。此四方，应乎中。曰水火，木金土。此五行，本乎数。十干者，甲至癸。十二支，子至亥。
-                            曰黄道，日所躔。曰赤道，当中权。赤道下，温暖极。我中华，在东北。曰江河，曰淮济。此四渎，水之纪。
-                            曰岱华，嵩恒衡。此五岳，山之名。曰士农，曰工商。此四民，国之良。曰仁义，礼智信。此五常，不容紊。
-                            地所生，有草木。此植物，遍水陆。有虫鱼，有鸟兽。此动物，能飞走。稻粱菽，麦黍稷。此六谷，人所食。
+                            「最最喜欢你，啊喵喵。」
+                            <br />「什么程度？」
+                            <br />「像勃艮第发射出的核导弹一样。」
+                            <br />「核导弹？」啊喵喵再次扬起脸，「什么核导弹？」
+                            <br />「繁华的街道，你一个人走在路上，忽然一枚核导弹以20马赫的速度向你奔来，他的光芒映入你的视网膜，温度温暖你的心房，你秀丽的身躯变为气体，最后和他融为一体。接着，光芒、冲击波和辐射开始向四周扩散，他带你走向你熟悉与陌生的每个地方，阻碍你的所有障碍也会被他完全摆平。你说棒不棒？」
+                            <br />「太棒了。」
+                            <br />「我就这么喜欢你。」
                         </Typography>
                         <Typography
                             variant="body2"
@@ -440,12 +452,37 @@ export default function CourseDetailPage({ subcategoryList }) {
                         />
                     </CardContent>
                     <Collapse in={expanded} unmountOnExit>
-                        <CardContent sx={{ paddingTop: 0 }}>
-                            还在写
-                            <br/>
-                            快好了
-                            <br/>
-                            你先别急
+                        <CardContent sx={{ paddingTop: 0, paddingBottom: "0px !important" }}>
+                            <ReplyField>
+                                <Reply>
+                                    <TimelineSeparator>
+                                        <Avatar>您</Avatar>
+                                        <TimelineConnector />
+                                    </TimelineSeparator>
+                                    <TimelineContent>
+                                        <UnifiedHeader
+                                            title="陈璟璨"
+                                            subheader="12/32/2022 23:61:07"
+                                        />
+                                        <Typography>
+                                            别在这💈
+                                        </Typography>
+                                    </TimelineContent>
+                                </Reply>
+                                <TimelineItem>
+                                    <TimelineSeparator>
+                                        <Avatar>您</Avatar>
+                                        <TimelineConnector />
+                                    </TimelineSeparator>
+                                    <TimelineContent>Code</TimelineContent>
+                                </TimelineItem>
+                                <TimelineItem>
+                                    <TimelineSeparator>
+                                        <Avatar>您</Avatar>
+                                    </TimelineSeparator>
+                                    <TimelineContent>Sleep</TimelineContent>
+                                </TimelineItem>
+                            </ReplyField>
                         </CardContent>
                     </Collapse>
                 </Comment>
