@@ -146,6 +146,14 @@ const CourseDetailSubtitle = styled(Typography)(({ theme }) => ({
     fontWeight: 700,
 }));
 
+const CommentsTitle = styled(Typography)(({ theme }) => ({
+    fontSize: "2.2rem",
+    fontWeight: 700,
+    marginTop: 12,
+    marginLeft: 1,
+    width: "100%"
+}));
+
 const CommentsField = styled("div")(({ theme }) => ({
     width: "100%",
     maxWidth: "1200px",
@@ -165,6 +173,11 @@ const Comment = styled(Card)(({ theme }) => ({
     },
 }));
 
+const CollapseField = styled(Typography)(({ theme }) => ({
+    paddingTop: 0,
+    paddingBottom: "0px !important",
+}));
+
 const ReplyField = styled(Timeline)(({ theme }) => ({
     paddingBottom: 0,
     [`& .${timelineItemClasses.root}:before`]: {
@@ -173,14 +186,18 @@ const ReplyField = styled(Timeline)(({ theme }) => ({
     },
 }));
 
-const ReplyText = styled(TimelineContent)(({ theme }) => ({
+const ReplyItem = styled(TimelineContent)(({ theme }) => ({
     paddingTop: 0,
+}));
+
+const ReplyText = styled(Typography)(({ theme }) => ({
+    paddingBottom: 8,
 }));
 
 const UnifiedHeader = styled((props) => (
     <CardHeader avatar={<div></div>} {...props} />
 ))(({ theme }) => ({
-    padding: theme.spacing(0),
+    padding: theme.spacing(0, 0, 0.75, 0),
     "& .MuiCardHeader-avatar": {
         display: "none"
     }
@@ -190,6 +207,13 @@ const UnifiedHeader = styled((props) => (
 const replayAt = (name) => {
     return <span>Reply <Link underline="none">{`@${name}`}</Link>: </span>
 }
+
+const replyHint = (count) => (<Typography
+    variant="body2"
+    align="right"
+    sx={{ marginTop: 1 }}
+    children={`(${count} Replies)`}
+/>)
 
 const RatingStar = ({ sx, ...props }) => (
     <Rating
@@ -409,16 +433,8 @@ export default function CourseDetailPage({ subcategoryList }) {
                     })}
                 />
             </IntroContainer>
-            <Typography
-                sx={{
-                    fontSize: "2.2rem",
-                    fontWeight: 700,
-                    marginTop: 6,
-                    marginLeft: 1,
-                    width: "100%"
-                }}
-                children={"Comments"}
-            />
+
+            <CommentsTitle children={"Comments"} />
             <CommentsField>
                 <Comment variant="outlined">
                     <CardHeader
@@ -449,48 +465,43 @@ export default function CourseDetailPage({ subcategoryList }) {
                             <br />「太棒了。」
                             <br />「我就这么喜欢你。」
                         </Typography>
-                        <Typography
-                            variant="body2"
-                            align="right"
-                            sx={{ marginTop: 1 }}
-                            children={"(114514 Replies)"}
-                        />
+                        {replyHint(114514)}
                     </CardContent>
                     <Collapse in={expanded} unmountOnExit>
-                        <CardContent sx={{ paddingTop: 0, paddingBottom: "0px !important" }}>
+                        <CollapseField>
                             <ReplyField>
                                 <TimelineItem>
                                     <TimelineSeparator>
                                         <Avatar>您</Avatar>
                                         <TimelineConnector />
                                     </TimelineSeparator>
-                                    <ReplyText>
+                                    <ReplyItem>
                                         <UnifiedHeader
                                             title="陈璟璨"
                                             subheader="12/32/2022 23:61:07"
                                         />
-                                        <Typography>
+                                        <ReplyText>
                                             别在这💈
-                                        </Typography>
-                                    </ReplyText>
+                                        </ReplyText>
+                                    </ReplyItem>
                                 </TimelineItem>
                                 <TimelineItem>
                                     <TimelineSeparator>
                                         <Avatar>蠢</Avatar>
                                         <TimelineConnector />
                                     </TimelineSeparator>
-                                    <ReplyText>
+                                    <ReplyItem>
                                         <UnifiedHeader
                                             title="永雏塔菲"
                                             subheader="12/32/2022 23:99:99"
                                         />
-                                        <Typography>
+                                        <ReplyText>
                                             {replayAt("陈璟璨")} 好想和啊喵喵结婚啊，他直播养我，我就在家打游戏，像他事业心那么强的人肯定不会放下直播的，嘿嘿🤤🤤这样就能一直花啊喵喵的钱。他要开始直播我就拖着啊喵喵的腿不让他走，让他用他的小脚踹我🤤🤤又踹不动我只能恶狠狠的用性感的嗓音骂我大变态🤤🤤马上要迟到了却只能干着急地用小手砸我脑袋🤤🤤等啊喵喵直播结束我就嚷嚷让他煮饭给我吃🤤🤤睡觉时就抱着啊喵喵睡🤤🤤啊喵喵小小的，凉凉🤤🤤的力气小又挣扎不开​🤤🤤
-                                        </Typography>
-                                    </ReplyText>
+                                        </ReplyText>
+                                    </ReplyItem>
                                 </TimelineItem>
                             </ReplyField>
-                        </CardContent>
+                        </CollapseField>
                     </Collapse>
                 </Comment>
             </CommentsField>
