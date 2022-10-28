@@ -174,6 +174,7 @@ const Comment = styled(Card)(({ theme }) => ({
 
 const PointerContent = styled(CardContent)(({ theme }) => ({
     paddingTop: 0,
+    paddingBottom: "16px !important",
     cursor: "pointer",
 }));
 
@@ -447,6 +448,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <CardHeader
                         avatar={<Avatar>您</Avatar>}
                         title="陈璟璨"
+                        subheader="99/99/9999 99:99:99"
                         action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
                     />
                     <PointerContent>
