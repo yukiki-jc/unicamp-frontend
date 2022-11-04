@@ -137,6 +137,18 @@ const AvatarSetting = styled('div')(({ theme }) => ({
   display: "flex",
 }));
 
+const uploadAvatar = (event) => {
+  const targetImage = event.target.files;
+  if (targetImage?.length > 0 && /image\/.+/.test(targetImage[0].type)) {
+    let avatar = targetImage[0];
+    console.log(avatar);
+    // TODO: upload avatar (js File class)
+  } else {
+    // TODO: the file uploaded is not image or
+    //       the number of image doesn't equal to one
+  }
+}
+
 const SettingPage = props => {
   const [showPassword, setShowPassword] = React.useState(false);
   const user = getUser();
@@ -362,7 +374,10 @@ const SettingPage = props => {
             <SingleTextField variant="outlined">
               <AvatarSetting>
                 <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} />
-                <Button variant="outlined" sx={{ marginLeft: "12px" }} children={"Upload"} />
+                <Button variant="outlined" sx={{ marginLeft: "12px" }} component="label" >
+                  {"Upload"}
+                  <input type="file" accept="image/*" onChange={uploadAvatar} hidden />
+                </Button>
               </AvatarSetting>
               <NoneFormHelperText> Avatar </NoneFormHelperText>
             </SingleTextField>
