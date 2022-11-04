@@ -15,6 +15,8 @@ import { apiPath, backend } from '../utils/urls';
 import { joinPaths } from '@remix-run/router';
 import { getUser } from '../utils/storeUser';
 import { PageContext } from '../App';
+import RoundAvatar from '../components/RoundAvatar';
+
 const Base = styled('main')(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -68,6 +70,7 @@ const FormItem = styled('div')(({ theme }) => ({
 const LeftFormItem = styled('div')(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     width: "100%",
+    marginBottom: "16px",
   },
   [theme.breakpoints.up('sm')]: {
     width: "30%",
@@ -85,7 +88,7 @@ const RightFormItem = styled('div')(({ theme }) => ({
   flexDirection: "column",
 }));
 
-const SubformItem = styled('div')(({ theme }) => ({
+const SubFormItem = styled('div')(({ theme }) => ({
   paddingBottom: "16px",
   display: "flex",
   [theme.breakpoints.down('md')]: {
@@ -128,6 +131,10 @@ const HalfTextField = styled(FormControl)(({ theme }) => ({
 
 const NoneFormHelperText = styled(FormHelperText)(({ theme }) => ({
   userSelect: "none"
+}));
+
+const AvatarSetting = styled('div')(({ theme }) => ({
+  display: "flex",
 }));
 
 const SettingPage = props => {
@@ -301,7 +308,7 @@ const SettingPage = props => {
           </Caption>
         </LeftFormItem>
         <RightFormItem>
-          <SubformItem>
+          <SubFormItem>
             <SingleTextField variant="outlined">
               <OutlinedInput
                 disabled
@@ -309,8 +316,8 @@ const SettingPage = props => {
               />
               <NoneFormHelperText> Username (Immutable) </NoneFormHelperText>
             </SingleTextField>
-          </SubformItem>
-          <SubformItem>
+          </SubFormItem>
+          <SubFormItem>
             <HalfTextField variant="outlined" sx={{ paddingRight: { sm: 0, md: "6px" } }}>
               <OutlinedInput
                 placeholder=''
@@ -340,7 +347,7 @@ const SettingPage = props => {
               />
               <NoneFormHelperText> New Password </NoneFormHelperText>
             </HalfTextField>
-          </SubformItem>
+          </SubFormItem>
         </RightFormItem>
       </FormItem>
       <FormItem>
@@ -351,7 +358,16 @@ const SettingPage = props => {
           </Caption>
         </LeftFormItem>
         <RightFormItem>
-          <SubformItem>
+          <SubFormItem>
+            <SingleTextField variant="outlined">
+              <AvatarSetting>
+                <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} />
+                <Button variant="outlined" sx={{ marginLeft: "12px" }} children={"Upload"} />
+              </AvatarSetting>
+              <NoneFormHelperText> Avatar </NoneFormHelperText>
+            </SingleTextField>
+          </SubFormItem>
+          <SubFormItem>
             <SingleTextField variant="outlined">
               <OutlinedInput
                 multiline
@@ -362,7 +378,7 @@ const SettingPage = props => {
               />
               <NoneFormHelperText> About </NoneFormHelperText>
             </SingleTextField>
-          </SubformItem>
+          </SubFormItem>
         </RightFormItem>
       </FormItem>
     </Base>
