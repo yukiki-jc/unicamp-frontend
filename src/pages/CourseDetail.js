@@ -10,8 +10,6 @@ import Iframe from 'react-iframe';
 import { Box } from '@mui/system';
 import { Avatar, Card, CardHeader, Collapse, CardContent, IconButton } from '@mui/material';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
-import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot } from '@mui/lab/';
-import { timelineItemClasses } from '@mui/lab/TimelineItem';
 import { LatoFont, LevelMappings } from '../utils/commonData';
 import { stylizeObject, reStylizeObject } from '../utils/functions';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -183,34 +181,9 @@ const CollapseField = styled(Typography)(({ theme }) => ({
     paddingBottom: "0px !important",
 }));
 
-const ReplyField = styled(Timeline)(({ theme }) => ({
-    paddingBottom: 0,
-    [theme.breakpoints.up('md')]: {
-        paddingRight: 48,
-    },
-    [`& .${timelineItemClasses.root}:before`]: {
-        flex: 0,
-        padding: 0,
-    },
+const ReplyField = styled("div")(({ theme }) => ({
+    padding: theme.spacing(0.5, 2, 2, 2),
 }));
-
-const ReplyItem = styled(TimelineContent)(({ theme }) => ({
-    paddingTop: 0,
-}));
-
-const ReplyText = styled(Typography)(({ theme }) => ({
-    paddingBottom: 8,
-}));
-
-const UnifiedHeader = styled((props) => (
-    <CardHeader avatar={<div></div>} {...props} />
-))(({ theme }) => ({
-    padding: theme.spacing(0, 0, 0.75, 0),
-    "& .MuiCardHeader-avatar": {
-        display: "none"
-    }
-}));
-
 
 const replayAt = (name) => {
     return <span>Reply <Link underline="none">{`@${name}`}</Link>: </span>
@@ -446,20 +419,7 @@ export default function CourseDetailPage({ subcategoryList }) {
             <CommentsField>
                 <Comment variant="outlined">
                     <CardHeader
-                        avatar={<Avatar>您</Avatar>}
-                        title="陈璟璨"
-                        subheader="99/99/9999 99:99:99"
-                        action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
-                    />
-                    <PointerContent>
-                        <Typography>
-                            你说得对，但是『你说的对』是由你说的对说你说得对的一款全新你说的对。你说的对发生在你说得「你说的对」的你说的对世界，在这里被你说的对选中的你说的对将被授予「你说的对」，引导你说的对之力。你说得对一位名为「你说的对」的你说得对，在你说的对旅行中邂逅你说的对、你说的对的你说的对们，和你说的对一起击败你说的对，寻找失散的你说的对，同时，你说得对「你说的对」的你说的对。
-                        </Typography>
-                    </PointerContent>
-                </Comment>
-                <Comment variant="outlined">
-                    <CardHeader
-                        avatar={<Avatar>蠢</Avatar>}
+                        avatar={<Avatar>T</Avatar>}
                         title="永雏塔菲"
                         subheader="12/32/2022 23:59:59"
                         action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
@@ -479,36 +439,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <Collapse in={expanded} unmountOnExit>
                         <CollapseField>
                             <ReplyField>
-                                <TimelineItem>
-                                    <TimelineSeparator>
-                                        <Avatar>您</Avatar>
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-                                    <ReplyItem>
-                                        <UnifiedHeader
-                                            title="陈璟璨"
-                                            subheader="12/32/2022 23:61:07"
-                                        />
-                                        <ReplyText>
-                                            别在这💈
-                                        </ReplyText>
-                                    </ReplyItem>
-                                </TimelineItem>
-                                <TimelineItem>
-                                    <TimelineSeparator>
-                                        <Avatar>蠢</Avatar>
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-                                    <ReplyItem>
-                                        <UnifiedHeader
-                                            title="永雏塔菲"
-                                            subheader="12/32/2022 23:99:99"
-                                        />
-                                        <ReplyText>
-                                            {replayAt("陈璟璨")} 好想和啊喵喵结婚啊，他直播养我，我就在家打游戏，像他事业心那么强的人肯定不会放下直播的，嘿嘿🤤🤤这样就能一直花啊喵喵的钱。他要开始直播我就拖着啊喵喵的腿不让他走，让他用他的小脚踹我🤤🤤又踹不动我只能恶狠狠的用性感的嗓音骂我大变态🤤🤤马上要迟到了却只能干着急地用小手砸我脑袋🤤🤤等啊喵喵直播结束我就嚷嚷让他煮饭给我吃🤤🤤睡觉时就抱着啊喵喵睡🤤🤤啊喵喵小小的，凉凉🤤🤤的力气小又挣扎不开​🤤🤤
-                                        </ReplyText>
-                                    </ReplyItem>
-                                </TimelineItem>
+                                123
                             </ReplyField>
                         </CollapseField>
                     </Collapse>
