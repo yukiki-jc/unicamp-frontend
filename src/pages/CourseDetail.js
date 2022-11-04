@@ -184,10 +184,25 @@ const CollapseField = styled(Typography)(({ theme }) => ({
     paddingBottom: "0px !important",
 }));
 
+const CommentField = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "flex-start",
+    padding: theme.spacing(2, 0, 1, 0),
+}));
+
 const ReplyField = styled("div")(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     padding: theme.spacing(0.5, 2, 2, 2),
+}));
+
+const ReplyInput = styled((props) => (
+    <TextField rows={8} {...props} />
+))(({ theme }) => ({
+    flexGrow: "1",
+    "& .MuiInputBase-root": {
+        borderRadius: "12px",
+    }
 }));
 
 const InnerReplyInput = styled(TextField)(({ theme }) => ({
@@ -202,13 +217,16 @@ const Caption = styled(Typography)(({ theme }) => ({
     marginBottom: "4px",
 }));
 
+const Tail = styled("div")(({ theme }) => ({
+    display: "flex",
+    justifyContent: "flex-end",
+}));
+
 const replyAt = (name, link=true) => {
     if (link) {
         return (<Caption>Reply <Link underline="none">{`@${name}`}</Link>: </Caption>);
-    } else if (name !== undefined) {
-        return `Reply @${name}`;
     } else {
-        return `Leave Some Comments Here`
+        return `Reply @${name}`;
     }
 }
 
@@ -489,6 +507,22 @@ export default function CourseDetailPage({ subcategoryList }) {
                         </CollapseField>
                     </Collapse>
                 </Comment>
+                <CommentField>
+                    <RoundAvatar sx={{ mr: "8px", mt: "12px" }} />
+                    <ReplyInput
+                        multiline
+                        variant="outlined"
+                        placeholder={"Leave Some Comments Here"}
+                    />
+                </CommentField>
+                <Tail>
+                    <Button
+                        children={"SEND"}
+                        variant="contained"
+                        endIcon={<SendIcon />}
+                        sx={{ borderRadius: "12rem" }}
+                    />
+                </Tail>
             </CommentsField>
         </MainContainer >
     )
