@@ -8,11 +8,12 @@ import { joinPaths } from '@remix-run/router';
 import { styled } from "@mui/material/styles";
 import Iframe from 'react-iframe';
 import { Box } from '@mui/system';
-import { Avatar, Card, CardHeader, Collapse, CardContent, IconButton } from '@mui/material';
+import { Avatar, Card, CardHeader, Collapse, CardContent, IconButton, TextField, InputAdornment } from '@mui/material';
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
 import { LatoFont, LevelMappings } from '../utils/commonData';
 import { stylizeObject, reStylizeObject } from '../utils/functions';
 import ClearIcon from '@mui/icons-material/Clear';
+import SendIcon from '@mui/icons-material/Send';
 
 const MainContainer = styled((props) => (
     <Box component="main" {...props} />
@@ -143,6 +144,15 @@ const CourseDetailSubtitle = styled(Typography)(({ theme }) => ({
     fontWeight: 700,
 }));
 
+const RoundSquareButton = styled(Button)(({ theme }) => ({
+    padding: theme.spacing(0.5, 1),
+}));
+
+const ReplyInput = styled(TextField)(({ theme }) => ({
+    width: "100%",
+    borderRadius: "12px",
+}));
+
 const CommentsTitle = styled(Typography)(({ theme }) => ({
     fontSize: "2.2rem",
     fontWeight: 700,
@@ -185,8 +195,12 @@ const ReplyField = styled("div")(({ theme }) => ({
     padding: theme.spacing(0.5, 2, 2, 2),
 }));
 
-const replayAt = (name) => {
-    return <span>Reply <Link underline="none">{`@${name}`}</Link>: </span>
+const replayAt = (name, link=true) => {
+    if (link) {
+        return (<span>Reply <Link underline="none">{`@${name}`}</Link>: </span>);
+    } else {
+        return `Reply @${name}`;
+    }
 }
 
 const replyHint = (count) => (<Typography
@@ -439,7 +453,19 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <Collapse in={expanded} unmountOnExit>
                         <CollapseField>
                             <ReplyField>
-                                123
+                                <ReplyInput
+                                    multiline
+                                    variant="outlined"
+                                    placeholder={replayAt("永雏塔菲", false)}
+                                    InputProps={{
+                                        endAdornment: (<InputAdornment position="end">
+                                            <IconButton
+                                                color="primary"
+                                                children={<SendIcon />}
+                                            />
+                                        </InputAdornment>)
+                                    }}
+                                />
                             </ReplyField>
                         </CollapseField>
                     </Collapse>
