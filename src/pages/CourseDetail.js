@@ -12,8 +12,10 @@ import { Avatar, Card, CardHeader, Collapse, CardContent, IconButton, TextField,
 import { Breadcrumbs, Button, Grid, LinearProgress, Link, Rating, Skeleton, Stack, Typography } from '@mui/material';
 import { LatoFont, LevelMappings } from '../utils/commonData';
 import { stylizeObject, reStylizeObject } from '../utils/functions';
+import RoundAvatar from '../components/RoundAvatar';
 import ClearIcon from '@mui/icons-material/Clear';
 import SendIcon from '@mui/icons-material/Send';
+import { TextFields } from '@mui/icons-material';
 
 const MainContainer = styled((props) => (
     <Box component="main" {...props} />
@@ -144,15 +146,6 @@ const CourseDetailSubtitle = styled(Typography)(({ theme }) => ({
     fontWeight: 700,
 }));
 
-const RoundSquareButton = styled(Button)(({ theme }) => ({
-    padding: theme.spacing(0.5, 1),
-}));
-
-const ReplyInput = styled(TextField)(({ theme }) => ({
-    width: "100%",
-    borderRadius: "12px",
-}));
-
 const CommentsTitle = styled(Typography)(({ theme }) => ({
     fontSize: "2.2rem",
     fontWeight: 700,
@@ -192,21 +185,37 @@ const CollapseField = styled(Typography)(({ theme }) => ({
 }));
 
 const ReplyField = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0.5, 2, 2, 2),
 }));
 
-const replayAt = (name, link=true) => {
+const InnerReplyInput = styled(TextField)(({ theme }) => ({
+    flexGrow: "1",
+    "& .MuiInputBase-root": {
+        padding: theme.spacing(1.5),
+    }
+}));
+
+const Caption = styled(Typography)(({ theme }) => ({
+    color: theme.palette.text.secondary,
+    marginBottom: "4px",
+}));
+
+const replyAt = (name, link=true) => {
     if (link) {
-        return (<span>Reply <Link underline="none">{`@${name}`}</Link>: </span>);
-    } else {
+        return (<Caption>Reply <Link underline="none">{`@${name}`}</Link>: </Caption>);
+    } else if (name !== undefined) {
         return `Reply @${name}`;
+    } else {
+        return `Leave Some Comments Here`
     }
 }
 
 const replyHint = (count) => (<Typography
     variant="body2"
     align="right"
-    sx={{ marginTop: 1 }}
+    sx={{ marginTop: 0.5 }}
     children={`(${count} Replies)`}
 />)
 
@@ -310,6 +319,27 @@ const RatingChart = ({ sx, rating, voters, distribution }) => {
         </Box>
     );
 };
+
+const CommentBox = (props) => {
+    const { replyName } = props;
+
+    return (<ReplyField>
+        <RoundAvatar sx={{ mr: "8px" }} />
+        <InnerReplyInput
+            multiline
+            variant="outlined"
+            placeholder={replyAt(replyName, false)}
+            InputProps={{
+                endAdornment: (<InputAdornment position="end">
+                    <IconButton
+                        color="primary"
+                        children={<SendIcon />}
+                    />
+                </InputAdornment>)
+            }}
+        />
+    </ReplyField>);
+}
 
 export default function CourseDetailPage({ subcategoryList }) {
     const { courseId } = useParams();
@@ -433,12 +463,13 @@ export default function CourseDetailPage({ subcategoryList }) {
             <CommentsField>
                 <Comment variant="outlined">
                     <CardHeader
-                        avatar={<Avatar>T</Avatar>}
+                        avatar={<RoundAvatar displayName="永雏塔菲"/>}
                         title="永雏塔菲"
                         subheader="12/32/2022 23:59:59"
                         action={<IconButton color="primary"> <ClearIcon /> </IconButton>}
                     />
                     <PointerContent onClick={() => setExpanded(!expanded)}>
+                        {replyAt("陈璟璨")}
                         <Typography>
                             「最最喜欢你，啊喵喵。」
                             <br />「什么程度？」
@@ -452,21 +483,9 @@ export default function CourseDetailPage({ subcategoryList }) {
                     </PointerContent>
                     <Collapse in={expanded} unmountOnExit>
                         <CollapseField>
-                            <ReplyField>
-                                <ReplyInput
-                                    multiline
-                                    variant="outlined"
-                                    placeholder={replayAt("永雏塔菲", false)}
-                                    InputProps={{
-                                        endAdornment: (<InputAdornment position="end">
-                                            <IconButton
-                                                color="primary"
-                                                children={<SendIcon />}
-                                            />
-                                        </InputAdornment>)
-                                    }}
-                                />
-                            </ReplyField>
+                            <CommentBox
+                                replyName={"永雏塔菲"}
+                            />
                         </CollapseField>
                     </Collapse>
                 </Comment>
