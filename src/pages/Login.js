@@ -35,7 +35,7 @@ export default function LoginPage(props) {
         userData.admin = json.admin;
         userData.token = json.token;
         const avatarURL = joinPaths([backend, apiPath.avatar.get, id.toString()])
-        return getRequest(avatarURL)
+        return getRequest(avatarURL);
       } else {
         pageContextValue.handler.setErrorBox(json.message);
         return false;
@@ -46,9 +46,7 @@ export default function LoginPage(props) {
         return false;
       }
       else {
-        userData.img = result.img;
-        console.log(userData)
-        console.log('successLogin')
+        userData.avatar = result.img;
         props.handleLoginSuccess(userData);
       }
     })

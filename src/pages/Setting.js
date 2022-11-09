@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 import { getRequest, postRequest } from '../utils/requests';
 import { apiPath, backend } from '../utils/urls';
 import { joinPaths } from '@remix-run/router';
-import { getUser } from '../utils/storeUser';
+import { getUser, saveUser } from '../utils/storeUser';
 import { PageContext } from '../App';
 import RoundAvatar from '../components/RoundAvatar';
 
@@ -147,20 +147,28 @@ function fileToBase64Async(file) {
   });
 }
 
-const uploadAvatar = (event) => {
+const uploadAvatar = (pageContextValue, setAvatar, event) => {
   const targetImage = event.target.files;
   if (targetImage?.length > 0 && /image\/.+/.test(targetImage[0].type)) {
     let avatar = targetImage[0];
-    console.log(avatar);
+    if (avatar.size >= 65536) {
+      pageContextValue.handler.setErrorBox("File too large!");
+      return;
+    }
+    const userData = getUser();
+    let newUserData = { ...userData }
     fileToBase64Async(avatar).then((base64) => {
       const setAvatarURL = joinPaths([backend, apiPath.avatar.set])
       const avatarBody = {
         img: base64
       }
+      newUserData.avatar = base64 
       return postRequest(avatarBody, setAvatarURL)
     }).then((json => {
       if (json.state === true) {
         pageContextValue.handler.setSuccessBox("Set Successfully");
+        saveUser(newUserData);
+        setAvatar(newUserData.avatar);
       }
       else {
         pageContextValue.handler.setErrorBox(json.message)
@@ -171,7 +179,7 @@ const uploadAvatar = (event) => {
     });
     // TODO: upload avatar (js File class)
   } else {
-    return false;
+    pageContextValue.handler.setErrorBox("Invalid image file");
     // TODO: the file uploaded is not image or
     //       the number of image doesn't equal to one
   }
@@ -270,8 +278,6 @@ const SettingPage = props => {
     let toPost = []
     pageContextValue.handler.setLoading(true);
     if (form.account.password.oldValue !== "" && form.account.password.newValue !== "") {
-      console.log("Here");
-      // console.log(form.account)
       const password = {
         "oldPassword": form.account.password.oldValue,
         'newPassword': form.account.password.newValue
@@ -280,7 +286,6 @@ const SettingPage = props => {
       toPost.push(postRequest(password, changePasswordURL));
     }
     if (form.info.about.initValue !== form.info.about.value) {
-      console.log('Changing description')
       const about = {
         "name": user.name,
         'description': form.info.about.value,
@@ -291,7 +296,6 @@ const SettingPage = props => {
     Promise.all(toPost).then((results => {
       let state = true;
       let message = '';
-      console.log(results)
       results.forEach(result =>{
         if (result.state === false) {
           state = false;
@@ -313,7 +317,7 @@ const SettingPage = props => {
     // window.history.back();
   }, [form]);
 
-
+  const [avatarNow, setAvatarNow] = React.useState(getUser()?.avatar);
   return (
     <Base>
       <Title>
@@ -402,10 +406,10 @@ const SettingPage = props => {
           <SubFormItem>
             <SingleTextField variant="outlined">
               <AvatarSetting>
-                <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} />
+                <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} src={avatarNow} />
                 <Button variant="outlined" sx={{ marginLeft: "12px" }} component="label" >
-                  {"Upload"}
-                  <input type="file" accept="image/*" onChange={(event) => { uploadAvatar(event, )}} hidden />
+                  {"Upload (less than 65536 bytes)"}
+                  <input type="file" accept="image/*" onChange={(event) => { uploadAvatar(pageContextValue, setAvatarNow, event)}} hidden />
                 </Button>
               </AvatarSetting>
               <NoneFormHelperText> Avatar </NoneFormHelperText>

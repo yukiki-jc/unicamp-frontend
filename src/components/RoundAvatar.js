@@ -2,11 +2,11 @@ import Avatar from '@mui/material/Avatar'
 import { getUser } from '../utils/storeUser';
 
 const RoundAvatar = props => {
-  const { sx, displayName } = props;
+  const { sx, displayName, src = null } = props;
   // this chain stands for priviledge of displaying
-  let name = displayName ?? getUser()?.name ?? 'X'
-  let src = getUser()?.img ?? '/'
-  return (<Avatar alt={name} sx={sx} src={src} />)
+  const name = displayName ?? getUser()?.name ?? 'X'
+  const avatarSrc = src ?? getUser()?.avatar ?? '/'
+  return (<Avatar alt={name} sx={sx} src={avatarSrc} />)
 }
 
 export default RoundAvatar;

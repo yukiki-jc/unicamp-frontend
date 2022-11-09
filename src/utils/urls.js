@@ -24,6 +24,11 @@ export const apiPath = {
     avatar: {
         'get': '/avatar/get',
         'set': '/avatar/set'
+    },
+    comment: {
+        'get': '/comment/get',
+        'add': '/comment/add',
+        'delete': '/comment/delete'
     }
 
     
