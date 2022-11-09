@@ -137,13 +137,41 @@ const AvatarSetting = styled('div')(({ theme }) => ({
   display: "flex",
 }));
 
+function fileToBase64Async(file) {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      resolve(e.target.result);
+    };
+  });
+}
+
 const uploadAvatar = (event) => {
   const targetImage = event.target.files;
   if (targetImage?.length > 0 && /image\/.+/.test(targetImage[0].type)) {
     let avatar = targetImage[0];
     console.log(avatar);
+    fileToBase64Async(avatar).then((base64) => {
+      const setAvatarURL = joinPaths([backend, apiPath.avatar.set])
+      const avatarBody = {
+        img: base64
+      }
+      return postRequest(avatarBody, setAvatarURL)
+    }).then((json => {
+      if (json.state === true) {
+        pageContextValue.handler.setSuccessBox("Set Successfully");
+      }
+      else {
+        pageContextValue.handler.setErrorBox(json.message)
+      }
+    })).catch(e => {
+      console.log(e);
+      pageContextValue.handler.setErrorBox("Connect Error");
+    });
     // TODO: upload avatar (js File class)
   } else {
+    return false;
     // TODO: the file uploaded is not image or
     //       the number of image doesn't equal to one
   }
@@ -236,7 +264,7 @@ const SettingPage = props => {
       console.log(e)
       pageContextValue.handler.setErrorBox("Connect Error");
     })
-  }, []);
+  });
 
   const applyChange = React.useCallback(() => {
     let toPost = []
@@ -284,6 +312,7 @@ const SettingPage = props => {
     })
     // window.history.back();
   }, [form]);
+
 
   return (
     <Base>
@@ -376,7 +405,7 @@ const SettingPage = props => {
                 <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} />
                 <Button variant="outlined" sx={{ marginLeft: "12px" }} component="label" >
                   {"Upload"}
-                  <input type="file" accept="image/*" onChange={uploadAvatar} hidden />
+                  <input type="file" accept="image/*" onChange={(event) => { uploadAvatar(event, )}} hidden />
                 </Button>
               </AvatarSetting>
               <NoneFormHelperText> Avatar </NoneFormHelperText>

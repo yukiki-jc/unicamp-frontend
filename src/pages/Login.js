@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 import SchoolIcon from '@mui/icons-material/School';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { postRequest } from '../utils/requests';
+import { postRequest, getRequest } from '../utils/requests';
 import { backend, apiPath } from '../utils/urls';
 import { PageContext } from '../App';
 import { joinPaths } from '@remix-run/router';
@@ -27,15 +27,29 @@ export default function LoginPage(props) {
       password: data.get('password'),
     }
     const loginURL = joinPaths([backend, apiPath.login]);
+    let userData = { ...loginBody }
     postRequest(loginBody, loginURL).then(json => {
       if (json.state === true) {
-        props.handleLoginSuccess({
-          ...loginBody,
-          admin: json.admin,
-          token: json.token
-        });
+        const id = json.id;
+        userData.id = id;
+        userData.admin = json.admin;
+        userData.token = json.token;
+        const avatarURL = joinPaths([backend, apiPath.avatar.get, id.toString()])
+        return getRequest(avatarURL)
       } else {
         pageContextValue.handler.setErrorBox(json.message);
+        return false;
+      }
+    })
+    .then(result => {
+      if (result === false) {
+        return false;
+      }
+      else {
+        userData.img = result.img;
+        console.log(userData)
+        console.log('successLogin')
+        props.handleLoginSuccess(userData);
       }
     })
     .catch(e => {

@@ -20,6 +20,11 @@ export const apiPath = {
     profile: {
         'update': '/profile/update',
         'myprofile': '/profile/myprofile'
+    },
+    avatar: {
+        'get': '/avatar/get',
+        'set': '/avatar/set'
     }
+
     
 }
