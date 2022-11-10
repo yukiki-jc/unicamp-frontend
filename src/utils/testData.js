@@ -1,34 +1,52 @@
 export const courseList = [
-    {
-      id: 29,
-      category_id: 6,
-      name: 'Course 1',
-      provider: '83',
-      difficulty: 1,
-      est_hour: 3
-    },
-    {
-      id: 95,
-      category_id: 97,
-      name: 'Course 2',
-      provider: '5',
-      difficulty: 2,
-      est_hour: 54
-    },
-    {
-      id: 84,
-      category_id: 26,
-      name: 'Course 3',
-      provider: '97',
-      difficulty: 3,
-      est_hour: 68
-    },
-    {
-      id: 80,
-      category_id: 75,
-      name: 'Course 4',
-      provider: '20',
-      difficulty: 5,
-      est_hour: 98
-    }
-  ];
+  {
+    id: 84,
+    category_id: "Software Engineering",
+    name: 'Why Unicamp is the best product human EVER made in the entire history',
+    provider: 'University of California, Berkeley',
+    difficulty: 3,
+    est_hour: 68,
+    voters: 1989,
+    rating: 3.7,
+  },
+  {
+    id: 95,
+    category_id: "Web3",
+    name: "How to make Unicamp an NFT",
+    provider: 'Massachusetts Institute of Technology',
+    difficulty: 2,
+    est_hour: 54,
+    voters: 2024,
+    rating: 4.8,
+  },
+  {
+    id: 29,
+    category_id: "Quantitative",
+    name: 'NASDAQ: UNCP (Unicamp Inc.) plans to lay off 100% of its employees',
+    provider: 'Stanford University',
+    difficulty: 1,
+    est_hour: 3,
+    voters: 2023,
+    rating: 3.9,
+  },
+  {
+    id: 80,
+    category_id: "CS (Computer Scamming)",
+    name: "Unicamp (VR ver.) is now available on Oculus Quest Store",
+    provider: 'Carnegie Mellow University',
+    difficulty: 5,
+    est_hour: 98,
+    voters: 2099,
+    rating: 3.5,
+  },
+  {
+    id: 80,
+    category_id: "Blockchain",
+    name: "Blockchain and Unicamp",
+    provider: 'Harvard University',
+    difficulty: 5,
+    est_hour: 98,
+    voters: 2077,
+    rating: 5.0,
+  },
+];
