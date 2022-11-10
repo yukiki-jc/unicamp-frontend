@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import CourseThumbnailLine from '../components/CourseThunbnailLine'
+import CourseMenu from '../components/CourseMenu'
 import { styled } from '@mui/material/styles'
 import { Link as MUILink } from '@mui/material'
 import { courseList } from '../utils/testData'
@@ -11,7 +11,7 @@ import { getUser } from '../utils/storeUser'
 import TitleBox from '../components/TitleBox'
 
 const MainPageCardContainer = styled(props => (
-  <Container maxWidth='md' {...props} />
+  <Container maxWidth='lg' {...props} />
 ))(({ theme }) => ({
   padding: theme.spacing(4, 0)
 }))
@@ -67,12 +67,12 @@ const MainPage = props => {
       </TitleBox>
       <MainPageCardContainer>
         <MainPageCardHeadline title='Hot Courses' />
-        <CourseThumbnailLine courseList={courseList} />
+        <CourseMenu courseList={courseList} />
       </MainPageCardContainer>
 
       <MainPageCardContainer>
         <MainPageCardHeadline title='My Favorites' />
-        <CourseThumbnailLine courseList={courseList} />
+        <CourseMenu courseList={courseList} />
       </MainPageCardContainer>
     </main>
   )
