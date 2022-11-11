@@ -145,7 +145,7 @@ const logos = [
 const MainPage = props => {
   return (
     <MainContainer>
-      <HeroContainer>
+      <HeroContainer sx={{ marginTop: { md: 1 } }}>
         <HeroImg src={`${process.env.PUBLIC_URL}/hero.jpg`} />
         <HeroTitle />
       </HeroContainer>
@@ -189,7 +189,7 @@ const MainPage = props => {
           </Box>
           <HeroImg
             src={`${process.env.PUBLIC_URL}/tutor.jpg`}
-            maxWidth="min(48rem, 48%)"
+            maxWidth="min(50rem, 48%)"
           />
         </HeroContainer>
 
@@ -212,7 +212,7 @@ const MainPage = props => {
               <p>Please do note that sharing your answers directly is strictly prohibited on Unicamp. We encourage thoughtful discussions.</p>
             </Typography>
           </Box>
-          <HeroImg src={`${process.env.PUBLIC_URL}/discuss.jpg`} maxWidth="min(48rem, 48%)" />
+          <HeroImg src={`${process.env.PUBLIC_URL}/discuss.jpg`} maxWidth="min(50rem, 48%)" />
         </HeroContainer>
 
         <MenuTitle>
