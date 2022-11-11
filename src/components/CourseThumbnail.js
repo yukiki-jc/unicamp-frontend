@@ -1,13 +1,11 @@
 import { Card, Chip, Divider, Rating, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles'
-import { LatoFont } from '../utils/commonData';
+import { LatoFont, LevelMappings } from '../utils/commonData';
 import { Link as RouterLink } from "react-router-dom";
 import SchoolIcon from '@mui/icons-material/School';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import { alpha, Box, Stack } from '@mui/system';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
-
-const LevelEmoji = ["👌", "🐣", "👨‍💻", "👩🏼‍🎓", "🤯"];
 
 const ThumbnailCard = styled((props) => (
     <Card variant='outlined' {...props} />
@@ -49,6 +47,8 @@ const InfoItem = styled(({ icon, title, ...props }) => (
     },
 }));
 
+const LevelColor = ["", "default", "info", "secondary", "warning", "error"];
+
 export default function CourseThumbnail({
     name, href, category_id, provider, voters, rating, est_hour, difficulty,
 }) {
@@ -58,13 +58,13 @@ export default function CourseThumbnail({
                 <Chip
                     sx={{
                         marginBottom: 1,
-                        fontSize: '2rem',
+                        fontSize: '1rem',
                         paddingX: 0.3,
                         paddingY: 1.8,
                     }}
                     size="small"
                     color="primary"
-                    label={LevelEmoji[difficulty - 1]}
+                    label={category_id}
                 />
                 <Chip
                     sx={{
@@ -74,13 +74,13 @@ export default function CourseThumbnail({
                         paddingY: 1.8,
                     }}
                     size="small"
-                    color="secondary"
-                    label={category_id}
+                    color={LevelColor[difficulty]}
+                    label={LevelMappings[difficulty]}
                 />
             </InfoStack>
             <Typography sx={(theme) => ({
                 fontSize: "1.6rem",
-                fontWeight: 800,
+                fontWeight: 600,
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
@@ -90,7 +90,6 @@ export default function CourseThumbnail({
                 color: 'inherit',
                 lineHeight: 1.35,
                 marginBottom: 1,
-                fontFamily: LatoFont,
                 textDecoration: "none",
             })} component={RouterLink} to={href}>
                 {name}

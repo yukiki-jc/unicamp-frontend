@@ -4,7 +4,6 @@ import LoginPage from './pages/Login'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import CourseListPage from './pages/CourseList'
 import {
-  CssBaseline,
   ThemeProvider,
   Snackbar,
   Alert,
@@ -20,7 +19,7 @@ import { backend, apiPath } from './utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { getRequest } from './utils/requests'
 import { styled } from "@mui/material/styles";
-import { stylizeObject, reStylizeObject} from './utils/functions'
+import { stylizeObject, reStylizeObject } from './utils/functions'
 import SignUpPage from './pages/SignUp'
 import SettingPage from './pages/Setting'
 import Copyright from './components/Copyright'
@@ -89,7 +88,7 @@ export default function App() {
     setAdmin(user.admin);
     navigate('/')
   }
-  
+
   const navigate = useNavigate()
   const handleLogout = () => {
     deleteUser();
@@ -149,7 +148,6 @@ export default function App() {
           }
         }}
       >
-        <CssBaseline enableColorScheme />
         <NavBar handleLogout={handleLogout} categoryList={categoryList} admin={admin} />
         <Offset />
 
@@ -157,10 +155,10 @@ export default function App() {
           subcategoryList: subcategoryList,
           categoryList: categoryList,
           courseList: courseList
-        } } handler={{
+        }} handler={{
           handleLoginSuccess: handleLoginSuccess,
           setCourseList: setCourseList
-        }}/>
+        }} />
 
         <Snackbar
           open={messageBox.show}

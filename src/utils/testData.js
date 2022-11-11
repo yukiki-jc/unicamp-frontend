@@ -44,7 +44,7 @@ export const courseList = [
     category_id: "Blockchain",
     name: "Blockchain and Unicamp",
     provider: 'Harvard University',
-    difficulty: 5,
+    difficulty: 4,
     est_hour: 98,
     voters: 2077,
     rating: 5.0,
