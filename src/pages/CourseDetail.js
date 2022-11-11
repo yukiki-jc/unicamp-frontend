@@ -271,6 +271,7 @@ const replyHint = count => (
 
 const RatingStar = ({ sx, ...props }) => (
     <Rating
+        readOnly
         precision={0.5}
         sx={theme => ({
             ...sx
