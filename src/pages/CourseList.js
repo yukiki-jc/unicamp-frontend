@@ -1,16 +1,23 @@
 import { Typography } from '@mui/material'
 import { Container } from '@mui/system'
-import React from 'react'
+import React, { useContext, useLayoutEffect } from 'react'
 import CourseCard from '../components/CourseCard'
-import { Box } from '@mui/material'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import TitleBox from '../components/TitleBox'
+import { PageContext } from '../App'
+import { stylizeObject } from '../utils/functions'
+import { getRequest } from '../utils/requests'
+import {  joinPaths } from '@remix-run/router';
+import { backend, apiPath } from '../utils/urls'
+import { errorHandler } from '../utils/functions'
 
 const CourseListPage = props => {
   const { title, courseList = [], subcategoryList = [] } = props
   const { subcategoryId } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageContextValue = useContext(PageContext);
   let newTitle = title;
-  let courseListShow = courseList;
+  let courseListShow = [];
   if (title === 'Category') {
     for (let i = 0; i < subcategoryList.length; i++) {
       if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
@@ -20,8 +27,31 @@ const CourseListPage = props => {
       return (course.subcategoryId.toString() === subcategoryId)
     })
   }
-
-  const courseCards = courseListShow.map(course => {
+  else if (title === 'Search Results') {
+    const searchValue = searchParams.get('value');
+    const searchReg = RegExp(searchValue.toLowerCase());
+    const searchResults = courseList.filter(course => {
+      const courseString = JSON.stringify(course).toLowerCase();
+      return searchReg.test(courseString);
+    })
+    courseListShow = searchResults;
+  }
+  useLayoutEffect(() => {
+    if (title === 'My Favorites') {
+      const favoriteURL = joinPaths([backend, apiPath.favorite]);
+      pageContextValue.handler.setLoading(true);
+      getRequest(favoriteURL)
+            .then((data) => {
+                courseListShow = stylizeObject(data)
+                console.log(courseListShow)
+                pageContextValue.handler.setLoading(false);
+            })
+            .catch((e) => {
+              errorHandler(e, pageContextValue);
+            });
+    }
+  }, [])
+  const courseCards = pageContextValue.state.loading ? [] : (courseListShow.map(course => {
     return (
       <CourseCard
             src='https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg'
@@ -35,7 +65,7 @@ const CourseListPage = props => {
             id={course.id}
           />
     )
-  })
+  }))
   
   return (
     <div>

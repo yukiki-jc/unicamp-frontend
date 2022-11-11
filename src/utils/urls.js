@@ -33,7 +33,13 @@ export const apiPath = {
     grade: {
         "get": '/grade/get',
         'set': '/grade/set'
-    }
+    },
+    recommend: {
+        new: '/recommend/new/main',
+        hot: '/recommend/hot/main',
+        rec: '/recommend/rec/main'
+    },
+    favorite: '/favorite'
 
     
 }

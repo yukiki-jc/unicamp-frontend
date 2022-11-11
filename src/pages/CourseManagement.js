@@ -12,6 +12,8 @@ import CourseInfoModal from '../components/CourseInfoModal'
 import { emptyCourse, emptyCourseThumbnail } from '../utils/commonData'
 import { getRequest } from '../utils/requests'
 import { reStylizeObject, stylizeObject } from '../utils/functions'
+import { errorHandler } from '../utils/functions'
+
 const columns = [
   {
     field: 'id',
@@ -125,9 +127,7 @@ export default function CourseManagementPage (props) {
           })
         })
         .catch(e => {
-          console.log(e)
-          pageContextValue.handler.setErrorBox("Connect Error")
-          pageContextValue.handler.setLoading(false)
+          errorHandler(e, pageContextValue);
         })
     }
   }
@@ -208,9 +208,7 @@ export default function CourseManagementPage (props) {
         pageContextValue.handler.setLoading(false)
       })
       .catch(e => {
-        console.log(e)
-        pageContextValue.handler.setErrorBox("Connect Error")
-        pageContextValue.handler.setLoading(false)
+        errorHandler(e, pageContextValue);
       })
   }
 

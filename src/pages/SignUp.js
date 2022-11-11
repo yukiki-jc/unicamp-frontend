@@ -21,6 +21,7 @@ import { PageContext } from '../App';
 import { backend, apiPath } from '../utils/urls';
 import { postRequest } from '../utils/requests';
 import { joinPaths } from '@remix-run/router';
+import { errorHandler } from '../utils/functions'
 
 export default function SignUpPage(props) {
   const pageContextValue = React.useContext(PageContext);
@@ -46,8 +47,7 @@ export default function SignUpPage(props) {
         throw "Connect Error";
     })
     .catch(e => {
-      console.log(e)
-      pageContextValue.handler.setErrorBox("Connect Error");
+      errorHandler(e, pageContextValue);
     });
   };
 

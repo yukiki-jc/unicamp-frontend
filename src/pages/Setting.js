@@ -16,6 +16,7 @@ import { joinPaths } from '@remix-run/router';
 import { getUser, saveUser } from '../utils/storeUser';
 import { PageContext } from '../App';
 import RoundAvatar from '../components/RoundAvatar';
+import { errorHandler } from '../utils/functions'
 
 const Base = styled('main')(({ theme }) => ({
   display: "flex",
@@ -269,8 +270,7 @@ const SettingPage = props => {
     getRequest(profileURL).then((json) => {
       dispatchForm({type: 'about', value: json.description})
     }).catch(e => {
-      console.log(e)
-      pageContextValue.handler.setErrorBox("Connect Error");
+      errorHandler(e, pageContextValue);
     })
   });
 
