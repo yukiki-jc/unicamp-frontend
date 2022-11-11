@@ -23,7 +23,7 @@ const ThumbnailCard = styled((props) => (
     margin: theme.spacing(0, 1.5),
     "&:hover": {
         width: "32rem",
-        backgroundColor: alpha(theme.palette.primary.main, 0.36),
+        backgroundColor: alpha(theme.palette.primary.main, 0.06),
     },
 }));
 

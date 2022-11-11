@@ -30,7 +30,7 @@ import {
     Typography
 } from '@mui/material'
 import { LatoFont, LevelMappings } from '../utils/commonData'
-import { stylizeObject, reStylizeObject } from '../utils/functions'
+import { stylizeObject, reStylizeObject, sumArr, average } from '../utils/functions'
 import RoundAvatar from '../components/RoundAvatar'
 import ClearIcon from '@mui/icons-material/Clear'
 import SendIcon from '@mui/icons-material/Send'
@@ -500,6 +500,8 @@ export default function CourseDetailPage({ subcategoryList }) {
     const [comments, setComments] = useState([])
     const [avatars, setAvatars] = useState({})
     const [myComment, setMyComment] = useState('')
+    const [ratingDistribution, setRatingDistribution] = useState([])
+    const [myRating, setMyRating] = useState(0)
     // TODO: remove this afterwards
     const {
         subcategoryId = 0,
@@ -515,13 +517,17 @@ export default function CourseDetailPage({ subcategoryList }) {
 
     useEffect(() => {
         const courseDataURL = joinPaths([backend, apiPath.course.info, courseId])
+        const ratingDetailURL = joinPaths([backend, apiPath.grade.get, courseId])
         pageContextValue.handler.setLoading(true)
-        Promise.all([getRequest(courseDataURL), getComments(courseId)])
+        Promise.all([getRequest(courseDataURL), getComments(courseId), getRequest(ratingDetailURL)])
             .then(datas => {
-                const courseData = datas[0]
+                const courseData = stylizeObject(datas[0])
                 const commentResult = datas[1]
+                const ratings = stylizeObject(datas[2])
 
-                setCourseData(stylizeObject(courseData))
+                setRatingDistribution(ratings.ratingDetail)
+                setMyRating(ratings.myRating)
+                setCourseData(courseData)
                 showComments(commentResult)
                 pageContextValue.handler.setLoading(false)
             })
@@ -671,7 +677,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                         fontSize: '1.2rem',
                         marginTop: 0.5,
                     }} color='inherit' target="_blank" rel="noopener noreferrer">
-                        Visit course website in a new tab ->
+                        Visit course website in a new tab -{'>'}
                     </Link>
                 </EmbedContainer>
 
@@ -742,9 +748,9 @@ export default function CourseDetailPage({ subcategoryList }) {
                         How do others love this course
                     </ItemSubtitle>
                     <RatingChart
-                        rating='4.0'
-                        voters={2023}
-                        distribution={[0, 1, 3, 9, 5]}
+                        rating={average(ratingDistribution)}
+                        voters={sumArr(ratingDistribution)}
+                        distribution={ratingDistribution}
                     />
                 </ItemContainer>
 

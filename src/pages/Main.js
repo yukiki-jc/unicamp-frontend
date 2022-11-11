@@ -27,9 +27,9 @@ const MainPageCardHeadline = props => {
       <Typography gutterBottom variant='h6' zIndex={1}>
         {props.title}
       </Typography>
-      <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
+      {/* <MUILink href='#' underline='hover' sx={{ pt: 1 }} zIndex={1}>
         More
-      </MUILink>
+      </MUILink> */}
     </Stack>
   )
 }

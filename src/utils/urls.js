@@ -29,6 +29,10 @@ export const apiPath = {
         'get': '/comment/get',
         'add': '/comment/add',
         'delete': '/comment/delete'
+    },
+    grade: {
+        "get": '/grade/get',
+        'set': '/grade/set'
     }
 
     
