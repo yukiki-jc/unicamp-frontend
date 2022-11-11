@@ -7,7 +7,8 @@ export const apiPath = {
         info: '/course/info',
         delete: '/course/delete',
         add: '/course/add',
-        update: '/course/update'
+        update: '/course/update',
+        relation: '/course/relation'
     },
     category: {
         list: '/category/list',
@@ -39,7 +40,8 @@ export const apiPath = {
         hot: '/recommend/hot/main',
         rec: '/recommend/rec/main'
     },
-    favorite: '/favorite'
+    favorite: '/favorite',
+    
 
     
 }

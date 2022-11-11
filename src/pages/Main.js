@@ -39,44 +39,44 @@ const MainPageCardHeadline = props => {
 }
 
 const MainPage = props => {
-  const [newCourses, setNewCourses] = useState([]);
-  const [hotCourses,setHotCourses] = useState([]);
-  const [recCourses, setRecCourses] = useState([]);
-  const pageContextValue = useContext(PageContext);
-  const user = getUser();
-  let name = 'Future Engineer';
-  if (user !== null)
-    name = user.name;
+  const {subcategoryList} = props
+  const [newCourses, setNewCourses] = useState([])
+  const [hotCourses, setHotCourses] = useState([])
+  const [recCourses, setRecCourses] = useState([])
+  const pageContextValue = useContext(PageContext)
+  const user = getUser()
+  let name = 'Future Engineer'
+  if (user !== null) name = user.name
   useLayoutEffect(() => {
-    const newCourseURL = joinPaths([backend, apiPath.recommend.new]);
-    const hotCourseURL = joinPaths([backend, apiPath.recommend.hot]);
-    pageContextValue.handler.setLoading(true);
-    Promise.all([
-      getRequest(newCourseURL),
-      getRequest(newCourseURL)
-    ]).then(results => {
-      const [newCoursesRaw, hotCoursesRaw] = results;
-      const newCourses = stylizeObject(newCoursesRaw);
-      const hotCourses = stylizeObject(hotCoursesRaw);
-      setNewCourses(newCourses);
-      setHotCourses(hotCourses);
-      if (user != null) {
-        const recCourseURL = joinPaths([backend, apiPath.recommend.rec]);
-        return getRequest(newCourseURL);
-      }
-      else return false;
-    }).then(recCourseRaw => {
-      if (recCourseRaw === false) {
-        return true;
-      }
-      const recCourses = stylizeObject(recCourseRaw);
-      setRecCourses(recCourses);
-      pageContextValue.handler.setLoading(false);
-    }).catch(e => {
-      errorHandler(e, pageContextValue);
-    })
+    const newCourseURL = joinPaths([backend, apiPath.recommend.new])
+    const hotCourseURL = joinPaths([backend, apiPath.recommend.hot])
+    pageContextValue.handler.setLoading(true)
+    Promise.all([getRequest(newCourseURL), getRequest(hotCourseURL)])
+      .then(results => {
+        const [newCoursesRaw, hotCoursesRaw] = results
+        const newCourses = stylizeObject(newCoursesRaw)
+        const hotCourses = stylizeObject(hotCoursesRaw)
+        setNewCourses(newCourses)
+        setHotCourses(hotCourses)
+        if (user != null) {
+          const recCourseURL = joinPaths([backend, apiPath.recommend.rec])
+          return getRequest(recCourseURL)
+        } else return false
+      })
+      .then(recCourseRaw => {
+        if (recCourseRaw === false) {
+          pageContextValue.handler.setLoading(false)
+          return true
+        }
+        const recCourses = stylizeObject(recCourseRaw)
+        setRecCourses(recCourses)
+        pageContextValue.handler.setLoading(false)
+      })
+      .catch(e => {
+        errorHandler(e, pageContextValue)
+      })
   }, [])
-  
+
   return (
     <main>
       {/* Hero unit */}
@@ -103,21 +103,19 @@ const MainPage = props => {
         </Container>
       </TitleBox>
       <MainPageCardContainer>
-      <MainPageCardHeadline title='New Courses' />
-        <CourseMenu courseList={newCourses} />
+        <MainPageCardHeadline title='New Courses' />
+        <CourseMenu courseList={newCourses} subcategoryList={subcategoryList} />
       </MainPageCardContainer>
       <MainPageCardContainer>
         <MainPageCardHeadline title='Hot Courses' />
-        <CourseMenu courseList={newCourses} />
+        <CourseMenu courseList={hotCourses} subcategoryList={subcategoryList} />
+      </MainPageCardContainer>
+      {user === null ? null : (
+        <MainPageCardContainer>
+          <MainPageCardHeadline title='Recommendations for You' />
+          <CourseMenu courseList={newCourses} subcategoryList={subcategoryList} />
         </MainPageCardContainer>
-        {
-        user === null ? null : (<MainPageCardContainer>
-        <MainPageCardHeadline title='Recommendations for You' />
-        <CourseMenu courseList={newCourses} />
-      </MainPageCardContainer>)
-        }
-      
-      
+      )}
     </main>
   )
 }

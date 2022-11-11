@@ -33,8 +33,9 @@ export async function getRequest (
 ) {
   var myHeaders = new Headers();
   const userInfo = getUser();
-  if (userInfo !== null) 
+  if (userInfo !== null)  {
     myHeaders.set('token', userInfo.token);
+  }
   url = 'http://' + url;
   return fetch(url, {
     credentials: 'include',

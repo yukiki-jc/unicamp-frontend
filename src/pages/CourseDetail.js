@@ -502,6 +502,7 @@ export default function CourseDetailPage({ subcategoryList }) {
     const [myComment, setMyComment] = useState('')
     const [ratingDistribution, setRatingDistribution] = useState([])
     const [myRating, setMyRating] = useState(0)
+    const [relatedCourses, setRelatedCourses] = useState(null)
     // TODO: remove this afterwards
     const {
         subcategoryId = 0,
@@ -518,16 +519,18 @@ export default function CourseDetailPage({ subcategoryList }) {
     useEffect(() => {
         const courseDataURL = joinPaths([backend, apiPath.course.info, courseId])
         const ratingDetailURL = joinPaths([backend, apiPath.grade.get, courseId])
+        const relatedCourseURL = joinPaths([backend, apiPath.course.relation, courseId])
         pageContextValue.handler.setLoading(true)
-        Promise.all([getRequest(courseDataURL), getComments(courseId), getRequest(ratingDetailURL)])
+        Promise.all([getRequest(courseDataURL), getComments(courseId), getRequest(ratingDetailURL), getRequest(relatedCourseURL)])
             .then(datas => {
                 const courseData = stylizeObject(datas[0])
                 const commentResult = datas[1]
                 const ratings = stylizeObject(datas[2])
-
+                const relatedCourses = stylizeObject(datas[3])
                 setRatingDistribution(ratings.ratingDetail)
                 setMyRating(ratings.myRating)
                 setCourseData(courseData)
+                setRelatedCourses(relatedCourses)
                 showComments(commentResult)
                 pageContextValue.handler.setLoading(false)
             })
@@ -728,7 +731,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <ItemSubtitle sx={{ marginBottom: 2 }}>
                         Feeling hard to follow? Try these first
                     </ItemSubtitle>
-                    <CourseMenu courseList={courseList} />
+                    <CourseMenu courseList={relatedCourses ? relatedCourses.pre : []} subcategoryList={subcategoryList} />
 
                     <ItemTitle>
                         Advance Courses
@@ -736,7 +739,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <ItemSubtitle sx={{ marginBottom: 2 }}>
                         Good job! Dive deeper
                     </ItemSubtitle>
-                    <CourseMenu courseList={courseList} />
+                    <CourseMenu courseList={relatedCourses ? relatedCourses.post : [] }  subcategoryList={subcategoryList}/>
                     <Divider variant="middle" sx={{ marginTop: 4 }} />
                 </ItemContainer>
 

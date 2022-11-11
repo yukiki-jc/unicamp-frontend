@@ -13,7 +13,7 @@ export default function Panel (props) {
   return (
     <div>
       <Routes>
-        <Route exact path='/' element={<MainPage />} />
+        <Route exact path='/' element={<MainPage subcategoryList={state.subcategoryList} />} />
         <Route
           path='login'
           element={<LoginPage handleLoginSuccess={handler.handleLoginSuccess} />}
