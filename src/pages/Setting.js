@@ -9,6 +9,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Tooltip from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { getRequest, postRequest } from '../utils/requests';
 import { apiPath, backend } from '../utils/urls';
@@ -178,11 +179,8 @@ const uploadAvatar = (pageContextValue, setAvatar, event) => {
       console.log(e);
       pageContextValue.handler.setErrorBox("Connect Error");
     });
-    // TODO: upload avatar (js File class)
   } else {
     pageContextValue.handler.setErrorBox("Invalid image file");
-    // TODO: the file uploaded is not image or
-    //       the number of image doesn't equal to one
   }
 }
 
@@ -359,7 +357,7 @@ const SettingPage = props => {
                 disabled
                 value={user.name}
               />
-              <NoneFormHelperText> Username (Immutable) </NoneFormHelperText>
+              <NoneFormHelperText> Username </NoneFormHelperText>
             </SingleTextField>
           </SubFormItem>
           <SubFormItem>
@@ -407,10 +405,12 @@ const SettingPage = props => {
             <SingleTextField variant="outlined">
               <AvatarSetting>
                 <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} src={avatarNow} />
-                <Button variant="outlined" sx={{ marginLeft: "12px" }} component="label" >
-                  {"Upload (less than 65536 bytes)"}
-                  <input type="file" accept="image/*" onChange={(event) => { uploadAvatar(pageContextValue, setAvatarNow, event)}} hidden />
-                </Button>
+                <Tooltip title="Less than 64 kB">
+                  <Button variant="outlined" sx={{ marginLeft: "16px" }} component="label" >
+                    {"Upload"}
+                    <input type="file" accept="image/*" onChange={(event) => { uploadAvatar(pageContextValue, setAvatarNow, event)}} hidden />
+                  </Button>
+                </Tooltip>
               </AvatarSetting>
               <NoneFormHelperText> Avatar </NoneFormHelperText>
             </SingleTextField>
