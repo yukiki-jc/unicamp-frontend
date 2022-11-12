@@ -1,5 +1,4 @@
 export const backend = '43.159.39.232:8080/api';
-export const frontend = "localhost:3000"
 export const apiPath = {
     login: '/login',
     course: {
@@ -41,7 +40,7 @@ export const apiPath = {
         rec: '/recommend/rec/main'
     },
     favorite: '/favorite',
-    
 
-    
+
+
 }

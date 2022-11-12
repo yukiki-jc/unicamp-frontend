@@ -15,7 +15,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Copyright from '../components/Copyright';
 import { PageContext } from '../App';
 import { backend, apiPath } from '../utils/urls';
 import { postRequest } from '../utils/requests';
@@ -46,9 +45,9 @@ export default function SignUpPage(props) {
         throw "Connect Error";
     })
 
-    .catch(e => {
-      errorHandler(e, pageContextValue);
-    });
+      .catch(e => {
+        errorHandler(e, pageContextValue);
+      });
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -121,7 +120,6 @@ export default function SignUpPage(props) {
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 }

@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -16,7 +16,6 @@ import { apiPath, backend } from '../utils/urls'
 import { errorHandler, stylizeObject } from '../utils/functions'
 import { PageContext } from '../App'
 import { getRequest } from '../utils/requests'
-
 
 const jobTitles = ["Web Developer", "UI/UX Designer", "Data Scienctist", "Project Manager", "DevOps Engineer", "Systems Architect", "Software Developer"];
 const HeroTitleText = styled((props) => (
@@ -102,8 +101,6 @@ const HeroContainer = styled((props) => (
 const HeroImg = styled("img", {
   shouldForwardProp: (prop) => prop !== "maxWidth"
 })(({ theme, maxWidth }) => ({
-  display: "block",
-  height: "fit-content",
   maxWidth: "100%",
   borderRadius: theme.shape.borderRadius * 5,
   [theme.breakpoints.up("md")]: {
@@ -150,8 +147,26 @@ const logos = [
   "cornell.png", "berkeley.png", "ucsd.png", "gatech.png",
 ];
 
+const logoHeight = (theme, line) => ({
+  maxHeight: `calc(${2.8 * line}vw + ${2.4 * (line - 1)}rem)`,
+  [theme.breakpoints.up("lg")]: {
+    maxHeight: `calc(${2.4 * line}vw + ${2.4 * (line - 1)}rem)`,
+  },
+  [theme.breakpoints.up("md")]: {
+    maxHeight: `calc(${1.8 * line}vw + ${2.4 * (line - 1)}rem)`,
+  },
+});
+
+const LogoImg = styled(({ alt, ...props }) => (
+  <img {...props} alt={alt} loading="lazy" />
+))(({ theme }) => ({
+  ...logoHeight(theme, 1),
+  marginBottom: "2.4rem",
+  marginRight: "3rem"
+}));
+
 const MainPage = props => {
-  const {subcategoryList} = props
+  const { subcategoryList } = props
   const [newCourses, setNewCourses] = useState([])
   const [hotCourses, setHotCourses] = useState([])
   const [recCourses, setRecCourses] = useState([])
@@ -189,7 +204,7 @@ const MainPage = props => {
         errorHandler(e, pageContextValue)
       })
   }, [])
-  
+
   return (
     <MainContainer>
       <HeroContainer sx={{ marginTop: { md: 1 } }}>
@@ -200,30 +215,34 @@ const MainPage = props => {
         <MenuTitle>
           Now Trending
         </MenuTitle>
-        <CourseMenu courseList={hotCourses} subcategoryList={subcategoryList}  />
+        <CourseMenu courseList={hotCourses} subcategoryList={subcategoryList} />
 
         <HeroContainer sx={{ marginTop: 5, alignItems: "center" }}>
           <Box sx={{ paddingRight: { md: "4vw" } }}>
             <HeroTitleText sx={{ marginBottom: 1 }}>
-              An online <span style={{ color: "#5A49E3" }}>self-taught</span> curriculum, dedicated for <span style={{ color: "#b27c66" }}>Computer Science</span>
+              An online <span style={{ color: "#5A49E3" }}>self-taught</span> curriculum, dedicated to <span style={{ color: "#b27c66" }}>Computer Science</span>
             </HeroTitleText>
             <Typography sx={{
               color: "#777",
               marginBottom: 4,
               fontSize: "1.4rem",
             }}>
-              featured the best universities around the world
+              enjoy courses from the best universities in the world
             </Typography>
-            <Box sx={{
+            <Box sx={(theme) => ({
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "space-between",
-              marginBottom: 1.5,
+              marginBottom: 2,
               overflow: "hidden",
-              height: "9rem"
-            }}>
+              ...logoHeight(theme, 2),
+            })}>
               {logos.map((name) => (
-                <img height={24} src={`${process.env.PUBLIC_URL}/logos/${name}`} style={{ marginRight: "max(3rem, 3vw)", marginBottom: "2.4rem" }} alt={name} />
+                <LogoImg
+                  src={`${process.env.PUBLIC_URL}/logos/${name}`}
+                  alt={name}
+                  key={`${name}-logo`}
+                />
               ))}
             </Box>
             <Typography sx={{
@@ -250,22 +269,26 @@ const MainPage = props => {
             <HeroTitleText sx={{ marginBottom: 1 }}>
               We're all in this together
             </HeroTitleText>
-            <Typography sx={{
+            <Box sx={{
               color: "#777",
               marginBottom: 4,
               fontSize: "1.4rem",
             }}>
-              Hey, you are not alone on this journey! Share anything you find helpful. Ideas, notes, puzzles, mindmaps, ANYTHING.
+              Hey, you are not alone on this journey. Share anything you find helpful. Ideas, notes, puzzles, mindmaps, ANYTHING!
               <p>Please do note that sharing your answers directly is strictly prohibited on Unicamp. We encourage thoughtful discussions.</p>
-            </Typography>
+            </Box>
           </Box>
           <HeroImg src={`${process.env.PUBLIC_URL}/discuss.jpg`} maxWidth="min(50rem, 48%)" />
         </HeroContainer>
 
-        <MenuTitle>
-          Courses For U
-        </MenuTitle>
-        <CourseMenu courseList={recCourses} subcategoryList={subcategoryList}  />
+        {recCourses.length > 0 && (
+          <Fragment>
+            <MenuTitle>
+              Courses For U
+            </MenuTitle>
+            <CourseMenu courseList={recCourses} subcategoryList={subcategoryList} />
+          </Fragment>
+        )}
       </MenuContainer>
     </MainContainer>
   )

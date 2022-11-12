@@ -3,8 +3,8 @@ import CourseThumbnail from './CourseThumbnail'
 import { Tab, Tabs } from '@mui/material';
 
 export default function CourseMenu(props) {
-
   const { courseList, subcategoryList } = props;
+
   return (
     <Tabs
       value={0}
@@ -24,11 +24,12 @@ export default function CourseMenu(props) {
         },
       }}
     >
-      {courseList.map(card => (
+      {courseList.map((card, idx) => (
         <Tab
-
           label={<CourseThumbnail {...card} subcategoryList={subcategoryList} />}
           sx={{ padding: 0 }}
+          key={idx}
+          disableRipple
         />
       ))}
     </Tabs>

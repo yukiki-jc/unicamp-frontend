@@ -164,30 +164,28 @@ const NavBar = props => {
       </MenuItem>
     ]
 
-  const categoryMenuItems = parentOpen => categoryList.map(category => {
-    const subcategoryMenuItems = category.subcategory.map(subCate => {
-      return (
-        <MenuItem>
-          <MUILink
-            href={joinPaths([
-              apiPath.category.info,
-              subCate.subcategoryId.toString()
-            ])}
-            underline='none'
-          >
-            <Typography textAlign='center' color='black'>
-              {subCate.subcategoryName}
-            </Typography>
-          </MUILink>
-        </MenuItem>
-      )
-    })
+  const categoryMenuItems = parentOpen => categoryList.map((category, idx) => {
     return (
       <NestedMenuItem
         label={category.categoryName}
         parentMenuOpen={parentOpen}
+        key={idx}
       >
-        {subcategoryMenuItems}
+        {category.subcategory.map((subCate, idx) => (
+          <MenuItem key={`item-${idx}`}>
+            <MUILink
+              href={joinPaths([
+                apiPath.category.info,
+                subCate.subcategoryId.toString()
+              ])}
+              underline='none'
+            >
+              <Typography textAlign='center' color='black'>
+                {subCate.subcategoryName}
+              </Typography>
+            </MUILink>
+          </MenuItem>
+        ))}
       </NestedMenuItem>
     )
   })
@@ -206,12 +204,12 @@ const NavBar = props => {
 
   const collectionMenuForXs = pageContextValue.state.login ? (<AlignMenuItem onClick={handleCloseMenuCategory}>
     <MUILink href='/favorites' underline='none'>
-    <Typography textAlign='center'> My Favorites </Typography>
+      <Typography textAlign='center'> My Favorites </Typography>
     </MUILink>
   </AlignMenuItem>) : null;
   const collectionMenuForMd = pageContextValue.state.login ? (<NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
     <MUILink href='/favorites' underline='none'>
-    My Favorites
+      My Favorites
     </MUILink>
   </NavbarLinkButton>) : null;
 
@@ -290,17 +288,17 @@ const NavBar = props => {
           {categoryMenuItems(!!anchorElMenuCategory)}
         </Menu>
         <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              onKeyDown={handleSearchSubmit}
-              onChange={(event) => { setSearchValue(event.target.value);}}
-              value={searchValue}
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            onKeyDown={handleSearchSubmit}
+            onChange={(event) => { setSearchValue(event.target.value); }}
+            value={searchValue}
+            placeholder="Search…"
+            inputProps={{ 'aria-label': 'search' }}
+          />
+        </Search>
         <Box sx={{ flexGrow: 0 }}>
           <IconButton onMouseOver={handleOpenUser} sx={{ p: 0 }}>
             <RoundAvatar sx={{ height: "3.6rem", width: "3.6rem" }} />
@@ -325,7 +323,7 @@ const NavBar = props => {
             {loginMenuItem}
           </Menu>
         </Box>
-        
+
       </Toolbar>
     </AppBar>
   )

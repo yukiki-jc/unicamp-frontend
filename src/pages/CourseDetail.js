@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { PageContext } from '../App'
 import { apiPath, backend } from '../utils/urls'
 import { useParams, Link as RouterLink } from 'react-router-dom'
@@ -77,7 +77,7 @@ const MasonryContainer = styled((props) => (
 const ItemTitle = styled(Typography)(({ theme }) => ({
     fontSize: '2.2rem',
     fontWeight: 700,
-    padding: theme.spacing(2, 0, 0.5, 0),
+    padding: theme.spacing(2.5, 0, 0.5, 0),
 }))
 
 const ItemSubtitle = styled(Typography)(({ theme }) => ({
@@ -461,8 +461,8 @@ const CommentCard = props => {
                 }
                 sx={{
                     cursor: pageContextValue.state.login && expandedId != commentData.id
-                     ? "pointer"
-                     : "text"
+                        ? "pointer"
+                        : "text"
                 }}
             >
                 {refData ? replyAt(refData.userName) : null}
@@ -719,17 +719,17 @@ export default function CourseDetailPage({ subcategoryList }) {
                     </LinkRouter>
                 </Breadcrumbs>
                 <LoadingButton
-                    disabled={!pageContextValue.state.login}
-                    sx={{ borderRadius: '12rem' }}
-                    color={favorite ? "loading" : "primary"}
+                    // disabled={!pageContextValue.state.login}
+                    sx={{ borderRadius: '12rem', paddingX: 1.5, textTransform: "capitalize" }}
+                    // color={favorite ? "loading" : "primary"}
                     disableElevation={favorite}
-                    variant="contained"
                     loadingPosition="start"
+                    size="small"
                     startIcon={favorite ? <DoneIcon /> : <StarIcon />}
                     loading={favoriteLoading}
                     onClick={favoriteClick}
                 >
-                    {favorite ? "Added to Favorite" : "Add to Favorite"}
+                    {favorite ? "Collected" : "Collect"}
                 </LoadingButton>
             </HeaderBar>
             <MasonryContainer>
@@ -789,22 +789,32 @@ export default function CourseDetailPage({ subcategoryList }) {
                         {description}
                     </ItemSubtitle>
 
-                    <ItemTitle>
-                        Prerequisites
-                    </ItemTitle>
-                    <ItemSubtitle sx={{ marginBottom: 2 }}>
-                        Feeling hard to follow? Try these first
-                    </ItemSubtitle>
+                    {relatedCourses && relatedCourses.pre.length > 0 && (
+                        <Fragment>
+                            <ItemTitle>
+                                Prerequisites
+                            </ItemTitle>
+                            <ItemSubtitle sx={{ marginBottom: 2 }}>
+                                Feeling hard to follow? Try these first
+                            </ItemSubtitle>
 
-                    <CourseMenu courseList={relatedCourses ? relatedCourses.pre : []} subcategoryList={subcategoryList} />
-                    <ItemTitle>
-                        Advance Courses
-                    </ItemTitle>
-                    <ItemSubtitle sx={{ marginBottom: 2 }}>
-                        Good job! Dive deeper
-                    </ItemSubtitle>
+                            <CourseMenu courseList={relatedCourses ? relatedCourses.pre : []} subcategoryList={subcategoryList} />
+                        </Fragment>
+                    )}
 
-                    <CourseMenu courseList={relatedCourses ? relatedCourses.post : []} subcategoryList={subcategoryList} />
+                    {relatedCourses && relatedCourses.post.length > 0 && (
+                        <Fragment>
+                            <ItemTitle>
+                                Advance Courses
+                            </ItemTitle>
+                            <ItemSubtitle sx={{ marginBottom: 2 }}>
+                                Good job! Dive deeper
+                            </ItemSubtitle>
+
+                            <CourseMenu courseList={relatedCourses ? relatedCourses.post : []} subcategoryList={subcategoryList} />
+                        </Fragment>
+                    )}
+
                     <Divider variant="middle" sx={{ marginTop: 4 }} />
                 </ItemContainer>
 

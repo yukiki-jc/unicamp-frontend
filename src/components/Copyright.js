@@ -3,8 +3,8 @@ import Typography from '@mui/material/Typography';
 
 export default function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+    <Typography color="text.secondary" align="center" fontSize="1.2rem" {...props}>
+      Made with 💜 in Fudan · Copyright ©
       <Link color="inherit" href="/">
         Unicamp
       </Link>{' '}

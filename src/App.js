@@ -81,7 +81,7 @@ export default function App() {
       show: false
     })
   }
-  
+
   const navigate = useNavigate()
   const handleLoginSuccess = user => {
     saveUser(user);
@@ -131,7 +131,7 @@ export default function App() {
   }, [])
 
 
- 
+
   return (
     <ThemeProvider theme={globalTheme}>
       <PageContext.Provider
@@ -186,7 +186,7 @@ export default function App() {
         >
           <CircularProgress color='inherit' />
         </Backdrop>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Copyright sx={{ marginTop: 3.5, marginBottom: 2.5 }} />
       </PageContext.Provider>
     </ThemeProvider>
   )
