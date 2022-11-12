@@ -518,6 +518,7 @@ export default function CourseDetailPage({ subcategoryList }) {
 
     useEffect(() => {
         const courseDataURL = joinPaths([backend, apiPath.course.info, courseId])
+
         const ratingDetailURL = joinPaths([backend, apiPath.grade.get, courseId])
         const relatedCourseURL = joinPaths([backend, apiPath.course.relation, courseId])
         pageContextValue.handler.setLoading(true)
@@ -680,6 +681,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                         fontSize: '1.2rem',
                         marginTop: 0.5,
                     }} color='inherit' target="_blank" rel="noopener noreferrer">
+
                         Visit course website in a new tab -{'>'}
                     </Link>
                 </EmbedContainer>
@@ -731,14 +733,15 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <ItemSubtitle sx={{ marginBottom: 2 }}>
                         Feeling hard to follow? Try these first
                     </ItemSubtitle>
-                    <CourseMenu courseList={relatedCourses ? relatedCourses.pre : []} subcategoryList={subcategoryList} />
 
+                    <CourseMenu courseList={relatedCourses ? relatedCourses.pre : []} subcategoryList={subcategoryList} />
                     <ItemTitle>
                         Advance Courses
                     </ItemTitle>
                     <ItemSubtitle sx={{ marginBottom: 2 }}>
                         Good job! Dive deeper
                     </ItemSubtitle>
+
                     <CourseMenu courseList={relatedCourses ? relatedCourses.post : [] }  subcategoryList={subcategoryList}/>
                     <Divider variant="middle" sx={{ marginTop: 4 }} />
                 </ItemContainer>

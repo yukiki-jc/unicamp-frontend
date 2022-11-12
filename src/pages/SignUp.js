@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -43,9 +42,10 @@ export default function SignUpPage(props) {
       } else if (json.state === false) {
         pageContextValue.handler.setErrorBox(json.message);
       }
-      else 
+      else
         throw "Connect Error";
     })
+
     .catch(e => {
       errorHandler(e, pageContextValue);
     });
@@ -55,7 +55,6 @@ export default function SignUpPage(props) {
 
   return (
     <Container component="main" maxWidth="xs" sx={{ userSelect: "none" }}>
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
