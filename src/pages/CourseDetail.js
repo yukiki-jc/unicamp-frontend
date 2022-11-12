@@ -429,6 +429,8 @@ const CommentCard = props => {
         setReply,
         handleCommentDelete
     } = props
+    const pageContextValue = useContext(PageContext)
+
     let deleteIcon = null
     if (getUser()?.admin) {
         deleteIcon = (
@@ -453,12 +455,18 @@ const CommentCard = props => {
                 action={deleteIcon}
             />
             <PointerContent
-                onClick={() => setExpandedId(commentData.id)}
-                sx={{ cursor: expandedId == commentData.id ? "text" : "pointer" }}
+                onClick={pageContextValue.state.login
+                    ? () => setExpandedId(commentData.id)
+                    : () => { }
+                }
+                sx={{
+                    cursor: pageContextValue.state.login && expandedId != commentData.id
+                     ? "pointer"
+                     : "text"
+                }}
             >
                 {refData ? replyAt(refData.userName) : null}
                 <Typography sx={{ fontSize: '1.5rem' }}>{commentData.text}</Typography>
-                {/* {replyHint(114514)} */}
             </PointerContent>
             <Collapse in={expanded} unmountOnExit>
                 <CollapseField>
@@ -674,13 +682,13 @@ export default function CourseDetailPage({ subcategoryList }) {
     const changeRating = (event) => {
         let targetValue = Number(event.target.value);
         if (myRating == targetValue) {
-            return;            
+            return;
         }
 
         // TODO: change setTimeout to request
         setTimeout(() => {
             setMyRating(targetValue);
-        }, 1);   
+        }, 1);
     }
 
     const favoriteClick = () => {
@@ -711,6 +719,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     </LinkRouter>
                 </Breadcrumbs>
                 <LoadingButton
+                    disabled={!pageContextValue.state.login}
                     sx={{ borderRadius: '12rem' }}
                     color={favorite ? "loading" : "primary"}
                     disableElevation={favorite}
@@ -795,7 +804,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                         Good job! Dive deeper
                     </ItemSubtitle>
 
-                    <CourseMenu courseList={relatedCourses ? relatedCourses.post : [] }  subcategoryList={subcategoryList}/>
+                    <CourseMenu courseList={relatedCourses ? relatedCourses.post : []} subcategoryList={subcategoryList} />
                     <Divider variant="middle" sx={{ marginTop: 4 }} />
                 </ItemContainer>
 
@@ -826,9 +835,10 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <CommentField>
                         <RoundAvatar sx={{ mr: '8px', mt: '12px' }} />
                         <ReplyInput
+                            disabled={!pageContextValue.state.login}
                             multiline
                             variant='outlined'
-                            placeholder={'Leave Some Comments Here'}
+                            placeholder={pageContextValue.state.login ? 'Leave Some Comments Here' : 'Pleasr Login First'}
                             value={myComment}
                             onChange={event => {
                                 setMyComment(event.target.value)
@@ -837,6 +847,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                     </CommentField>
                     <Tail>
                         <Button
+                            disabled={!pageContextValue.state.login}
                             children={'SEND'}
                             variant='contained'
                             endIcon={<SendIcon />}
