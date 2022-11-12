@@ -719,9 +719,9 @@ export default function CourseDetailPage({ subcategoryList }) {
                     </LinkRouter>
                 </Breadcrumbs>
                 <LoadingButton
-                    // disabled={!pageContextValue.state.login}
+                    disabled={!pageContextValue.state.login}
                     sx={{ borderRadius: '12rem', paddingX: 1.5, textTransform: "capitalize" }}
-                    // color={favorite ? "loading" : "primary"}
+                    color={favorite ? "loading" : "primary"}
                     disableElevation={favorite}
                     loadingPosition="start"
                     size="small"
