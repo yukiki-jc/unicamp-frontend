@@ -17,7 +17,7 @@ import { errorHandler, stylizeObject } from '../utils/functions'
 import { PageContext } from '../App'
 import { getRequest } from '../utils/requests'
 
-const jobTitles = ["Web Developer", "UI/UX Designer", "Data Scienctist", "Product Manager", "DevOps Engineer", "Systems Architect", "Software Developer", "Game Developer"];
+const jobTitles = ["Web Developer", "UI/UX Designer", "Data Scienctist", "Product Manager", "DevOps Engineer", "Systems Architect", "Game Developer", "Quantitative Analyst"];
 
 const HeroTitleText = styled((props) => (
   <Typography variant="h1" {...props} />
