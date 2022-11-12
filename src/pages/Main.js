@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
@@ -10,7 +11,22 @@ import Typed from "typed.js";
 import { LatoFont } from '../utils/commonData'
 
 const jobTitles = ["Web Developer", "UI/UX Designer", "Data Scienctist", "Project Manager", "DevOps Engineer", "Systems Architect", "Software Developer"];
-
+import React, { useContext, useLayoutEffect, useState } from 'react'
+import Stack from '@mui/material/Stack'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
+import CourseMenu from '../components/CourseMenu'
+import { styled } from '@mui/material/styles'
+import { Link as MUILink } from '@mui/material'
+// import { courseList } from '../utils/testData'
+import { getUser } from '../utils/storeUser'
+import TitleBox from '../components/TitleBox'
+import { joinPaths } from '@remix-run/router'
+import { apiPath, backend } from '../utils/urls'
+import { errorHandler, stylizeObject } from '../utils/functions'
+import { PageContext } from '../App'
+import { getRequest } from '../utils/requests'
 const HeroTitleText = styled((props) => (
   <Typography variant="h1" {...props} />
 ))(({ theme }) => ({
@@ -143,6 +159,44 @@ const logos = [
 ];
 
 const MainPage = props => {
+  const {subcategoryList} = props
+  const [newCourses, setNewCourses] = useState([])
+  const [hotCourses, setHotCourses] = useState([])
+  const [recCourses, setRecCourses] = useState([])
+  const pageContextValue = useContext(PageContext)
+  const user = getUser()
+  let name = 'Future Engineer'
+  if (user !== null) name = user.name
+  useLayoutEffect(() => {
+    const newCourseURL = joinPaths([backend, apiPath.recommend.new])
+    const hotCourseURL = joinPaths([backend, apiPath.recommend.hot])
+    pageContextValue.handler.setLoading(true)
+    Promise.all([getRequest(newCourseURL), getRequest(hotCourseURL)])
+      .then(results => {
+        const [newCoursesRaw, hotCoursesRaw] = results
+        const newCourses = stylizeObject(newCoursesRaw)
+        const hotCourses = stylizeObject(hotCoursesRaw)
+        setNewCourses(newCourses)
+        setHotCourses(hotCourses)
+        if (user != null) {
+          const recCourseURL = joinPaths([backend, apiPath.recommend.rec])
+          return getRequest(recCourseURL)
+        } else return false
+      })
+      .then(recCourseRaw => {
+        if (recCourseRaw === false) {
+          pageContextValue.handler.setLoading(false)
+          return true
+        }
+        const recCourses = stylizeObject(recCourseRaw)
+        setRecCourses(recCourses)
+        pageContextValue.handler.setLoading(false)
+      })
+      .catch(e => {
+        errorHandler(e, pageContextValue)
+      })
+  }, [])
+  
   return (
     <MainContainer>
       <HeroContainer sx={{ marginTop: { md: 1 } }}>
@@ -153,7 +207,7 @@ const MainPage = props => {
         <MenuTitle>
           Now Trending
         </MenuTitle>
-        <CourseMenu courseList={courseList} />
+        <CourseMenu courseList={hotCourses} />
 
         <HeroContainer sx={{ marginTop: 5, alignItems: "center" }}>
           <Box sx={{ paddingRight: { md: "4vw" } }}>
@@ -194,9 +248,9 @@ const MainPage = props => {
         </HeroContainer>
 
         <MenuTitle>
-          UR Collection
+          What's New
         </MenuTitle>
-        <CourseMenu courseList={courseList} />
+        <CourseMenu courseList={newCourses} />
 
         <HeroContainer sx={{ marginTop: 5, alignItems: "center" }}>
           <Box sx={{ paddingRight: { md: "6.4vw" } }}>
@@ -218,7 +272,7 @@ const MainPage = props => {
         <MenuTitle>
           Courses For U
         </MenuTitle>
-        <CourseMenu courseList={courseList} />
+        <CourseMenu courseList={recCourses} />
       </MenuContainer>
     </MainContainer>
   )

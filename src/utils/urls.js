@@ -7,7 +7,8 @@ export const apiPath = {
         info: '/course/info',
         delete: '/course/delete',
         add: '/course/add',
-        update: '/course/update'
+        update: '/course/update',
+        relation: '/course/relation'
     },
     category: {
         list: '/category/list',
@@ -29,7 +30,18 @@ export const apiPath = {
         'get': '/comment/get',
         'add': '/comment/add',
         'delete': '/comment/delete'
-    }
+    },
+    grade: {
+        "get": '/grade/get',
+        'set': '/grade/set'
+    },
+    recommend: {
+        new: '/recommend/new/main',
+        hot: '/recommend/hot/main',
+        rec: '/recommend/rec/main'
+    },
+    favorite: '/favorite',
+    
 
     
 }

@@ -30,7 +30,7 @@ import {
     Typography
 } from '@mui/material'
 import { LatoFont, LevelMappings } from '../utils/commonData'
-import { stylizeObject, reStylizeObject } from '../utils/functions'
+import { stylizeObject, reStylizeObject, sumArr, average } from '../utils/functions'
 import RoundAvatar from '../components/RoundAvatar'
 import ClearIcon from '@mui/icons-material/Clear'
 import SendIcon from '@mui/icons-material/Send'
@@ -500,6 +500,9 @@ export default function CourseDetailPage({ subcategoryList }) {
     const [comments, setComments] = useState([])
     const [avatars, setAvatars] = useState({})
     const [myComment, setMyComment] = useState('')
+    const [ratingDistribution, setRatingDistribution] = useState([])
+    const [myRating, setMyRating] = useState(0)
+    const [relatedCourses, setRelatedCourses] = useState(null)
     // TODO: remove this afterwards
     const {
         subcategoryId = 0,
@@ -515,13 +518,20 @@ export default function CourseDetailPage({ subcategoryList }) {
 
     useEffect(() => {
         const courseDataURL = joinPaths([backend, apiPath.course.info, courseId])
-        pageContextValue.handler.setLoading(true)
-        Promise.all([getRequest(courseDataURL), getComments(courseId)])
-            .then(datas => {
-                const courseData = datas[0]
-                const commentResult = datas[1]
 
-                setCourseData(stylizeObject(courseData))
+        const ratingDetailURL = joinPaths([backend, apiPath.grade.get, courseId])
+        const relatedCourseURL = joinPaths([backend, apiPath.course.relation, courseId])
+        pageContextValue.handler.setLoading(true)
+        Promise.all([getRequest(courseDataURL), getComments(courseId), getRequest(ratingDetailURL), getRequest(relatedCourseURL)])
+            .then(datas => {
+                const courseData = stylizeObject(datas[0])
+                const commentResult = datas[1]
+                const ratings = stylizeObject(datas[2])
+                const relatedCourses = stylizeObject(datas[3])
+                setRatingDistribution(ratings.ratingDetail)
+                setMyRating(ratings.myRating)
+                setCourseData(courseData)
+                setRelatedCourses(relatedCourses)
                 showComments(commentResult)
                 pageContextValue.handler.setLoading(false)
             })
@@ -671,7 +681,8 @@ export default function CourseDetailPage({ subcategoryList }) {
                         fontSize: '1.2rem',
                         marginTop: 0.5,
                     }} color='inherit' target="_blank" rel="noopener noreferrer">
-                        Visit course website in a new tab ->
+
+                        Visit course website in a new tab -{'>'}
                     </Link>
                 </EmbedContainer>
 
@@ -722,15 +733,16 @@ export default function CourseDetailPage({ subcategoryList }) {
                     <ItemSubtitle sx={{ marginBottom: 2 }}>
                         Feeling hard to follow? Try these first
                     </ItemSubtitle>
-                    <CourseMenu courseList={courseList} />
 
+                    <CourseMenu courseList={relatedCourses ? relatedCourses.pre : []} subcategoryList={subcategoryList} />
                     <ItemTitle>
                         Advance Courses
                     </ItemTitle>
                     <ItemSubtitle sx={{ marginBottom: 2 }}>
                         Good job! Dive deeper
                     </ItemSubtitle>
-                    <CourseMenu courseList={courseList} />
+
+                    <CourseMenu courseList={relatedCourses ? relatedCourses.post : [] }  subcategoryList={subcategoryList}/>
                     <Divider variant="middle" sx={{ marginTop: 4 }} />
                 </ItemContainer>
 
@@ -742,9 +754,9 @@ export default function CourseDetailPage({ subcategoryList }) {
                         How do others love this course
                     </ItemSubtitle>
                     <RatingChart
-                        rating='4.0'
-                        voters={2023}
-                        distribution={[0, 1, 3, 9, 5]}
+                        rating={average(ratingDistribution)}
+                        voters={sumArr(ratingDistribution)}
+                        distribution={ratingDistribution}
                     />
                 </ItemContainer>
 

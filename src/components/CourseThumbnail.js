@@ -1,11 +1,17 @@
-import { Card, Chip, Divider, Rating, Typography } from '@mui/material';
+
+import { Card, Chip, Divider, Rating, Typography, Skeleton } from '@mui/material';
 import { styled } from '@mui/material/styles'
-import { LatoFont, LevelMappings } from '../utils/commonData';
+import { LatoFont } from '../utils/commonData';
 import { Link as RouterLink } from "react-router-dom";
+import { Link as MUILink } from '@mui/material'
 import SchoolIcon from '@mui/icons-material/School';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import { alpha, Box, Stack } from '@mui/system';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import { apiPath } from '../utils/urls'
+import { joinPaths } from '@remix-run/router'
+import { LevelMappings } from "../utils/commonData";
+const LevelEmoji = ["👌", "🐣", "👨‍💻", "👩🏼‍🎓", "🤯"];
 
 const ThumbnailCard = styled((props) => (
     <Card variant='outlined' {...props} />
@@ -16,12 +22,12 @@ const ThumbnailCard = styled((props) => (
     cursor: 'pointer',
     padding: theme.spacing(2.5, 2),
     width: "27rem",
-    height: "23rem",
+    height: "20rem",
     transition: "all 0.2s",
     margin: theme.spacing(0, 1.5),
     "&:hover": {
         width: "32rem",
-        backgroundColor: alpha(theme.palette.primary.main, 0.36),
+        backgroundColor: alpha(theme.palette.primary.main, 0.06),
     },
 }));
 
@@ -49,10 +55,16 @@ const InfoItem = styled(({ icon, title, ...props }) => (
 
 const LevelColor = ["", "default", "info", "secondary", "warning", "error"];
 
+
 export default function CourseThumbnail({
-    name, href, category_id, provider, voters, rating, est_hour, difficulty,
+    name, href, subcategoryId, provider, voters, rating, estHour, difficulty, subcategoryList, id
 }) {
+    console.log(subcategoryList)
     return (
+        <MUILink
+        href={joinPaths([apiPath.course.info, id.toString()])}
+        underline='none'
+      >
         <ThumbnailCard>
             <InfoStack direction="row" spacing={1}>
                 <Chip
@@ -64,7 +76,11 @@ export default function CourseThumbnail({
                     }}
                     size="small"
                     color="primary"
-                    label={category_id}
+                    label={subcategoryId && subcategoryList && subcategoryList.length > 0 ? (
+                        subcategoryList[subcategoryId - 1].subcategoryName
+                    ) : (
+                        <Skeleton variant='text' width='3rem' />
+                    )}
                 />
                 <Chip
                     sx={{
@@ -76,6 +92,7 @@ export default function CourseThumbnail({
                     size="small"
                     color={LevelColor[difficulty]}
                     label={LevelMappings[difficulty]}
+                    
                 />
             </InfoStack>
             <Typography sx={(theme) => ({
@@ -98,9 +115,10 @@ export default function CourseThumbnail({
             <InfoStack sx={{ marginTop: 1 }}>
                 <InfoItem title={provider} icon={<SchoolIcon />} />
                 <InfoItem title={`${voters} camper${voters > 1 ? "s" : ""}`} icon={<SupervisorAccountIcon />} />
-                <InfoItem title={`${est_hour} hrs.`} icon={<AccessAlarmIcon />} />
+
+                <InfoItem title={`${estHour} hrs.`} icon={<AccessAlarmIcon />} />
             </InfoStack>
-            <Box sx={{
+            {/* <Box sx={{
                 marginTop: 1.5,
                 display: "flex",
                 alignItems: "center",
@@ -132,7 +150,8 @@ export default function CourseThumbnail({
                 }}>
                     ({voters})
                 </Typography>
-            </Box>
+            </Box> */}
         </ThumbnailCard>
+      </MUILink>
     );
 };

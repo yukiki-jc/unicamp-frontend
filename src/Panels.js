@@ -13,7 +13,7 @@ export default function Panel (props) {
   return (
     <div>
       <Routes>
-        <Route exact path='/' element={<MainPage />} />
+        <Route exact path='/' element={<MainPage subcategoryList={state.subcategoryList} />} />
         <Route
           path='login'
           element={<LoginPage handleLoginSuccess={handler.handleLoginSuccess} />}
@@ -35,12 +35,18 @@ export default function Panel (props) {
             />
           }
         />
-        {/* <Route
+        <Route
           path='/search'
           element={
             <CourseListPage title='Search Results' courseList={state.courseList} />
           }
-        /> */}
+        />
+        <Route
+          path='/favorites'
+          element={
+            <CourseListPage title='My Favorites' courseList={state.courseList} />
+          }
+        />
         <Route
           path='/coursemanagement'
           element={
