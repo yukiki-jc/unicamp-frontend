@@ -16,8 +16,12 @@ const globalTheme = createTheme({
     info: {
       main: "#1976d2",
       light: "#42a5f5",
-      dark: "1565c0",
+      dark: "#1565c0",
       contrastText: "#fff",
+    },
+    loading: {
+      main: "rgba(0, 0, 0, 0.12)",
+      contrastText: "rgba(0, 0, 0, 0.26)"
     }
   },
   typography: {

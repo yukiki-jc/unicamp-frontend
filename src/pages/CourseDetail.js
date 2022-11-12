@@ -29,10 +29,13 @@ import {
     Stack,
     Typography
 } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton';
 import { LatoFont, LevelMappings } from '../utils/commonData'
 import { stylizeObject, reStylizeObject, sumArr, average } from '../utils/functions'
 import RoundAvatar from '../components/RoundAvatar'
 import ClearIcon from '@mui/icons-material/Clear'
+import StarIcon from '@mui/icons-material/Star'
+import DoneIcon from '@mui/icons-material/Done'
 import SendIcon from '@mui/icons-material/Send'
 import { Masonry } from '@mui/lab'
 import CourseMenu from '../components/CourseMenu'
@@ -189,6 +192,14 @@ const CourseDetailButton = styled(props => (
     width: '90%',
     maxWidth: '48rem',
     fontWeight: 600
+}))
+
+const HeaderBar = styled('div')(({ theme }) => ({
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    marginBottom: "8px"
 }))
 
 const Comment = styled(Card)(({ theme }) => ({
@@ -505,8 +516,9 @@ export default function CourseDetailPage({ subcategoryList }) {
     const [myComment, setMyComment] = useState('')
     const [ratingDistribution, setRatingDistribution] = useState([])
     const [myRating, setMyRating] = useState(0)
+    const [favorite, setFavorite] = useState(false)
+    const [favoriteLoading, setFavoriteLoading] = useState(false)
     const [relatedCourses, setRelatedCourses] = useState(null)
-    // TODO: remove this afterwards
     const {
         subcategoryId = 0,
         name,
@@ -655,25 +667,46 @@ export default function CourseDetailPage({ subcategoryList }) {
         )
     })
 
-    // ----- comment -----
+    const favoriteClick = () => {
+        setFavoriteLoading(true);
+        // TODO: change setTimeout to request
+        setTimeout(() => {
+            setFavoriteLoading(false);
+            setFavorite((favorite) => !favorite);
+        }, 2000);
+    }
 
     return (
         <MainContainer>
-            <Breadcrumbs sx={{ marginBottom: 3 }}>
-                <LinkRouter to='/'>Home</LinkRouter>
-                <LinkRouter
-                    to={joinPaths([apiPath.category.info, subcategoryId.toString()])}
+            <HeaderBar>
+                <Breadcrumbs sx={{ marginBottom: 3 }}>
+                    <LinkRouter to='/'>Home</LinkRouter>
+                    <LinkRouter
+                        to={joinPaths([apiPath.category.info, subcategoryId.toString()])}
+                    >
+                        {subcategoryId && subcategoryList.length > 0 ? (
+                            subcategoryList[subcategoryId - 1].subcategoryName
+                        ) : (
+                            <Skeleton variant='text' width='5rem' />
+                        )}
+                    </LinkRouter>
+                    <LinkRouter color='primary'>
+                        {name || <Skeleton variant='text' width='5rem' />}
+                    </LinkRouter>
+                </Breadcrumbs>
+                <LoadingButton
+                    sx={{ borderRadius: '12rem' }}
+                    color={favorite ? "loading" : "primary"}
+                    disableElevation={favorite}
+                    variant="contained"
+                    loadingPosition="start"
+                    startIcon={favorite ? <DoneIcon /> : <StarIcon />}
+                    loading={favoriteLoading}
+                    onClick={favoriteClick}
                 >
-                    {subcategoryId && subcategoryList.length > 0 ? (
-                        subcategoryList[subcategoryId - 1].subcategoryName
-                    ) : (
-                        <Skeleton variant='text' width='5rem' />
-                    )}
-                </LinkRouter>
-                <LinkRouter color='primary'>
-                    {name || <Skeleton variant='text' width='5rem' />}
-                </LinkRouter>
-            </Breadcrumbs>
+                    {favorite ? "Added to Favorite" : "Add to Favorite"}
+                </LoadingButton>
+            </HeaderBar>
             <MasonryContainer>
                 <EmbedContainer sx={{ padding: 0 }}>
                     <EmbedContentCard>
