@@ -29,10 +29,13 @@ import {
     Stack,
     Typography
 } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton';
 import { LatoFont, LevelMappings } from '../utils/commonData'
 import { stylizeObject, reStylizeObject, sumArr, average } from '../utils/functions'
 import RoundAvatar from '../components/RoundAvatar'
 import ClearIcon from '@mui/icons-material/Clear'
+import StarIcon from '@mui/icons-material/Star'
+import DoneIcon from '@mui/icons-material/Done'
 import SendIcon from '@mui/icons-material/Send'
 import { Masonry } from '@mui/lab'
 import CourseMenu from '../components/CourseMenu'
@@ -191,6 +194,14 @@ const CourseDetailButton = styled(props => (
     fontWeight: 600
 }))
 
+const HeaderBar = styled('div')(({ theme }) => ({
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    marginBottom: "8px"
+}))
+
 const Comment = styled(Card)(({ theme }) => ({
     marginBottom: 16,
     borderRadius: 12,
@@ -201,8 +212,7 @@ const Comment = styled(Card)(({ theme }) => ({
 
 const PointerContent = styled(CardContent)(({ theme }) => ({
     paddingTop: 0,
-    paddingBottom: '16px !important',
-    cursor: 'pointer'
+    paddingBottom: '16px !important'
 }))
 
 const CollapseField = styled(Typography)(({ theme }) => ({
@@ -271,8 +281,6 @@ const replyHint = count => (
 
 const RatingStar = ({ sx, ...props }) => (
     <Rating
-        readOnly
-        precision={0.5}
         sx={theme => ({
             ...sx
             // '& .MuiRating-iconFilled': {
@@ -313,7 +321,7 @@ const RatingBar = ({ rating, value, maxValue }) => {
     )
 }
 
-const RatingChart = ({ rating, voters, distribution }) => {
+const RatingChart = ({ myRating, rating, voters, distribution, changeRating }) => {
     const maxValue = Math.max(...distribution) + 1
 
     return (
@@ -341,16 +349,22 @@ const RatingChart = ({ rating, voters, distribution }) => {
                 >
                     {rating}
                 </Typography>
-                <RatingStar precision={0.5} size='small' value={parseInt(rating)} />
                 <Typography
                     sx={{
                         color: '#777',
                         fontSize: '1.2rem',
-                        marginTop: 1
+                        marginTop: 0.25,
+                        marginBottom: 1.5,
                     }}
                 >
                     {voters} Ratings
                 </Typography>
+                <RatingStar
+                    precision={1}
+                    size='small'
+                    value={myRating}
+                    onChange={changeRating}
+                />
             </Box>
             <Box
                 sx={{
@@ -359,7 +373,7 @@ const RatingChart = ({ rating, voters, distribution }) => {
                     maxWidth: '32rem'
                 }}
             >
-                {distribution.reverse().map((val, idx) => (
+                {[...distribution].reverse().map((val, idx) => (
                     <RatingBar
                         key={idx}
                         rating={5 - idx}
@@ -407,6 +421,7 @@ const CommentCard = props => {
         commentData,
         refData = null,
         expanded,
+        expandedId,
         setExpandedId,
         avatar,
         handleReplySend,
@@ -437,7 +452,10 @@ const CommentCard = props => {
                 subheader={commentData.time}
                 action={deleteIcon}
             />
-            <PointerContent onClick={() => setExpandedId(commentData.id)}>
+            <PointerContent
+                onClick={() => setExpandedId(commentData.id)}
+                sx={{ cursor: expandedId == commentData.id ? "text" : "pointer" }}
+            >
                 {refData ? replyAt(refData.userName) : null}
                 <Typography sx={{ fontSize: '1.5rem' }}>{commentData.text}</Typography>
                 {/* {replyHint(114514)} */}
@@ -502,8 +520,9 @@ export default function CourseDetailPage({ subcategoryList }) {
     const [myComment, setMyComment] = useState('')
     const [ratingDistribution, setRatingDistribution] = useState([])
     const [myRating, setMyRating] = useState(0)
+    const [favorite, setFavorite] = useState(false)
+    const [favoriteLoading, setFavoriteLoading] = useState(false)
     const [relatedCourses, setRelatedCourses] = useState(null)
-    // TODO: remove this afterwards
     const {
         subcategoryId = 0,
         name,
@@ -642,6 +661,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                 refData={refData}
                 avatar={avatars[comment.userId]}
                 expanded={expandedId === comment.id}
+                expandedId={expandedId}
                 setExpandedId={setExpandedId}
                 reply={reply}
                 setReply={setReply}
@@ -651,25 +671,58 @@ export default function CourseDetailPage({ subcategoryList }) {
         )
     })
 
-    // ----- comment -----
+    const changeRating = (event) => {
+        let targetValue = Number(event.target.value);
+        if (myRating == targetValue) {
+            return;            
+        }
+
+        // TODO: change setTimeout to request
+        setTimeout(() => {
+            setMyRating(targetValue);
+        }, 1);   
+    }
+
+    const favoriteClick = () => {
+        setFavoriteLoading(true);
+        // TODO: change setTimeout to request
+        setTimeout(() => {
+            setFavoriteLoading(false);
+            setFavorite((favorite) => !favorite);
+        }, 2000);
+    }
 
     return (
         <MainContainer>
-            <Breadcrumbs sx={{ marginBottom: 3 }}>
-                <LinkRouter to='/'>Home</LinkRouter>
-                <LinkRouter
-                    to={joinPaths([apiPath.category.info, subcategoryId.toString()])}
+            <HeaderBar>
+                <Breadcrumbs sx={{ marginBottom: 3 }}>
+                    <LinkRouter to='/'>Home</LinkRouter>
+                    <LinkRouter
+                        to={joinPaths([apiPath.category.info, subcategoryId.toString()])}
+                    >
+                        {subcategoryId && subcategoryList.length > 0 ? (
+                            subcategoryList[subcategoryId - 1].subcategoryName
+                        ) : (
+                            <Skeleton variant='text' width='5rem' />
+                        )}
+                    </LinkRouter>
+                    <LinkRouter color='primary'>
+                        {name || <Skeleton variant='text' width='5rem' />}
+                    </LinkRouter>
+                </Breadcrumbs>
+                <LoadingButton
+                    sx={{ borderRadius: '12rem' }}
+                    color={favorite ? "loading" : "primary"}
+                    disableElevation={favorite}
+                    variant="contained"
+                    loadingPosition="start"
+                    startIcon={favorite ? <DoneIcon /> : <StarIcon />}
+                    loading={favoriteLoading}
+                    onClick={favoriteClick}
                 >
-                    {subcategoryId && subcategoryList.length > 0 ? (
-                        subcategoryList[subcategoryId - 1].subcategoryName
-                    ) : (
-                        <Skeleton variant='text' width='5rem' />
-                    )}
-                </LinkRouter>
-                <LinkRouter color='primary'>
-                    {name || <Skeleton variant='text' width='5rem' />}
-                </LinkRouter>
-            </Breadcrumbs>
+                    {favorite ? "Added to Favorite" : "Add to Favorite"}
+                </LoadingButton>
+            </HeaderBar>
             <MasonryContainer>
                 <EmbedContainer sx={{ padding: 0 }}>
                     <EmbedContentCard>
@@ -754,9 +807,11 @@ export default function CourseDetailPage({ subcategoryList }) {
                         How do others love this course
                     </ItemSubtitle>
                     <RatingChart
+                        myRating={myRating}
                         rating={average(ratingDistribution)}
                         voters={sumArr(ratingDistribution)}
                         distribution={ratingDistribution}
+                        changeRating={changeRating}
                     />
                 </ItemContainer>
 
