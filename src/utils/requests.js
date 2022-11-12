@@ -9,6 +9,9 @@ export async function postRequest (
   if (userInfo !== null) {
     myHeaders.set('token', userInfo.token);
   }
+  else {
+    myHeaders.set('token', '');
+  }
   url = 'http://' + url;
   myHeaders.append('Content-Type', 'application/json; charset=utf-8');
   return fetch(url, {
@@ -35,6 +38,9 @@ export async function getRequest (
   const userInfo = getUser();
   if (userInfo !== null)  {
     myHeaders.set('token', userInfo.token);
+  }
+  else {
+    myHeaders.set('token', '');
   }
   url = 'http://' + url;
   return fetch(url, {

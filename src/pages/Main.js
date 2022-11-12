@@ -1,32 +1,24 @@
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import CourseMenu from '../components/CourseMenu'
 import { styled } from '@mui/material/styles'
-import { Button, Divider, Grid, Link as MUILink } from '@mui/material'
-import { courseList } from '../utils/testData'
+import { Button } from '@mui/material'
 import Typed from "typed.js";
 import { LatoFont } from '../utils/commonData'
 
-const jobTitles = ["Web Developer", "UI/UX Designer", "Data Scienctist", "Project Manager", "DevOps Engineer", "Systems Architect", "Software Developer"];
 import React, { useContext, useLayoutEffect, useState } from 'react'
-import Stack from '@mui/material/Stack'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import CourseMenu from '../components/CourseMenu'
-import { styled } from '@mui/material/styles'
-import { Link as MUILink } from '@mui/material'
-// import { courseList } from '../utils/testData'
 import { getUser } from '../utils/storeUser'
-import TitleBox from '../components/TitleBox'
 import { joinPaths } from '@remix-run/router'
 import { apiPath, backend } from '../utils/urls'
 import { errorHandler, stylizeObject } from '../utils/functions'
 import { PageContext } from '../App'
 import { getRequest } from '../utils/requests'
+
+
+const jobTitles = ["Web Developer", "UI/UX Designer", "Data Scienctist", "Project Manager", "DevOps Engineer", "Systems Architect", "Software Developer"];
 const HeroTitleText = styled((props) => (
   <Typography variant="h1" {...props} />
 ))(({ theme }) => ({
@@ -189,6 +181,7 @@ const MainPage = props => {
           return true
         }
         const recCourses = stylizeObject(recCourseRaw)
+        console.log(recCourses)
         setRecCourses(recCourses)
         pageContextValue.handler.setLoading(false)
       })
@@ -207,7 +200,7 @@ const MainPage = props => {
         <MenuTitle>
           Now Trending
         </MenuTitle>
-        <CourseMenu courseList={hotCourses} />
+        <CourseMenu courseList={hotCourses} subcategoryList={subcategoryList}  />
 
         <HeroContainer sx={{ marginTop: 5, alignItems: "center" }}>
           <Box sx={{ paddingRight: { md: "4vw" } }}>
@@ -250,7 +243,7 @@ const MainPage = props => {
         <MenuTitle>
           What's New
         </MenuTitle>
-        <CourseMenu courseList={newCourses} />
+        <CourseMenu courseList={newCourses} subcategoryList={subcategoryList} />
 
         <HeroContainer sx={{ marginTop: 5, alignItems: "center" }}>
           <Box sx={{ paddingRight: { md: "6.4vw" } }}>
@@ -272,7 +265,7 @@ const MainPage = props => {
         <MenuTitle>
           Courses For U
         </MenuTitle>
-        <CourseMenu courseList={recCourses} />
+        <CourseMenu courseList={recCourses} subcategoryList={subcategoryList}  />
       </MenuContainer>
     </MainContainer>
   )

@@ -59,7 +59,6 @@ const LevelColor = ["", "default", "info", "secondary", "warning", "error"];
 export default function CourseThumbnail({
     name, href, subcategoryId, provider, voters, rating, estHour, difficulty, subcategoryList, id
 }) {
-    console.log(subcategoryList)
     return (
         <MUILink
         href={joinPaths([apiPath.course.info, id.toString()])}
