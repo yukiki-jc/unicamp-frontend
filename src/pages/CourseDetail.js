@@ -201,8 +201,7 @@ const Comment = styled(Card)(({ theme }) => ({
 
 const PointerContent = styled(CardContent)(({ theme }) => ({
     paddingTop: 0,
-    paddingBottom: '16px !important',
-    cursor: 'pointer'
+    paddingBottom: '16px !important'
 }))
 
 const CollapseField = styled(Typography)(({ theme }) => ({
@@ -407,6 +406,7 @@ const CommentCard = props => {
         commentData,
         refData = null,
         expanded,
+        expandedId,
         setExpandedId,
         avatar,
         handleReplySend,
@@ -437,7 +437,10 @@ const CommentCard = props => {
                 subheader={commentData.time}
                 action={deleteIcon}
             />
-            <PointerContent onClick={() => setExpandedId(commentData.id)}>
+            <PointerContent
+                onClick={() => setExpandedId(commentData.id)}
+                sx={{ cursor: expandedId == commentData.id ? "text" : "pointer" }}
+            >
                 {refData ? replyAt(refData.userName) : null}
                 <Typography sx={{ fontSize: '1.5rem' }}>{commentData.text}</Typography>
                 {/* {replyHint(114514)} */}
@@ -642,6 +645,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                 refData={refData}
                 avatar={avatars[comment.userId]}
                 expanded={expandedId === comment.id}
+                expandedId={expandedId}
                 setExpandedId={setExpandedId}
                 reply={reply}
                 setReply={setReply}
