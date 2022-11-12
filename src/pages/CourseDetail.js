@@ -281,8 +281,6 @@ const replyHint = count => (
 
 const RatingStar = ({ sx, ...props }) => (
     <Rating
-        readOnly
-        precision={0.5}
         sx={theme => ({
             ...sx
             // '& .MuiRating-iconFilled': {
@@ -323,7 +321,7 @@ const RatingBar = ({ rating, value, maxValue }) => {
     )
 }
 
-const RatingChart = ({ rating, voters, distribution }) => {
+const RatingChart = ({ myRating, rating, voters, distribution, changeRating }) => {
     const maxValue = Math.max(...distribution) + 1
 
     return (
@@ -351,16 +349,22 @@ const RatingChart = ({ rating, voters, distribution }) => {
                 >
                     {rating}
                 </Typography>
-                <RatingStar precision={0.5} size='small' value={parseInt(rating)} />
                 <Typography
                     sx={{
                         color: '#777',
                         fontSize: '1.2rem',
-                        marginTop: 1
+                        marginTop: 0.25,
+                        marginBottom: 1.5,
                     }}
                 >
                     {voters} Ratings
                 </Typography>
+                <RatingStar
+                    precision={1}
+                    size='small'
+                    value={myRating}
+                    onChange={changeRating}
+                />
             </Box>
             <Box
                 sx={{
@@ -369,7 +373,7 @@ const RatingChart = ({ rating, voters, distribution }) => {
                     maxWidth: '32rem'
                 }}
             >
-                {distribution.reverse().map((val, idx) => (
+                {[...distribution].reverse().map((val, idx) => (
                     <RatingBar
                         key={idx}
                         rating={5 - idx}
@@ -667,6 +671,18 @@ export default function CourseDetailPage({ subcategoryList }) {
         )
     })
 
+    const changeRating = (event) => {
+        let targetValue = Number(event.target.value);
+        if (myRating == targetValue) {
+            return;            
+        }
+
+        // TODO: change setTimeout to request
+        setTimeout(() => {
+            setMyRating(targetValue);
+        }, 1);   
+    }
+
     const favoriteClick = () => {
         setFavoriteLoading(true);
         // TODO: change setTimeout to request
@@ -791,9 +807,11 @@ export default function CourseDetailPage({ subcategoryList }) {
                         How do others love this course
                     </ItemSubtitle>
                     <RatingChart
+                        myRating={myRating}
                         rating={average(ratingDistribution)}
                         voters={sumArr(ratingDistribution)}
                         distribution={ratingDistribution}
+                        changeRating={changeRating}
                     />
                 </ItemContainer>
 
