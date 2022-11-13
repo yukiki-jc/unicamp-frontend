@@ -358,7 +358,7 @@ const RatingChart = ({
             fontWeight: 500
           }}
         >
-          {rating}
+          {parseFloat(rating).toFixed(1)}
         </Typography>
         <Typography
           sx={{
@@ -469,7 +469,7 @@ const CommentCard = props => {
         onClick={
           pageContextValue.state.login
             ? () => setExpandedId(commentData.id)
-            : () => {}
+            : () => { }
         }
         sx={{
           cursor:
@@ -497,7 +497,7 @@ const CommentCard = props => {
   )
 }
 
-async function getComments (courseId) {
+async function getComments(courseId) {
   try {
     const getCommentURL = joinPaths([
       backend,
@@ -532,7 +532,7 @@ async function getComments (courseId) {
   }
 }
 
-export default function CourseDetailPage ({ subcategoryList }) {
+export default function CourseDetailPage({ subcategoryList }) {
   const { courseId } = useParams();
   const [courseData, setCourseData] = useState(null);
   const pageContextValue = useContext(PageContext);
@@ -556,6 +556,8 @@ export default function CourseDetailPage ({ subcategoryList }) {
     assignment,
     description
   } = courseData || {}
+
+  console.log("rerender");
 
   useLayoutEffect(() => {
     const courseDataURL = joinPaths([backend, apiPath.course.info, courseId])
@@ -583,23 +585,23 @@ export default function CourseDetailPage ({ subcategoryList }) {
         const ratings = stylizeObject(datas[2])
         const relatedCourses = stylizeObject(datas[3])
 
-        
+
         setRatingDistribution(ratings.ratingDetail)
         setMyRating(ratings.myRating)
         setCourseData(courseData)
         setRelatedCourses(relatedCourses)
         showComments(commentResult)
         if (pageContextValue.state.login) {
-            console.log('here')
-            return getRequest(favoriteQueryURL);
+          console.log('here')
+          return getRequest(favoriteQueryURL);
         }
         return false;
       })
       .then((result) => {
         if (result !== false) {
-            const favoriteQuery = stylizeObject(result)
-            setFavorite(favoriteQuery.isFavorite)
-            console.log(favoriteQuery)
+          const favoriteQuery = stylizeObject(result)
+          setFavorite(favoriteQuery.isFavorite)
+          console.log(favoriteQuery)
         }
         pageContextValue.handler.setLoading(false)
       })
@@ -726,8 +728,8 @@ export default function CourseDetailPage ({ subcategoryList }) {
       return
     }
     if (pageContextValue.state.login === false) {
-        pageContextValue.handler.setErrorBox("Login to Rate");
-        return;
+      pageContextValue.handler.setErrorBox("Login to Rate");
+      return;
     }
     const ratingURL = joinPaths([backend, apiPath.grade.set])
     const ratingBody = {
@@ -742,7 +744,7 @@ export default function CourseDetailPage ({ subcategoryList }) {
             distribution[targetValue - 1] += 1;
             distribution[myRating - 1] -= 1;
             console.log(distribution)
-            return distribution; 
+            return distribution;
           })
           setMyRating(targetValue)
           pageContextValue.handler.setSuccessBox('Rated Successfully')
@@ -766,9 +768,9 @@ export default function CourseDetailPage ({ subcategoryList }) {
       .then(result => {
         if (result.state === true) {
           pageContextValue.handler.setSuccessBox(
-            favorite 
-            ? 'Removed from Favorites Successfully'
-            : 'Added to Favorites Successfully'
+            favorite
+              ? 'Removed from Favorites Successfully'
+              : 'Added to Favorites Successfully'
           )
           setFavorite(favorite => !favorite)
         } else {
