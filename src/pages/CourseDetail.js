@@ -537,7 +537,6 @@ export default function CourseDetailPage({ subcategoryList }) {
   const { courseId } = useParams();
   const [courseData, setCourseData] = useState(null);
   const pageContextValue = useContext(PageContext);
-  console.log(pageContextValue);
   const [comments, setComments] = useState([])
   const [avatars, setAvatars] = useState({})
   const [myComment, setMyComment] = useState('')
@@ -557,8 +556,6 @@ export default function CourseDetailPage({ subcategoryList }) {
     assignment,
     description
   } = courseData || {}
-
-  console.log("rerender");
 
   useLayoutEffect(() => {
     const courseDataURL = joinPaths([backend, apiPath.course.info, courseId])
@@ -593,7 +590,6 @@ export default function CourseDetailPage({ subcategoryList }) {
         setRelatedCourses(relatedCourses)
         showComments(commentResult)
         if (pageContextValue.state.login) {
-          console.log('here')
           return getRequest(favoriteQueryURL);
         }
         return false;
@@ -602,7 +598,6 @@ export default function CourseDetailPage({ subcategoryList }) {
         if (result !== false) {
           const favoriteQuery = stylizeObject(result)
           setFavorite(favoriteQuery.isFavorite)
-          console.log(favoriteQuery)
         }
         pageContextValue.handler.setLoading(false)
       })
@@ -709,6 +704,7 @@ export default function CourseDetailPage({ subcategoryList }) {
     const refData = idToComment[comment.refCommentId]
     return (
       <CommentCard
+        key={comment.id}
         commentData={comment}
         refData={refData}
         avatar={avatars[comment.userId]}
@@ -744,7 +740,6 @@ export default function CourseDetailPage({ subcategoryList }) {
           setRatingDistribution((distribution) => {
             distribution[targetValue - 1] += 1;
             distribution[myRating - 1] -= 1;
-            console.log(distribution)
             return distribution;
           })
           setMyRating(targetValue)

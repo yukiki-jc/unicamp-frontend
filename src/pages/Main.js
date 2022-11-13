@@ -196,7 +196,6 @@ const MainPage = props => {
           return true
         }
         const recCourses = stylizeObject(recCourseRaw)
-        console.log(recCourses)
         setRecCourses(recCourses)
         pageContextValue.handler.setLoading(false)
       })

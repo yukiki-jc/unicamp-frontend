@@ -21,7 +21,6 @@ const CourseListPage = props => {
 
   useEffect(() => {
     if (title === 'Category') {
-      console.log('here');
       for (let i = 0; i < subcategoryList.length; i++) {
         if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
           newTitle = subcategoryList[i].subcategoryName
