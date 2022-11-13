@@ -511,6 +511,7 @@ async function getComments(courseId) {
       const userId = obj.userId
       allAvatarIds.push(userId)
     })
+    allAvatarIds = [...new Set(allAvatarIds)];
     const avatarResults = await Promise.all(
       allAvatarIds.map(userId => {
         const avatarURL = joinPaths([
