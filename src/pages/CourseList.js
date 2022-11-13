@@ -29,7 +29,6 @@ const CourseListPage = props => {
       const toShow = courseList.filter(course => {
         return (course.subcategoryId.toString() === subcategoryId)
       })
-      console.log(toShow)
       setCourseListShow(toShow);
     }
     else if (title === 'Search Results') {
@@ -54,8 +53,7 @@ const CourseListPage = props => {
           errorHandler(e, pageContextValue);
         });
     }
-  }, [subcategoryId, searchParams])
-
+  }, [subcategoryId, searchParams, courseList])
   const courseCards = courseListShow.map(course => {
     return (
       <CourseCard
