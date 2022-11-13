@@ -1,13 +1,13 @@
 import { Typography } from '@mui/material'
 import { Container } from '@mui/system'
-import React, { useContext, useLayoutEffect, useState } from 'react'
+import React, { useContext, useLayoutEffect as useEffect, useState } from 'react'
 import CourseCard from '../components/CourseCard'
 import { useParams, useSearchParams } from 'react-router-dom'
 import TitleBox from '../components/TitleBox'
 import { PageContext } from '../App'
 import { stylizeObject } from '../utils/functions'
 import { getRequest } from '../utils/requests'
-import {  joinPaths } from '@remix-run/router';
+import { joinPaths } from '@remix-run/router';
 import { backend, apiPath } from '../utils/urls'
 import { errorHandler } from '../utils/functions'
 
@@ -18,8 +18,8 @@ const CourseListPage = props => {
   const pageContextValue = useContext(PageContext);
   let newTitle = title;
   const [courseListShow, setCourseListShow] = useState([]);
-  
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     if (title === 'Category') {
       console.log('here');
       for (let i = 0; i < subcategoryList.length; i++) {
@@ -45,32 +45,33 @@ const CourseListPage = props => {
       const favoriteURL = joinPaths([backend, apiPath.favorite.query]);
       pageContextValue.handler.setLoading(true);
       getRequest(favoriteURL)
-            .then((data) => {
-              setCourseListShow(stylizeObject(data))
-                console.log(courseListShow)
-                pageContextValue.handler.setLoading(false);
-            })
-            .catch((e) => {
-              errorHandler(e, pageContextValue);
-            });
+        .then((data) => {
+          setCourseListShow(stylizeObject(data))
+          console.log(courseListShow)
+          pageContextValue.handler.setLoading(false);
+        })
+        .catch((e) => {
+          errorHandler(e, pageContextValue);
+        });
     }
-  }, [])
+  }, [subcategoryId, searchParams])
+
   const courseCards = courseListShow.map(course => {
     return (
       <CourseCard
-            src='https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg'
-            name={course.name}
-            rating={3.7}
-            voters={2023}
-            difficulty={course.difficulty}
-            time={course.estHour}
-            description={course.description}
-            provider={course.provider}
-            id={course.id}
-          />
+        src='https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg'
+        name={course.name}
+        rating={3.7}
+        voters={2023}
+        difficulty={course.difficulty}
+        time={course.estHour}
+        description={course.description}
+        provider={course.provider}
+        id={course.id}
+      />
     )
   })
-  
+
   return (
     <div>
       <main>

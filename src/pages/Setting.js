@@ -164,7 +164,7 @@ const uploadAvatar = (pageContextValue, setAvatar, event) => {
       const avatarBody = {
         img: base64
       }
-      newUserData.avatar = base64 
+      newUserData.avatar = base64
       return postRequest(avatarBody, setAvatarURL)
     }).then((json => {
       if (json.state === true) {
@@ -224,7 +224,7 @@ const SettingPage = props => {
             }
           }
         };
-      
+
       case "applySuccess":
         return {
           ...form,
@@ -266,11 +266,11 @@ const SettingPage = props => {
   useLayoutEffect(() => {
     const profileURL = joinPaths([backend, apiPath.profile.myprofile]);
     getRequest(profileURL).then((json) => {
-      dispatchForm({type: 'about', value: json.description})
+      dispatchForm({ type: 'about', value: json.description })
     }).catch(e => {
       errorHandler(e, pageContextValue);
     })
-  });
+  }, []);
 
   const applyChange = React.useCallback(() => {
     let toPost = []
@@ -294,7 +294,7 @@ const SettingPage = props => {
     Promise.all(toPost).then((results => {
       let state = true;
       let message = '';
-      results.forEach(result =>{
+      results.forEach(result => {
         if (result.state === false) {
           state = false;
           message = result.message;
@@ -366,7 +366,7 @@ const SettingPage = props => {
                 placeholder=''
                 type="password"
                 value={form.account.password.oldValue}
-                onChange={ event => dispatchForm({ type: "oldPassword", value: event.target.value }) }
+                onChange={event => dispatchForm({ type: "oldPassword", value: event.target.value })}
               />
               <NoneFormHelperText> Old Password </NoneFormHelperText>
             </HalfTextField>
@@ -386,7 +386,7 @@ const SettingPage = props => {
                   </InputAdornment>
                 }
                 value={form.account.password.newValue}
-                onChange={ event => dispatchForm({ type: "newPassword", value: event.target.value }) }
+                onChange={event => dispatchForm({ type: "newPassword", value: event.target.value })}
               />
               <NoneFormHelperText> New Password </NoneFormHelperText>
             </HalfTextField>
@@ -408,7 +408,7 @@ const SettingPage = props => {
                 <Tooltip title="Less than 64 kB">
                   <Button variant="outlined" sx={{ marginLeft: "16px" }} component="label" >
                     {"Upload"}
-                    <input type="file" accept="image/*" onChange={(event) => { uploadAvatar(pageContextValue, setAvatarNow, event)}} hidden />
+                    <input type="file" accept="image/*" onChange={(event) => { uploadAvatar(pageContextValue, setAvatarNow, event) }} hidden />
                   </Button>
                 </Tooltip>
               </AvatarSetting>
@@ -422,7 +422,7 @@ const SettingPage = props => {
                 rows={6}
                 placeholder="Write something about yourself ..."
                 value={form.info.about.value}
-                onChange={ event => dispatchForm({ type: "about", value: event.target.value }) }
+                onChange={event => dispatchForm({ type: "about", value: event.target.value })}
               />
               <NoneFormHelperText> About </NoneFormHelperText>
             </SingleTextField>

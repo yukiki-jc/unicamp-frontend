@@ -215,10 +215,8 @@ const NavBar = props => {
 
   const navigate = useNavigate()
   const handleSearchSubmit = (event) => {
-    if (event.keyCode == 13) {
-      console.log(searchValue);
+    if (event.keyCode === 13) {
       navigate('/search?value=' + searchValue);
-      navigate(0);
     }
   }
 
