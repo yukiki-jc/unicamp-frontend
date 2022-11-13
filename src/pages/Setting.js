@@ -270,7 +270,7 @@ const SettingPage = props => {
     }).catch(e => {
       errorHandler(e, pageContextValue);
     })
-  });
+  }, []);
 
   const applyChange = React.useCallback(() => {
     let toPost = []
