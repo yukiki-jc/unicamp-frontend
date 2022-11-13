@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material'
 import { Container } from '@mui/system'
-import React, { useContext, useLayoutEffect } from 'react'
+import React, { useContext, useLayoutEffect, useState } from 'react'
 import CourseCard from '../components/CourseCard'
 import { useParams, useSearchParams } from 'react-router-dom'
 import TitleBox from '../components/TitleBox'
@@ -17,32 +17,36 @@ const CourseListPage = props => {
   const [searchParams, setSearchParams] = useSearchParams();
   const pageContextValue = useContext(PageContext);
   let newTitle = title;
-  let courseListShow = [];
-  if (title === 'Category') {
-    for (let i = 0; i < subcategoryList.length; i++) {
-      if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
-        newTitle = subcategoryList[i].subcategoryName
-    }
-    courseListShow = courseList.filter(course => {
-      return (course.subcategoryId.toString() === subcategoryId)
-    })
-  }
-  else if (title === 'Search Results') {
-    const searchValue = searchParams.get('value');
-    const searchReg = RegExp(searchValue.toLowerCase());
-    const searchResults = courseList.filter(course => {
-      const courseString = JSON.stringify(course).toLowerCase();
-      return searchReg.test(courseString);
-    })
-    courseListShow = searchResults;
-  }
+  const [courseListShow, setCourseListShow] = useState([]);
+  
   useLayoutEffect(() => {
-    if (title === 'My Favorites') {
-      const favoriteURL = joinPaths([backend, apiPath.favorite]);
+    if (title === 'Category') {
+      console.log('here');
+      for (let i = 0; i < subcategoryList.length; i++) {
+        if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
+          newTitle = subcategoryList[i].subcategoryName
+      }
+      const toShow = courseList.filter(course => {
+        return (course.subcategoryId.toString() === subcategoryId)
+      })
+      console.log(toShow)
+      setCourseListShow(toShow);
+    }
+    else if (title === 'Search Results') {
+      const searchValue = searchParams.get('value');
+      const searchReg = RegExp(searchValue.toLowerCase());
+      const searchResults = courseList.filter(course => {
+        const courseString = JSON.stringify(course).toLowerCase();
+        return searchReg.test(courseString);
+      })
+      setCourseListShow(searchResults);
+    }
+    else if (title === 'My Favorites') {
+      const favoriteURL = joinPaths([backend, apiPath.favorite.query]);
       pageContextValue.handler.setLoading(true);
       getRequest(favoriteURL)
             .then((data) => {
-                courseListShow = stylizeObject(data)
+              setCourseListShow(stylizeObject(data))
                 console.log(courseListShow)
                 pageContextValue.handler.setLoading(false);
             })
@@ -51,7 +55,7 @@ const CourseListPage = props => {
             });
     }
   }, [])
-  const courseCards = pageContextValue.state.loading ? [] : (courseListShow.map(course => {
+  const courseCards = courseListShow.map(course => {
     return (
       <CourseCard
             src='https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg'
@@ -65,7 +69,7 @@ const CourseListPage = props => {
             id={course.id}
           />
     )
-  }))
+  })
   
   return (
     <div>

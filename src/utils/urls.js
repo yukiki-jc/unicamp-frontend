@@ -39,7 +39,11 @@ export const apiPath = {
         hot: '/recommend/hot/main',
         rec: '/recommend/rec/main'
     },
-    favorite: '/favorite',
+    favorite: {
+        query: '/favorite',
+        set: '/favorite/set',
+    }
+    
 
 
 
