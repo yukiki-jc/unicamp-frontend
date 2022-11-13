@@ -139,7 +139,7 @@ const NavBar = props => {
   const pageContextValue = React.useContext(PageContext)
   const loginMenuItem = pageContextValue.state.login
     ? [
-      <MenuItem onClick={handleCloseUser}>
+      <MenuItem key={"1"} onClick={handleCloseUser}>
         <MUILink
           href={"/setting"}
           underline='none'
@@ -149,12 +149,12 @@ const NavBar = props => {
           </Typography>
         </MUILink>
       </MenuItem>,
-      <MenuItem onClick={handleLogout}>
+      <MenuItem key={"2"} onClick={handleLogout}>
         <Typography textAlign='center'> Logout </Typography>
       </MenuItem>
     ]
     : [
-      <MenuItem onClick={handleCloseUser}>
+      <MenuItem key={"0"} onClick={handleCloseUser}>
         <MUILink href='/login' underline='none'>
           <Typography textAlign='center' color='gray'>
             {' '}
