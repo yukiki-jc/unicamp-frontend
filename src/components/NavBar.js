@@ -154,11 +154,19 @@ const NavBar = props => {
       </MenuItem>
     ]
     : [
-      <MenuItem key={"0"} onClick={handleCloseUser}>
+      <MenuItem key={"3"} onClick={handleCloseUser}>
         <MUILink href='/login' underline='none'>
           <Typography textAlign='center' color='gray'>
             {' '}
-            Login{' '}
+            Sign In{' '}
+          </Typography>
+        </MUILink>
+      </MenuItem>,
+      <MenuItem key={"4"} onClick={handleCloseUser}>
+        <MUILink href='/signup' underline='none'>
+          <Typography textAlign='center' color='gray'>
+            {' '}
+            Sign Up{' '}
           </Typography>
         </MUILink>
       </MenuItem>
