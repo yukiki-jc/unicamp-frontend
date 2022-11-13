@@ -281,12 +281,12 @@ const MainPage = props => {
           <HeroImg src={`${process.env.PUBLIC_URL}/discuss.jpg`} maxWidth="min(50rem, 48%)" />
         </HeroContainer>
 
-        {recCourses.length > 0 && (
+        {pageContextValue.state.login && (
           <Fragment>
             <MenuTitle>
               Courses For U
             </MenuTitle>
-            <CourseMenu courseList={recCourses} subcategoryList={subcategoryList} />
+            <CourseMenu courseList={recCourses.length ? recCourses : newCourses} subcategoryList={subcategoryList} />
           </Fragment>
         )}
       </MenuContainer>
