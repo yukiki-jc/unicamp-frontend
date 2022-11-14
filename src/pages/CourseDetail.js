@@ -852,7 +852,7 @@ export default function CourseDetailPage({ subcategoryList }) {
               <CourseTagGridItem label='Category' sm={7} lg={7}>
                 {subcategoryId &&
                   subcategoryList.length &&
-                  subcategoryList[subcategoryId].subcategoryName}
+                  subcategoryList[subcategoryId - 1].subcategoryName}
               </CourseTagGridItem>
               <CourseTagGridItem label='Time Cost' sm={5} lg={5}>
                 {estHour} hrs.
