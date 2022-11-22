@@ -1,43 +1,51 @@
-
-import { Fragment, useEffect } from 'react'
-import Stack from '@mui/material/Stack'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import CourseMenu from '../components/CourseMenu'
-import { styled } from '@mui/material/styles'
-import { Button } from '@mui/material'
+import { Fragment, useEffect } from "react";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import CourseMenu from "../components/CourseMenu";
+import { styled } from "@mui/material/styles";
+import { Button } from "@mui/material";
 import Typed from "typed.js";
-import { LatoFont } from '../utils/commonData'
+import { LatoFont } from "../utils/commonData";
 
-import React, { useContext, useLayoutEffect, useState } from 'react'
-import { getUser } from '../utils/storeUser'
-import { joinPaths } from '@remix-run/router'
-import { apiPath, backend } from '../utils/urls'
-import { errorHandler, stylizeObject } from '../utils/functions'
-import { PageContext } from '../App'
-import { getRequest } from '../utils/requests'
-import { Link as MUILink } from '@mui/material'
+import React, { useContext, useLayoutEffect, useState } from "react";
+import { getUser } from "../utils/storeUser";
+import { joinPaths } from "@remix-run/router";
+import { apiPath, backend } from "../utils/urls";
+import { errorHandler, stylizeObject } from "../utils/functions";
+import { PageContext } from "../App";
+import { getRequest } from "../utils/requests";
+import { Link as MUILink } from "@mui/material";
 
-const jobTitles = ["Web Developer", "UI/UX Designer", "Data Scienctist", "Product Manager", "DevOps Engineer", "Systems Architect", "Game Developer", "Quantitative Analyst"];
+const jobTitles = [
+  "Web Developer",
+  "UI/UX Designer",
+  "Data Scienctist",
+  "Product Manager",
+  "DevOps Engineer",
+  "Systems Architect",
+  "Game Developer",
+  "Quantitative Analyst",
+];
 
-const HeroTitleText = styled((props) => (
-  <Typography variant="h1" {...props} />
-))(({ theme }) => ({
-  fontFamily: LatoFont,
-  fontSize: "2.4rem",
-  color: "#3a3a3a",
-  [theme.breakpoints.up("sm")]: {
-    fontSize: "3.2rem",
-  },
-  [theme.breakpoints.up("md")]: {
+const HeroTitleText = styled((props) => <Typography variant="h1" {...props} />)(
+  ({ theme }) => ({
+    fontFamily: LatoFont,
     fontSize: "2.4rem",
-  },
-  [theme.breakpoints.up("lg")]: {
-    fontSize: "3rem",
-  },
-}));
+    color: "#3a3a3a",
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "3.2rem",
+    },
+    [theme.breakpoints.up("md")]: {
+      fontSize: "2.4rem",
+    },
+    [theme.breakpoints.up("lg")]: {
+      fontSize: "3rem",
+    },
+  })
+);
 
-const HeroTitle = () => {
+const HeroTitle = ({ login }) => {
   useEffect(() => {
     const typingTitle = new Typed(`#hero-job-title`, {
       strings: jobTitles,
@@ -53,56 +61,79 @@ const HeroTitle = () => {
 
   return (
     <Box sx={{ width: { md: "50%" }, paddingLeft: { md: "4vw" } }}>
-      <HeroTitleText sx={{
-        paddingTop: { xs: "3.6rem", md: "1.6rem" },
-      }}>
+      <HeroTitleText
+        sx={{
+          paddingTop: { xs: "3.6rem", md: "1.6rem" },
+        }}
+      >
         Hello, future
       </HeroTitleText>
-      <Box sx={(theme) => ({
-        fontSize: "min(9vw, 6.4rem)",
-        fontFamily: "Roboto Condensed",
-        lineHeight: 1.44,
-        color: theme.palette.primary.main,
-        "& .typed-cursor": {
-          color: "inherit",
-        },
-        [theme.breakpoints.up("md")]: {
-          fontSize: "min(5vw, 6.4rem)",
-        },
-      })}>
+      <Box
+        sx={(theme) => ({
+          fontSize: "min(9vw, 6.4rem)",
+          fontFamily: "Roboto Condensed",
+          lineHeight: 1.44,
+          color: theme.palette.primary.main,
+          "& .typed-cursor": {
+            color: "inherit",
+          },
+          [theme.breakpoints.up("md")]: {
+            fontSize: "min(5vw, 6.4rem)",
+          },
+        })}
+      >
         <Typography
           id="hero-job-title"
           variant="span"
           sx={{ whiteSpace: "nowrap" }}
         />
       </Box>
-      <HeroTitleText sx={{ fontSize: { xs: "min(2rem, 4vw)", md: "min(2.4rem, 2vw)", lg: "2.4rem" }, color: "#777" }}>
-        your journey to the tech <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>industry starts here.</span>
+      <HeroTitleText
+        sx={{
+          fontSize: {
+            xs: "min(2rem, 4vw)",
+            md: "min(2.4rem, 2vw)",
+            lg: "2.4rem",
+          },
+          color: "#777",
+        }}
+      >
+        your journey to the tech{" "}
+        <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+          industry starts here.
+        </span>
       </HeroTitleText>
       <HeroButtonStack>
-      <MUILink href='/allcourses' underline='none'>
-      <HeroButton>Browse Courses</HeroButton>
+        <MUILink href="/allcourses" underline="none">
+          <HeroButton>Browse Courses</HeroButton>
         </MUILink>
-        <HeroButton color="inherit" sx={{ filter: "invert(1)" }}>Sign Up</HeroButton>
+
+        {login ? null : (
+          <MUILink href="/signup" underline="none">
+            <HeroButton color="secondary">
+             Sign Up
+            </HeroButton>
+          </MUILink>
+        )}
       </HeroButtonStack>
     </Box>
   );
 };
 
-const HeroContainer = styled((props) => (
-  <Box component="section" {...props} />
-))(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  [theme.breakpoints.up("md")]: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  padding: theme.spacing(2),
-}));
+const HeroContainer = styled((props) => <Box component="section" {...props} />)(
+  ({ theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    [theme.breakpoints.up("md")]: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    padding: theme.spacing(2),
+  })
+);
 
 const HeroImg = styled("img", {
-  shouldForwardProp: (prop) => prop !== "maxWidth"
+  shouldForwardProp: (prop) => prop !== "maxWidth",
 })(({ theme, maxWidth }) => ({
   maxWidth: "100%",
   borderRadius: theme.shape.borderRadius * 5,
@@ -112,32 +143,35 @@ const HeroImg = styled("img", {
 }));
 
 const HeroButtonStack = styled((props) => (
-  <Stack spacing={2.5} direction={{ xs: "column", sm: "row", lg: "column" }} {...props} />
+  <Stack
+    spacing={2.5}
+    direction={{ xs: "column", sm: "row", lg: "column" }}
+    {...props}
+  />
 ))(({ theme }) => ({
   marginTop: theme.spacing(4),
 }));
 
-const HeroButton = styled((props) => (
-  <Button variant="contained" {...props} />
-))(({ theme }) => ({
-  borderRadius: "10rem",
-  paddingTop: "1.3rem",
-  paddingBottom: "1.3rem",
-  width: "92%",
-  fontWeight: 600,
-  [theme.breakpoints.up("lg")]: {
-    maxWidth: "48rem",
-  },
-}));
+const HeroButton = styled((props) => <Button variant="contained" {...props} />)(
+  ({ theme }) => ({
+    borderRadius: "10rem",
+    paddingTop: "1.3rem",
+    paddingBottom: "1.3rem",
+    width: "92%",
+    fontWeight: 600,
+    [theme.breakpoints.up("lg")]: {
+      maxWidth: "48rem",
+    },
+  })
+);
 
-const MainContainer = styled((props) => (
-  <Box component="main" {...props} />
-))(({ theme }) => ({
-  padding: theme.spacing(0, "4vw"),
-}));
+const MainContainer = styled((props) => <Box component="main" {...props} />)(
+  ({ theme }) => ({
+    padding: theme.spacing(0, "4vw"),
+  })
+);
 
-const MenuContainer = styled(Box)(({ theme }) => ({
-}));
+const MenuContainer = styled(Box)(({ theme }) => ({}));
 
 const MenuTitle = styled(Typography)(({ theme }) => ({
   fontFamily: "Roboto Condensed",
@@ -146,8 +180,15 @@ const MenuTitle = styled(Typography)(({ theme }) => ({
 }));
 
 const logos = [
-  "stanford.png", "mit.png", "uiuc.svg", "harvard.png", "cmu.jpeg",
-  "cornell.png", "berkeley.png", "ucsd.png", "gatech.png",
+  "stanford.png",
+  "mit.png",
+  "uiuc.svg",
+  "harvard.png",
+  "cmu.jpeg",
+  "cornell.png",
+  "berkeley.png",
+  "ucsd.png",
+  "gatech.png",
 ];
 
 const logoHeight = (theme, line) => ({
@@ -165,80 +206,84 @@ const LogoImg = styled(({ alt, ...props }) => (
 ))(({ theme }) => ({
   ...logoHeight(theme, 1),
   marginBottom: "2.4rem",
-  marginRight: "3rem"
+  marginRight: "3rem",
 }));
 
-const MainPage = props => {
-  const { subcategoryList } = props
-  const [newCourses, setNewCourses] = useState([])
-  const [hotCourses, setHotCourses] = useState([])
-  const [recCourses, setRecCourses] = useState([])
-  const pageContextValue = useContext(PageContext)
-  const user = getUser()
-  let name = 'Future Engineer'
-  if (user !== null) name = user.name
+const MainPage = (props) => {
+  const { subcategoryList } = props;
+  const [newCourses, setNewCourses] = useState([]);
+  const [hotCourses, setHotCourses] = useState([]);
+  const [recCourses, setRecCourses] = useState([]);
+  const pageContextValue = useContext(PageContext);
+  const user = getUser();
+  let name = "Future Engineer";
+  if (user !== null) name = user.name;
   useLayoutEffect(() => {
-    const newCourseURL = joinPaths([backend, apiPath.recommend.new])
-    const hotCourseURL = joinPaths([backend, apiPath.recommend.hot])
-    pageContextValue.handler.setLoading(true)
+    const newCourseURL = joinPaths([backend, apiPath.recommend.new]);
+    const hotCourseURL = joinPaths([backend, apiPath.recommend.hot]);
+    pageContextValue.handler.setLoading(true);
     Promise.all([getRequest(newCourseURL), getRequest(hotCourseURL)])
-      .then(results => {
-        const [newCoursesRaw, hotCoursesRaw] = results
-        const newCourses = stylizeObject(newCoursesRaw)
-        const hotCourses = stylizeObject(hotCoursesRaw)
-        setNewCourses(newCourses)
-        setHotCourses(hotCourses)
+      .then((results) => {
+        const [newCoursesRaw, hotCoursesRaw] = results;
+        const newCourses = stylizeObject(newCoursesRaw);
+        const hotCourses = stylizeObject(hotCoursesRaw);
+        setNewCourses(newCourses);
+        setHotCourses(hotCourses);
         if (user != null) {
-          const recCourseURL = joinPaths([backend, apiPath.recommend.rec])
-          return getRequest(recCourseURL)
-        } else return false
+          const recCourseURL = joinPaths([backend, apiPath.recommend.rec]);
+          return getRequest(recCourseURL);
+        } else return false;
       })
-      .then(recCourseRaw => {
+      .then((recCourseRaw) => {
         if (recCourseRaw === false) {
-          pageContextValue.handler.setLoading(false)
-          return true
+          pageContextValue.handler.setLoading(false);
+          return true;
         }
-        const recCourses = stylizeObject(recCourseRaw)
-        setRecCourses(recCourses)
-        pageContextValue.handler.setLoading(false)
+        const recCourses = stylizeObject(recCourseRaw);
+        setRecCourses(recCourses);
+        pageContextValue.handler.setLoading(false);
       })
-      .catch(e => {
-        errorHandler(e, pageContextValue)
-      })
-  }, [])
+      .catch((e) => {
+        errorHandler(e, pageContextValue);
+      });
+  }, []);
 
   return (
     <MainContainer>
       <HeroContainer sx={{ marginTop: { md: 1 } }}>
         <HeroImg src={`${process.env.PUBLIC_URL}/hero.jpg`} />
-        <HeroTitle />
+        <HeroTitle login={pageContextValue.state.login} />
       </HeroContainer>
       <MenuContainer>
-        <MenuTitle>
-          Now Trending
-        </MenuTitle>
+        <MenuTitle>Now Trending</MenuTitle>
         <CourseMenu courseList={hotCourses} subcategoryList={subcategoryList} />
 
         <HeroContainer sx={{ marginTop: 5, alignItems: "center" }}>
           <Box sx={{ paddingRight: { md: "4vw" } }}>
             <HeroTitleText sx={{ marginBottom: 1 }}>
-              An online <span style={{ color: "#5A49E3" }}>self-taught</span> curriculum, dedicated to <span style={{ color: "#b27c66" }}>Computer Science</span>
+              An online <span style={{ color: "#5A49E3" }}>self-taught</span>{" "}
+              curriculum, dedicated to{" "}
+              <span style={{ color: "#b27c66" }}>Computer Science</span>
             </HeroTitleText>
-            <Typography sx={{
-              color: "#777",
-              marginBottom: 4,
-              fontSize: "1.4rem",
-            }}>
+            <Typography
+              sx={{
+                color: "#777",
+                marginBottom: 4,
+                fontSize: "1.4rem",
+              }}
+            >
               enjoy courses from the best universities in the world
             </Typography>
-            <Box sx={(theme) => ({
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-              marginBottom: 2,
-              overflow: "hidden",
-              ...logoHeight(theme, 2),
-            })}>
+            <Box
+              sx={(theme) => ({
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+                marginBottom: 2,
+                overflow: "hidden",
+                ...logoHeight(theme, 2),
+              })}
+            >
               {logos.map((name) => (
                 <LogoImg
                   src={`${process.env.PUBLIC_URL}/logos/${name}`}
@@ -247,12 +292,15 @@ const MainPage = props => {
                 />
               ))}
             </Box>
-            <Typography sx={{
-              color: "#777",
-              marginBottom: { xs: 5, md: 0 },
-              fontSize: "0.8rem",
-            }}>
-              * Logos are only used to visually refer to certain Universities in our database, and do not indicate any partnership.
+            <Typography
+              sx={{
+                color: "#777",
+                marginBottom: { xs: 5, md: 0 },
+                fontSize: "0.8rem",
+              }}
+            >
+              * Logos are only used to visually refer to certain Universities in
+              our database, and do not indicate any partnership.
             </Typography>
           </Box>
           <HeroImg
@@ -261,9 +309,7 @@ const MainPage = props => {
           />
         </HeroContainer>
 
-        <MenuTitle>
-          What's New
-        </MenuTitle>
+        <MenuTitle>What's New</MenuTitle>
         <CourseMenu courseList={newCourses} subcategoryList={subcategoryList} />
 
         <HeroContainer sx={{ marginTop: 5, alignItems: "center" }}>
@@ -271,29 +317,39 @@ const MainPage = props => {
             <HeroTitleText sx={{ marginBottom: 1 }}>
               We're all in this together
             </HeroTitleText>
-            <Box sx={{
-              color: "#777",
-              marginBottom: 4,
-              fontSize: "1.4rem",
-            }}>
-              Hey, you are not alone on this journey. Share anything you find helpful. Ideas, notes, puzzles, mindmaps, ANYTHING!
-              <p>Please do note that sharing your answers directly is strictly prohibited on Unicamp. We encourage thoughtful discussions.</p>
+            <Box
+              sx={{
+                color: "#777",
+                marginBottom: 4,
+                fontSize: "1.4rem",
+              }}
+            >
+              Hey, you are not alone on this journey. Share anything you find
+              helpful. Ideas, notes, puzzles, mindmaps, ANYTHING!
+              <p>
+                Please do note that sharing your answers directly is strictly
+                prohibited on Unicamp. We encourage thoughtful discussions.
+              </p>
             </Box>
           </Box>
-          <HeroImg src={`${process.env.PUBLIC_URL}/discuss.jpg`} maxWidth="min(50rem, 48%)" />
+          <HeroImg
+            src={`${process.env.PUBLIC_URL}/discuss.jpg`}
+            maxWidth="min(50rem, 48%)"
+          />
         </HeroContainer>
 
         {pageContextValue.state.login && (
           <Fragment>
-            <MenuTitle>
-              Courses For U
-            </MenuTitle>
-            <CourseMenu courseList={recCourses.length ? recCourses : newCourses} subcategoryList={subcategoryList} />
+            <MenuTitle>Courses For U</MenuTitle>
+            <CourseMenu
+              courseList={recCourses.length ? recCourses : newCourses}
+              subcategoryList={subcategoryList}
+            />
           </Fragment>
         )}
       </MenuContainer>
     </MainContainer>
-  )
+  );
 };
 
-export default MainPage
+export default MainPage;
