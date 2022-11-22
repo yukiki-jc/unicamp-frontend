@@ -16,6 +16,7 @@ import { apiPath, backend } from '../utils/urls'
 import { errorHandler, stylizeObject } from '../utils/functions'
 import { PageContext } from '../App'
 import { getRequest } from '../utils/requests'
+import { Link as MUILink } from '@mui/material'
 
 const jobTitles = ["Web Developer", "UI/UX Designer", "Data Scienctist", "Product Manager", "DevOps Engineer", "Systems Architect", "Game Developer", "Quantitative Analyst"];
 
@@ -79,7 +80,9 @@ const HeroTitle = () => {
         your journey to the tech <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>industry starts here.</span>
       </HeroTitleText>
       <HeroButtonStack>
-        <HeroButton>Browse Courses</HeroButton>
+      <MUILink href='/allcourses' underline='none'>
+      <HeroButton>Browse Courses</HeroButton>
+        </MUILink>
         <HeroButton color="inherit" sx={{ filter: "invert(1)" }}>Sign Up</HeroButton>
       </HeroButtonStack>
     </Box>

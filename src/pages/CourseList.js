@@ -16,14 +16,14 @@ const CourseListPage = props => {
   const { subcategoryId } = useParams()
   const [searchParams, setSearchParams] = useSearchParams();
   const pageContextValue = useContext(PageContext);
-  let newTitle = title;
+  const [newTitle, setNewTitle] = useState(title);
   const [courseListShow, setCourseListShow] = useState([]);
 
   useEffect(() => {
     if (title === 'Category') {
       for (let i = 0; i < subcategoryList.length; i++) {
         if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
-          newTitle = subcategoryList[i].subcategoryName
+          setNewTitle(subcategoryList[i].subcategoryName);
       }
       const toShow = courseList.filter(course => {
         return (course.subcategoryId.toString() === subcategoryId)
@@ -51,6 +51,9 @@ const CourseListPage = props => {
         .catch((e) => {
           errorHandler(e, pageContextValue);
         });
+    }
+    else if (title === 'All Courses') {
+      setCourseListShow(courseList);
     }
   }, [subcategoryId, searchParams, courseList])
   const courseCards = courseListShow.map(course => {

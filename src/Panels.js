@@ -57,6 +57,12 @@ export default function Panel (props) {
             />
           }
         />
+        <Route
+          path='/allcourses'
+          element={
+            <CourseListPage title='All Courses' courseList={state.courseList} />
+          }
+        />
       </Routes>
     </div>
   )
