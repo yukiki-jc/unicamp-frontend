@@ -1,13 +1,19 @@
-import React, { Fragment, useContext, useEffect, useState, useLayoutEffect } from 'react'
-import { PageContext } from '../App'
-import { apiPath, backend } from '../utils/urls'
-import { useParams, Link as RouterLink } from 'react-router-dom'
-import { getRequest, postRequest } from '../utils/requests'
-import { joinPaths } from '@remix-run/router'
-import { styled } from '@mui/material/styles'
-import Iframe from 'react-iframe'
-import { Box } from '@mui/system'
-import { getUser } from '../utils/storeUser'
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useState,
+  useLayoutEffect,
+} from "react";
+import { PageContext } from "../App";
+import { apiPath, backend } from "../utils/urls";
+import { useParams, Link as RouterLink } from "react-router-dom";
+import { getRequest, postRequest } from "../utils/requests";
+import { joinPaths } from "@remix-run/router";
+import { styled } from "@mui/material/styles";
+import Iframe from "react-iframe";
+import { Box } from "@mui/system";
+import { getUser } from "../utils/storeUser";
 import {
   Card,
   CardHeader,
@@ -16,8 +22,8 @@ import {
   IconButton,
   TextField,
   InputAdornment,
-  Divider
-} from '@mui/material'
+  Divider,
+} from "@mui/material";
 import {
   Breadcrumbs,
   Button,
@@ -27,352 +33,355 @@ import {
   Rating,
   Skeleton,
   Stack,
-  Typography
-} from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
-import { LatoFont, LevelMappings } from '../utils/commonData'
+  Typography,
+} from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { LatoFont, LevelMappings } from "../utils/commonData";
 import {
   stylizeObject,
   reStylizeObject,
   sumArr,
   average,
-  errorHandler
-} from '../utils/functions'
-import RoundAvatar from '../components/RoundAvatar'
-import ClearIcon from '@mui/icons-material/Clear'
-import StarIcon from '@mui/icons-material/Star'
-import DoneIcon from '@mui/icons-material/Done'
-import SendIcon from '@mui/icons-material/Send'
-import { Masonry } from '@mui/lab'
-import CourseMenu from '../components/CourseMenu'
-import { courseList } from '../utils/testData'
+  errorHandler,
+} from "../utils/functions";
+import RoundAvatar from "../components/RoundAvatar";
+import ClearIcon from "@mui/icons-material/Clear";
+import StarIcon from "@mui/icons-material/Star";
+import DoneIcon from "@mui/icons-material/Done";
+import SendIcon from "@mui/icons-material/Send";
+import { Masonry } from "@mui/lab";
+import CourseMenu from "../components/CourseMenu";
+import { courseList } from "../utils/testData";
 
-const mobileItemWidth = 86
-const desktopItemWidth = 45
+const mobileItemWidth = 86;
+const desktopItemWidth = 45;
 
-const MainContainer = styled(props => <Box component='main' {...props} />)(
+const MainContainer = styled((props) => <Box component="main" {...props} />)(
   ({ theme }) => ({
-    padding: theme.spacing(2, '6vw'),
-    [theme.breakpoints.up('md')]: {
-      padding: theme.spacing(2, '4vw')
-    }
+    padding: theme.spacing(2, "6vw"),
+    [theme.breakpoints.up("md")]: {
+      padding: theme.spacing(2, "4vw"),
+    },
   })
-)
+);
 
-const ItemContainer = styled(props => <Box component='section' {...props} />, {
-  shouldForwardProp: prop => prop !== 'gutter'
-})(({ theme, gutter }) => ({
-  textAlign: 'left',
-  paddingLeft: theme.spacing(0.5),
-  [theme.breakpoints.up('md')]: {
-    padding: gutter && theme.spacing(0, 0, 0, 3)
+const ItemContainer = styled(
+  (props) => <Box component="section" {...props} />,
+  {
+    shouldForwardProp: (prop) => prop !== "gutter",
   }
-}))
+)(({ theme, gutter }) => ({
+  textAlign: "left",
+  paddingLeft: theme.spacing(0.5),
+  [theme.breakpoints.up("md")]: {
+    padding: gutter && theme.spacing(0, 0, 0, 3),
+  },
+}));
 
 // 18 / 8 = 2.25, 18 is the width of most scrollbars
-const MasonryContainer = styled(props => (
+const MasonryContainer = styled((props) => (
   <Masonry
     columns={{ xs: 1, md: 2 }}
     spacing={2.25}
-    component='section'
+    component="section"
     {...props}
   />
-))(({ theme }) => ({}))
+))(({ theme }) => ({}));
 
 const ItemTitle = styled(Typography)(({ theme }) => ({
-  fontSize: '2.2rem',
+  fontSize: "2.2rem",
   fontWeight: 700,
-  padding: theme.spacing(2.5, 0, 0.5, 0)
-}))
+  padding: theme.spacing(2.5, 0, 0.5, 0),
+}));
 
 const ItemSubtitle = styled(Typography)(({ theme }) => ({
-  color: '#6a6a6a',
+  color: "#6a6a6a",
   marginBottom: theme.spacing(1),
-  fontSize: '1.3rem'
-}))
+  fontSize: "1.3rem",
+}));
 
 const EmbedContainer = styled(ItemContainer)(({ theme }) => ({
-  '& a': {
-    opacity: 0
+  "& a": {
+    opacity: 0,
   },
-  '&:hover': {
-    '& a': {
-      opacity: 1
-    }
-  }
-}))
+  "&:hover": {
+    "& a": {
+      opacity: 1,
+    },
+  },
+}));
 
 const EmbedContentCard = styled(Box)(({ theme }) => ({
-  height: '52vw',
-  border: '0.8px solid #ddd',
-  backgroundColor: '#ddd',
+  height: "52vw",
+  border: "0.8px solid #ddd",
+  backgroundColor: "#ddd",
   borderRadius: theme.shape.borderRadius * 3,
-  overflow: 'hidden',
-  cursor: 'default',
-  [theme.breakpoints.up('md')]: {
-    height: '32vw'
+  overflow: "hidden",
+  cursor: "default",
+  [theme.breakpoints.up("md")]: {
+    height: "32vw",
   },
-  [theme.breakpoints.up('lg')]: {
-    height: '26vw'
+  [theme.breakpoints.up("lg")]: {
+    height: "26vw",
   },
-  '&:hover': {
-    borderColor: theme.palette.primary.main
-  }
-}))
+  "&:hover": {
+    borderColor: theme.palette.primary.main,
+  },
+}));
 
-const EmbedContent = styled(props => (
-  <Iframe allowFullScreen={false} scrolling='yes' {...props} />
+const EmbedContent = styled((props) => (
+  <Iframe allowFullScreen={false} scrolling="yes" {...props} />
 ))(({ theme }) => ({
   width: `${mobileItemWidth}vw`,
-  height: 'calc(52vw + 1.8rem)',
-  border: 'none',
-  [theme.breakpoints.up('md')]: {
+  height: "calc(52vw + 1.8rem)",
+  border: "none",
+  [theme.breakpoints.up("md")]: {
     width: `${desktopItemWidth}vw`,
-    height: 'calc(32vw + 1.8rem)'
+    height: "calc(32vw + 1.8rem)",
   },
-  [theme.breakpoints.up('lg')]: {
-    height: 'calc(26vw + 1.8rem)'
-  }
-}))
+  [theme.breakpoints.up("lg")]: {
+    height: "calc(26vw + 1.8rem)",
+  },
+}));
 
-const LinkRouter = styled(props => (
-  <Link component={RouterLink} color='GrayText' underline='hover' {...props} />
+const LinkRouter = styled((props) => (
+  <Link component={RouterLink} color="GrayText" underline="hover" {...props} />
 ))(({ theme }) => ({
-  fontSize: '1.3rem'
-}))
+  fontSize: "1.3rem",
+}));
 
-const CourseDetailTitle = styled(props => (
-  <Typography component='h1' {...props} />
+const CourseDetailTitle = styled((props) => (
+  <Typography component="h1" {...props} />
 ))(({ theme }) => ({
   fontFamily: LatoFont,
-  fontSize: '2.7rem',
+  fontSize: "2.7rem",
   fontWeight: 900,
   lineHeight: 1.15,
-  whiteSpace: 'pre-line',
-  [theme.breakpoints.up('sm')]: {
-    fontSize: '3.2rem'
+  whiteSpace: "pre-line",
+  [theme.breakpoints.up("sm")]: {
+    fontSize: "3.2rem",
   },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '3.6rem',
-    marginTop: 0
+  [theme.breakpoints.up("md")]: {
+    fontSize: "3.6rem",
+    marginTop: 0,
   },
-  [theme.breakpoints.up('lg')]: {
-    fontSize: '4.8rem'
-  }
-}))
+  [theme.breakpoints.up("lg")]: {
+    fontSize: "4.8rem",
+  },
+}));
 
-const CourseTagGrid = styled(props => (
+const CourseTagGrid = styled((props) => (
   <Grid container spacing={0.5} {...props} />
 ))(({ theme }) => ({
-  margin: theme.spacing(2, 0, 3)
-}))
+  margin: theme.spacing(2, 0, 3),
+}));
 
 const CourseTagGridItem = styled(
-  props => <Grid item xs={12} sm={6} md={12} lg={6} {...props} />,
-  { shouldForwardProp: prop => prop !== 'label' }
+  (props) => <Grid item xs={12} sm={6} md={12} lg={6} {...props} />,
+  { shouldForwardProp: (prop) => prop !== "label" }
 )(({ theme, label }) => ({
-  fontSize: '1.5rem',
+  fontSize: "1.5rem",
   fontWeight: 500,
-  '&::before': {
+  "&::before": {
     content: `'${label}: '`,
-    color: '#777',
-    fontWeight: 400
-  }
-}))
+    color: "#777",
+    fontWeight: 400,
+  },
+}));
 
-const CourseDetailButtonStack = styled(props => (
+const CourseDetailButtonStack = styled((props) => (
   <Stack spacing={2} {...props} />
 ))(({ theme }) => ({
   marginBottom: theme.spacing(5),
-  [theme.breakpoints.up('md')]: {
-    marginBottom: theme.spacing(3.5)
-  }
-}))
+  [theme.breakpoints.up("md")]: {
+    marginBottom: theme.spacing(3.5),
+  },
+}));
 
-const CourseDetailButton = styled(props => (
-  <Button variant='contained' {...props} />
+const CourseDetailButton = styled((props) => (
+  <Button variant="contained" {...props} />
 ))(({ theme }) => ({
-  borderRadius: '20rem',
+  borderRadius: "20rem",
   padding: theme.spacing(1.5, 2),
-  width: '90%',
-  maxWidth: '48rem',
-  fontWeight: 600
-}))
+  width: "90%",
+  maxWidth: "48rem",
+  fontWeight: 600,
+}));
 
-const HeaderBar = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'flex-start',
-  justifyContent: 'space-between',
-  marginBottom: '8px'
-}))
+const HeaderBar = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "flex-start",
+  justifyContent: "space-between",
+  marginBottom: "8px",
+}));
 
 const Comment = styled(Card)(({ theme }) => ({
   marginBottom: 16,
   borderRadius: 12,
-  '&:hover': {
-    borderColor: theme.palette.primary.main
-  }
-}))
+  "&:hover": {
+    borderColor: theme.palette.primary.main,
+  },
+}));
 
 const PointerContent = styled(CardContent)(({ theme }) => ({
   paddingTop: 0,
-  paddingBottom: '16px !important'
-}))
+  paddingBottom: "16px !important",
+}));
 
 const CollapseField = styled(Typography)(({ theme }) => ({
   paddingTop: 0,
-  paddingBottom: '0px !important'
-}))
+  paddingBottom: "0px !important",
+}));
 
-const CommentField = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'flex-start',
-  padding: theme.spacing(2, 0, 1, 0)
-}))
+const CommentField = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "flex-start",
+  padding: theme.spacing(2, 0, 1, 0),
+}));
 
-const ReplyField = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0.5, 2, 2, 2)
-}))
+const ReplyField = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0.5, 2, 2, 2),
+}));
 
-const ReplyInput = styled(props => <TextField rows={8} {...props} />)(
+const ReplyInput = styled((props) => <TextField rows={8} {...props} />)(
   ({ theme }) => ({
-    flexGrow: '1',
-    '& .MuiInputBase-root': {
-      borderRadius: '12px'
-    }
+    flexGrow: "1",
+    "& .MuiInputBase-root": {
+      borderRadius: "12px",
+    },
   })
-)
+);
 
 const InnerReplyInput = styled(TextField)(({ theme }) => ({
-  flexGrow: '1',
-  '& .MuiInputBase-root': {
-    padding: theme.spacing(1.5)
-  }
-}))
+  flexGrow: "1",
+  "& .MuiInputBase-root": {
+    padding: theme.spacing(1.5),
+  },
+}));
 
 const Caption = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
-  marginBottom: '4px'
-}))
+  marginBottom: "4px",
+}));
 
-const Tail = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'flex-end'
-}))
+const Tail = styled("div")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "flex-end",
+}));
 
 const replyAt = (name, link = true) => {
   if (link) {
     return (
       <Caption>
-        Reply <Link underline='none'>{`@${name}`}</Link>:{' '}
+        Reply <Link underline="none">{`@${name}`}</Link>:{" "}
       </Caption>
-    )
+    );
   } else {
-    return `Reply @${name}`
+    return `Reply @${name}`;
   }
-}
+};
 
-const replyHint = count => (
+const replyHint = (count) => (
   <Typography
-    variant='body2'
-    align='right'
+    variant="body2"
+    align="right"
     sx={{ marginTop: 0.5 }}
     children={`(${count} Replies)`}
   />
-)
+);
 
 const RatingStar = ({ sx, ...props }) => (
   <Rating
-    sx={theme => ({
-      ...sx
+    sx={(theme) => ({
+      ...sx,
       // '& .MuiRating-iconFilled': {
       //     color: theme.palette.secondary.main,
       // },
     })}
     {...props}
   />
-)
+);
 
 const RatingBar = ({ rating, value, maxValue }) => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        fontSize: '1.3rem',
+        display: "flex",
+        fontSize: "1.3rem",
         fontWeight: 700,
-        alignItems: 'center'
+        alignItems: "center",
       }}
     >
       <RatingStar max={1} value={1} sx={{ marginRight: 0.5 }} />
       {rating}
       <LinearProgress
-        variant='determinate'
+        variant="determinate"
         value={(value / maxValue) * 100}
         sx={{
-          height: '1.2rem',
+          height: "1.2rem",
           flexGrow: 1,
           marginX: 1.5,
-          borderRadius: '1rem',
-          '&.MuiLinearProgress-root': {
-            backgroundColor: '#f1f1f1'
-          }
+          borderRadius: "1rem",
+          "&.MuiLinearProgress-root": {
+            backgroundColor: "#f1f1f1",
+          },
         }}
       />
       {value}
     </Box>
-  )
-}
+  );
+};
 
 const RatingChart = ({
   myRating,
   rating,
   voters,
   distribution,
-  changeRating
+  changeRating,
 }) => {
-  const maxValue = Math.max(...distribution) + 1
+  const maxValue = Math.max(...distribution) + 1;
 
   return (
     <Box
       sx={{
         marginX: 2,
-        display: 'flex',
-        alignItems: 'center',
+        display: "flex",
+        alignItems: "center",
         fontFamily: LatoFont,
-        flexWrap: 'nowrap'
+        flexWrap: "nowrap",
       }}
     >
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <Typography
           sx={{
-            fontSize: '3.6rem',
-            fontWeight: 500
+            fontSize: "3.6rem",
+            fontWeight: 500,
           }}
         >
           {parseFloat(rating).toFixed(1)}
         </Typography>
         <Typography
           sx={{
-            color: '#777',
-            fontSize: '1.2rem',
+            color: "#777",
+            fontSize: "1.2rem",
             marginTop: 0.25,
-            marginBottom: 1.5
+            marginBottom: 1.5,
           }}
         >
           {voters} Ratings
         </Typography>
         <RatingStar
           precision={1}
-          size='small'
+          size="small"
           value={myRating}
           onChange={changeRating}
         />
@@ -380,8 +389,8 @@ const RatingChart = ({
       <Box
         sx={{
           marginLeft: 5,
-          width: '100%',
-          maxWidth: '32rem'
+          width: "100%",
+          maxWidth: "32rem",
         }}
       >
         {[...distribution].reverse().map((val, idx) => (
@@ -394,40 +403,40 @@ const RatingChart = ({
         ))}
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-const CommentBox = props => {
-  const { replyName, handleReplySend, reply, setReply } = props
+const CommentBox = (props) => {
+  const { replyName, handleReplySend, reply, setReply } = props;
 
   return (
     <ReplyField>
-      <RoundAvatar sx={{ mr: '8px' }} />
+      <RoundAvatar sx={{ mr: "8px" }} />
       <InnerReplyInput
         multiline
-        variant='outlined'
+        variant="outlined"
         placeholder={replyAt(replyName, false)}
         value={reply}
-        onChange={event => {
-          setReply(event.target.value)
+        onChange={(event) => {
+          setReply(event.target.value);
         }}
         InputProps={{
           endAdornment: (
-            <InputAdornment position='end'>
+            <InputAdornment position="end">
               <IconButton
-                color='primary'
+                color="primary"
                 children={<SendIcon />}
                 onClick={handleReplySend}
               />
             </InputAdornment>
-          )
+          ),
         }}
       />
     </ReplyField>
-  )
-}
+  );
+};
 
-const CommentCard = props => {
+const CommentCard = (props) => {
   const {
     commentData,
     refData = null,
@@ -438,27 +447,27 @@ const CommentCard = props => {
     handleReplySend,
     reply,
     setReply,
-    handleCommentDelete
-  } = props
-  const pageContextValue = useContext(PageContext)
+    handleCommentDelete,
+  } = props;
+  const pageContextValue = useContext(PageContext);
 
-  let deleteIcon = null
+  let deleteIcon = null;
   if (getUser()?.admin) {
     deleteIcon = (
       <IconButton
-        color='primary'
+        color="primary"
         onClick={() => {
-          handleCommentDelete(commentData.id)
+          handleCommentDelete(commentData.id);
         }}
       >
-        {' '}
-        <ClearIcon />{' '}
+        {" "}
+        <ClearIcon />{" "}
       </IconButton>
-    )
+    );
   }
 
   return (
-    <Comment variant='outlined'>
+    <Comment variant="outlined">
       <CardHeader
         avatar={<RoundAvatar displayName={commentData.userName} src={avatar} />}
         title={commentData.userName}
@@ -469,24 +478,24 @@ const CommentCard = props => {
         onClick={
           pageContextValue.state.login
             ? () => setExpandedId(commentData.id)
-            : () => { }
+            : () => {}
         }
         sx={{
           cursor:
             pageContextValue.state.login && expandedId != commentData.id
-              ? 'pointer'
-              : 'text'
+              ? "pointer"
+              : "text",
         }}
       >
         {refData ? replyAt(refData.userName) : null}
-        <Typography sx={{ fontSize: '1.5rem' }}>{commentData.text}</Typography>
+        <Typography sx={{ fontSize: "1.5rem" }}>{commentData.text}</Typography>
       </PointerContent>
       <Collapse in={expanded} unmountOnExit>
         <CollapseField>
           <CommentBox
             replyName={commentData.userName}
             handleReplySend={() => {
-              handleReplySend(commentData.id)
+              handleReplySend(commentData.id);
             }}
             reply={reply}
             setReply={setReply}
@@ -494,42 +503,42 @@ const CommentCard = props => {
         </CollapseField>
       </Collapse>
     </Comment>
-  )
-}
+  );
+};
 
 async function getComments(courseId) {
   try {
     const getCommentURL = joinPaths([
       backend,
       apiPath.comment.get,
-      courseId.toString()
-    ])
-    const allCommentsRaw = await getRequest(getCommentURL)
-    const allComments = stylizeObject(allCommentsRaw)
-    let allAvatarIds = []
-    allComments.forEach(obj => {
-      const userId = obj.userId
-      allAvatarIds.push(userId)
-    })
+      courseId.toString(),
+    ]);
+    const allCommentsRaw = await getRequest(getCommentURL);
+    const allComments = stylizeObject(allCommentsRaw);
+    let allAvatarIds = [];
+    allComments.forEach((obj) => {
+      const userId = obj.userId;
+      allAvatarIds.push(userId);
+    });
     allAvatarIds = [...new Set(allAvatarIds)];
     const avatarResults = await Promise.all(
-      allAvatarIds.map(userId => {
+      allAvatarIds.map((userId) => {
         const avatarURL = joinPaths([
           backend,
           apiPath.avatar.get,
-          userId.toString()
-        ])
-        return getRequest(avatarURL)
+          userId.toString(),
+        ]);
+        return getRequest(avatarURL);
       })
-    )
-    let allAvatars = {}
+    );
+    let allAvatars = {};
     avatarResults.forEach((obj, idx) => {
-      allAvatars[allAvatarIds[idx]] = obj.img
-    })
-    return [allComments, allAvatars]
+      allAvatars[allAvatarIds[idx]] = obj.img;
+    });
+    return [allComments, allAvatars];
   } catch (e) {
-    console.log(e)
-    return false
+    console.log(e);
+    return false;
   }
 }
 
@@ -537,14 +546,15 @@ export default function CourseDetailPage({ subcategoryList }) {
   const { courseId } = useParams();
   const [courseData, setCourseData] = useState(null);
   const pageContextValue = useContext(PageContext);
-  const [comments, setComments] = useState([])
-  const [avatars, setAvatars] = useState({})
-  const [myComment, setMyComment] = useState('')
-  const [ratingDistribution, setRatingDistribution] = useState([])
-  const [myRating, setMyRating] = useState(0)
-  const [favorite, setFavorite] = useState(false)
-  const [favoriteLoading, setFavoriteLoading] = useState(false)
-  const [relatedCourses, setRelatedCourses] = useState(null)
+  const [comments, setComments] = useState([]);
+  const [avatars, setAvatars] = useState({});
+  const [myComment, setMyComment] = useState("");
+  const [ratingDistribution, setRatingDistribution] = useState([]);
+  const [myRating, setMyRating] = useState(0);
+  const [favorite, setFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [relatedCourses, setRelatedCourses] = useState(null);
+  const [recRelatedCourses, setRecRelatedCourses] = useState(null);
   const {
     subcategoryId = 0,
     name,
@@ -554,41 +564,68 @@ export default function CourseDetailPage({ subcategoryList }) {
     provider,
     video,
     assignment,
-    description
-  } = courseData || {}
+    description,
+  } = courseData || {};
 
   useLayoutEffect(() => {
-    const courseDataURL = joinPaths([backend, apiPath.course.info, courseId])
-    const ratingDetailURL = joinPaths([backend, apiPath.grade.get, courseId])
+    const courseDataURL = joinPaths([backend, apiPath.course.info, courseId]);
+    const ratingDetailURL = joinPaths([backend, apiPath.grade.get, courseId]);
     const relatedCourseURL = joinPaths([
       backend,
       apiPath.course.relation,
-      courseId
-    ])
+      courseId,
+    ]);
     const favoriteQueryURL = joinPaths([
       backend,
       apiPath.favorite.query,
-      courseId
-    ])
-    pageContextValue.handler.setLoading(true)
-    Promise.all([
-      getRequest(courseDataURL),
-      getComments(courseId),
-      getRequest(ratingDetailURL),
-      getRequest(relatedCourseURL)
-    ])
-      .then(datas => {
-        const courseData = stylizeObject(datas[0])
-        const commentResult = datas[1]
-        const ratings = stylizeObject(datas[2])
-        const relatedCourses = stylizeObject(datas[3])
+      courseId,
+    ]);
+    const recommendRelatedURL = joinPaths([
+      backend,
+      apiPath.recommend.related,
+      courseId,
+    ]);
+    pageContextValue.handler.setLoading(true);
+    getComments(courseId)
+      .then((json) => {
+        const commentResult = json;
+        showComments(commentResult);
+      })
+      .catch((e) => {
+        console.log(e);
+        pageContextValue.handler.setErrorBox("Connect Error");
+        pageContextValue.handler.setLoading(false);
+      });
 
+    getRequest(relatedCourseURL)
+      .then((json) => {
+        const relatedCourses = stylizeObject(json);
+        setRelatedCourses(relatedCourses);
+      })
+      .catch((e) => {
+        console.log(e);
+        pageContextValue.handler.setErrorBox("Connect Error");
+        pageContextValue.handler.setLoading(false);
+      });
 
-        setRatingDistribution(ratings.ratingDetail)
-        setMyRating(ratings.myRating)
-        setCourseData(courseData)
-        setRelatedCourses(relatedCourses)
-        showComments(commentResult)
+    getRequest(recommendRelatedURL)
+      .then((json) => {
+        const recRelatedCourses = stylizeObject(json);
+        setRecRelatedCourses(recRelatedCourses);
+      })
+      .catch((e) => {
+        console.log(e);
+        pageContextValue.handler.setErrorBox("Connect Error");
+        pageContextValue.handler.setLoading(false);
+      });
+
+    Promise.all([getRequest(courseDataURL), getRequest(ratingDetailURL)])
+      .then((datas) => {
+        const courseData = stylizeObject(datas[0]);
+        const ratings = stylizeObject(datas[1]);
+        setRatingDistribution(ratings.ratingDetail);
+        setMyRating(ratings.myRating);
+        setCourseData(courseData);
         if (pageContextValue.state.login) {
           return getRequest(favoriteQueryURL);
         }
@@ -596,112 +633,112 @@ export default function CourseDetailPage({ subcategoryList }) {
       })
       .then((result) => {
         if (result !== false) {
-          const favoriteQuery = stylizeObject(result)
-          setFavorite(favoriteQuery.isFavorite)
+          const favoriteQuery = stylizeObject(result);
+          setFavorite(favoriteQuery.isFavorite);
         }
-        pageContextValue.handler.setLoading(false)
+        pageContextValue.handler.setLoading(false);
       })
-      .catch(e => {
-        console.log(e)
-        pageContextValue.handler.setErrorBox('Connect Error')
-        pageContextValue.handler.setLoading(false)
-      })
-  }, [pageContextValue.state.login])
+      .catch((e) => {
+        console.log(e);
+        pageContextValue.handler.setErrorBox("Connect Error");
+        pageContextValue.handler.setLoading(false);
+      });
+  }, [pageContextValue.state.login]);
 
   // ----- comment -----
-  const idToComment = {}
-  comments.forEach(comment => {
-    idToComment[comment.id] = comment
-  })
-  const [expandedId, setExpandedId] = useState(0)
-  const [reply, setReply] = useState('')
+  const idToComment = {};
+  comments.forEach((comment) => {
+    idToComment[comment.id] = comment;
+  });
+  const [expandedId, setExpandedId] = useState(0);
+  const [reply, setReply] = useState("");
   useEffect(() => {
-    setReply('')
-  }, [expandedId])
+    setReply("");
+  }, [expandedId]);
 
-  const showComments = commentResult => {
+  const showComments = (commentResult) => {
     if (commentResult === false) {
-      throw 'Get comments failed'
+      throw "Get comments failed";
     } else {
-      const notNullComments = commentResult[0].filter(comment => {
-        return comment.text.length !== 0
-      })
-      setComments(notNullComments)
-      setAvatars(commentResult[1])
+      const notNullComments = commentResult[0].filter((comment) => {
+        return comment.text.length !== 0;
+      });
+      setComments(notNullComments);
+      setAvatars(commentResult[1]);
     }
-  }
+  };
 
-  const handleCommentSend = refCommentId => {
-    const sendCommentURL = joinPaths([backend, apiPath.comment.add])
-    const commentToSend = refCommentId ? reply : myComment
+  const handleCommentSend = (refCommentId) => {
+    const sendCommentURL = joinPaths([backend, apiPath.comment.add]);
+    const commentToSend = refCommentId ? reply : myComment;
     if (commentToSend.length === 0) {
-      pageContextValue.handler.setErrorBox("You haven't type anything")
-      return
+      pageContextValue.handler.setErrorBox("You haven't type anything");
+      return;
     }
     const commentBody = {
       courseId: courseId,
       refCommentId: refCommentId,
-      text: commentToSend
-    }
-    pageContextValue.handler.setLoading(true)
+      text: commentToSend,
+    };
+    pageContextValue.handler.setLoading(true);
     postRequest(reStylizeObject(commentBody), sendCommentURL)
-      .then(json => {
+      .then((json) => {
         if (json.state === true) {
           pageContextValue.handler.setSuccessBox(
-            refCommentId ? 'Replied Successfully' : 'Commented Successfully'
-          )
-          return getComments(courseId)
+            refCommentId ? "Replied Successfully" : "Commented Successfully"
+          );
+          return getComments(courseId);
         } else {
-          pageContextValue.handler.setSuccessBox(json.message)
-          return false
+          pageContextValue.handler.setSuccessBox(json.message);
+          return false;
         }
       })
-      .then(result => {
-        showComments(result)
+      .then((result) => {
+        showComments(result);
         if (result !== false) {
-          setExpandedId(0)
-          setMyComment('')
+          setExpandedId(0);
+          setMyComment("");
         }
-        pageContextValue.handler.setLoading(false)
+        pageContextValue.handler.setLoading(false);
       })
-      .catch(e => {
-        console.log(e)
-        pageContextValue.handler.setErrorBox('Connect Error')
-        pageContextValue.handler.setLoading(false)
-      })
-  }
+      .catch((e) => {
+        console.log(e);
+        pageContextValue.handler.setErrorBox("Connect Error");
+        pageContextValue.handler.setLoading(false);
+      });
+  };
 
-  const handleCommentDelete = commentId => {
-    const deleteCommentURL = joinPaths([backend, apiPath.comment.delete])
+  const handleCommentDelete = (commentId) => {
+    const deleteCommentURL = joinPaths([backend, apiPath.comment.delete]);
     const deleteBody = {
-      id: commentId
-    }
-    pageContextValue.handler.setLoading(true)
+      id: commentId,
+    };
+    pageContextValue.handler.setLoading(true);
     postRequest(deleteBody, deleteCommentURL)
-      .then(json => {
+      .then((json) => {
         if (json.state === true) {
-          pageContextValue.handler.setSuccessBox('Deleted Successfully')
-          return getComments(courseId)
+          pageContextValue.handler.setSuccessBox("Deleted Successfully");
+          return getComments(courseId);
         } else {
-          pageContextValue.handler.setSuccessBox(json.message)
-          return false
+          pageContextValue.handler.setSuccessBox(json.message);
+          return false;
         }
       })
-      .then(result => {
-        showComments(result)
+      .then((result) => {
+        showComments(result);
         if (result !== false) {
-          setExpandedId(0)
+          setExpandedId(0);
         }
-        pageContextValue.handler.setLoading(false)
+        pageContextValue.handler.setLoading(false);
       })
-      .catch(e => {
-        console.log(e)
-        pageContextValue.handler.setErrorBox('Connect Error')
-        pageContextValue.handler.setLoading(false)
-      })
-  }
-  const CommentCards = comments.map(comment => {
-    const refData = idToComment[comment.refCommentId]
+      .catch((e) => {
+        console.log(e);
+        pageContextValue.handler.setErrorBox("Connect Error");
+        pageContextValue.handler.setLoading(false);
+      });
+  };
+  const CommentCards = comments.map((comment) => {
+    const refData = idToComment[comment.refCommentId];
     return (
       <CommentCard
         key={comment.id}
@@ -716,145 +753,144 @@ export default function CourseDetailPage({ subcategoryList }) {
         handleReplySend={handleCommentSend}
         handleCommentDelete={handleCommentDelete}
       />
-    )
-  })
+    );
+  });
 
-  const changeRating = event => {
-    let targetValue = Number(event.target.value)
+  const changeRating = (event) => {
+    let targetValue = Number(event.target.value);
     if (myRating == targetValue) {
-      return
+      return;
     }
     if (pageContextValue.state.login === false) {
       pageContextValue.handler.setErrorBox("Login to Rate");
       return;
     }
-    const ratingURL = joinPaths([backend, apiPath.grade.set])
+    const ratingURL = joinPaths([backend, apiPath.grade.set]);
     const ratingBody = {
       courseId: courseId,
-      rating: targetValue
-    }
-    // TODO: change setTimeout to request
+      rating: targetValue,
+    };
     postRequest(reStylizeObject(ratingBody), ratingURL)
-      .then(result => {
+      .then((result) => {
         if (result.state === true) {
           setRatingDistribution((distribution) => {
             distribution[targetValue - 1] += 1;
             distribution[myRating - 1] -= 1;
             return distribution;
-          })
-          setMyRating(targetValue)
-          pageContextValue.handler.setSuccessBox('Rated Successfully')
+          });
+          setMyRating(targetValue);
+          pageContextValue.handler.setSuccessBox("Rated Successfully");
         } else {
-          pageContextValue.handler.setErrorBox(result.message)
+          pageContextValue.handler.setErrorBox(result.message);
         }
       })
-      .catch(e => {
-        errorHandler(e, pageContextValue)
-      })
-  }
+      .catch((e) => {
+        errorHandler(e, pageContextValue);
+      });
+  };
 
   const favoriteClick = () => {
-    setFavoriteLoading(true)
-    const setFavoriteURL = joinPaths([backend, apiPath.favorite.set])
+    setFavoriteLoading(true);
+    const setFavoriteURL = joinPaths([backend, apiPath.favorite.set]);
     const dataBody = {
       courseId: courseId,
-      isFavorite: !favorite
-    }
+      isFavorite: !favorite,
+    };
     postRequest(reStylizeObject(dataBody), setFavoriteURL)
-      .then(result => {
+      .then((result) => {
         if (result.state === true) {
           pageContextValue.handler.setSuccessBox(
             favorite
-              ? 'Removed from Favorites Successfully'
-              : 'Added to Favorites Successfully'
-          )
-          setFavorite(favorite => !favorite)
+              ? "Removed from Favorites Successfully"
+              : "Added to Favorites Successfully"
+          );
+          setFavorite((favorite) => !favorite);
         } else {
-          pageContextValue.handler.setErrorBox(result.message)
+          pageContextValue.handler.setErrorBox(result.message);
         }
-        setFavoriteLoading(false)
+        setFavoriteLoading(false);
       })
-      .catch(e => {
-        errorHandler(e, pageContextValue)
-        setFavoriteLoading(false)
-      })
-  }
+      .catch((e) => {
+        errorHandler(e, pageContextValue);
+        setFavoriteLoading(false);
+      });
+  };
 
   return (
     <MainContainer>
       <HeaderBar>
         <Breadcrumbs sx={{ marginBottom: 3 }}>
-          <LinkRouter to='/'>Home</LinkRouter>
+          <LinkRouter to="/">Home</LinkRouter>
           <LinkRouter
             to={joinPaths([apiPath.category.info, subcategoryId.toString()])}
           >
             {subcategoryId && subcategoryList.length > 0 ? (
               subcategoryList[subcategoryId - 1].subcategoryName
             ) : (
-              <Skeleton variant='text' width='5rem' />
+              <Skeleton variant="text" width="5rem" />
             )}
           </LinkRouter>
-          <LinkRouter color='primary'>
-            {name || <Skeleton variant='text' width='5rem' />}
+          <LinkRouter color="primary">
+            {name || <Skeleton variant="text" width="5rem" />}
           </LinkRouter>
         </Breadcrumbs>
         <LoadingButton
           disabled={!pageContextValue.state.login}
           sx={{
-            borderRadius: '12rem',
+            borderRadius: "12rem",
             paddingX: 1.5,
-            textTransform: 'capitalize'
+            textTransform: "capitalize",
           }}
-          color={favorite ? 'loading' : 'primary'}
+          color={favorite ? "loading" : "primary"}
           disableElevation={favorite}
-          loadingPosition='start'
-          size='small'
+          loadingPosition="start"
+          size="small"
           startIcon={favorite ? <DoneIcon /> : <StarIcon />}
           loading={favoriteLoading}
           onClick={favoriteClick}
         >
-          {favorite ? 'Collected' : 'Collect'}
+          {favorite ? "Collected" : "Collect"}
         </LoadingButton>
       </HeaderBar>
       <MasonryContainer>
         <EmbedContainer sx={{ padding: 0 }}>
           <EmbedContentCard>
-            <EmbedContent url={website || 'about:blank'} />
+            <EmbedContent url={website || "about:blank"} />
           </EmbedContentCard>
           <Link
             href={website}
             sx={{
-              transition: 'all 0.2s',
+              transition: "all 0.2s",
               marginLeft: 2,
-              fontSize: '1.2rem',
-              marginTop: 0.5
+              fontSize: "1.2rem",
+              marginTop: 0.5,
             }}
-            color='inherit'
-            target='_blank'
-            rel='noopener noreferrer'
+            color="inherit"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Visit course website in a new tab -{'>'}
+            Visit course website in a new tab -{">"}
           </Link>
         </EmbedContainer>
 
         <ItemContainer gutter>
           <Box sx={{ paddingLeft: { xs: 1, md: 0 } }}>
             <CourseDetailTitle>
-              {name || <Skeleton variant='text' />}
+              {name || <Skeleton variant="text" />}
             </CourseDetailTitle>
             <CourseTagGrid>
-              <CourseTagGridItem label='Provider' sm={7} lg={7}>
+              <CourseTagGridItem label="Provider" sm={7} lg={7}>
                 {provider}
               </CourseTagGridItem>
-              <CourseTagGridItem label='Level' sm={5} lg={5}>
+              <CourseTagGridItem label="Level" sm={5} lg={5}>
                 {LevelMappings[difficulty]}
               </CourseTagGridItem>
-              <CourseTagGridItem label='Category' sm={7} lg={7}>
+              <CourseTagGridItem label="Category" sm={7} lg={7}>
                 {subcategoryId &&
                   subcategoryList.length &&
                   subcategoryList[subcategoryId - 1].subcategoryName}
               </CourseTagGridItem>
-              <CourseTagGridItem label='Time Cost' sm={5} lg={5}>
+              <CourseTagGridItem label="Time Cost" sm={5} lg={5}>
                 {estHour} hrs.
               </CourseTagGridItem>
             </CourseTagGrid>
@@ -863,21 +899,21 @@ export default function CourseDetailPage({ subcategoryList }) {
                 Watch Lectures
               </CourseDetailButton>
               <CourseDetailButton
-                color='inherit'
+                color="inherit"
                 href={assignment}
-                sx={{ filter: 'invert(1)', color: '#000' }}
+                sx={{ filter: "invert(1)", color: "#000" }}
               >
                 Assignment
               </CourseDetailButton>
             </CourseDetailButtonStack>
             <Divider
-              variant='middle'
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              variant="middle"
+              sx={{ display: { xs: "block", md: "none" } }}
             />
           </Box>
 
           <ItemTitle>Description</ItemTitle>
-          <ItemSubtitle sx={{ fontSize: '1.5rem' }}>{description}</ItemSubtitle>
+          <ItemSubtitle sx={{ fontSize: "1.5rem" }}>{description}</ItemSubtitle>
 
           {relatedCourses && relatedCourses.pre.length > 0 && (
             <Fragment>
@@ -907,7 +943,20 @@ export default function CourseDetailPage({ subcategoryList }) {
             </Fragment>
           )}
 
-          <Divider variant='middle' sx={{ marginTop: 4 }} />
+          {recRelatedCourses && recRelatedCourses.length > 0 && (
+            <Fragment>
+              <ItemTitle>Related Courses</ItemTitle>
+              <ItemSubtitle sx={{ marginBottom: 2 }}>
+                Don't like this course? Try these similar ones!
+              </ItemSubtitle>
+
+              <CourseMenu
+                courseList={recRelatedCourses ? recRelatedCourses : []}
+                subcategoryList={subcategoryList}
+              />
+            </Fragment>
+          )}
+          <Divider variant="middle" sx={{ marginTop: 4 }} />
         </ItemContainer>
 
         <ItemContainer>
@@ -926,41 +975,41 @@ export default function CourseDetailPage({ subcategoryList }) {
           <ItemTitle>Comments</ItemTitle>
           <ItemSubtitle>
             {CommentCards.length > 0
-              ? 'Come share your thoughts'
-              : 'No comments yet'}
+              ? "Come share your thoughts"
+              : "No comments yet"}
           </ItemSubtitle>
           {CommentCards}
           <CommentField>
-            <RoundAvatar sx={{ mr: '8px', mt: '12px' }} />
+            <RoundAvatar sx={{ mr: "8px", mt: "12px" }} />
             <ReplyInput
               disabled={!pageContextValue.state.login}
               multiline
-              variant='outlined'
+              variant="outlined"
               placeholder={
                 pageContextValue.state.login
-                  ? 'Leave Some Comments Here'
-                  : 'Pleasr Login First'
+                  ? "Leave Some Comments Here"
+                  : "Pleasr Login First"
               }
               value={myComment}
-              onChange={event => {
-                setMyComment(event.target.value)
+              onChange={(event) => {
+                setMyComment(event.target.value);
               }}
             />
           </CommentField>
           <Tail>
             <Button
               disabled={!pageContextValue.state.login}
-              children={'SEND'}
-              variant='contained'
+              children={"SEND"}
+              variant="contained"
               endIcon={<SendIcon />}
-              sx={{ borderRadius: '12rem', marginTop: 1 }}
+              sx={{ borderRadius: "12rem", marginTop: 1 }}
               onClick={() => {
-                handleCommentSend(0)
+                handleCommentSend(0);
               }}
             />
           </Tail>
         </ItemContainer>
       </MasonryContainer>
     </MainContainer>
-  )
+  );
 }
