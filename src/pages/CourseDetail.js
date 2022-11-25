@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useState,
+  useRef,
   useLayoutEffect,
 } from "react";
 import { PageContext } from "../App";
@@ -272,11 +273,25 @@ const Tail = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const replyAt = (name, link = true) => {
+const ActionEnd = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  color: theme.palette.text.secondary,
+}));
+
+const CardHeading = styled(CardHeader)(({ theme }) => ({
+  "& .MuiCardHeader-action": {
+    alignSelf: "center",
+    margin: theme.spacing(0),
+  },
+}));
+
+const replyAt = (name, link=true, floor=0) => {
   if (link) {
     return (
       <Caption>
-        Reply <Link underline="none">{`@${name}`}</Link>:{" "}
+        Reply {` #${floor} `}<Link underline="none" sx={{ userSelect: "none" }}>{`@${name}`}</Link>:
       </Caption>
     );
   } else {
@@ -407,24 +422,23 @@ const RatingChart = ({
 };
 
 const CommentBox = (props) => {
-  const { replyName, handleReplySend, reply, setReply } = props;
+  const { replyName, handleReplySend, replyLoading, sendLoading, replyRef } = props;
 
   return (
     <ReplyField>
       <RoundAvatar sx={{ mr: "8px" }} />
       <InnerReplyInput
         multiline
+        disabled={replyLoading || sendLoading}
         variant="outlined"
         placeholder={replyAt(replyName, false)}
-        value={reply}
-        onChange={(event) => {
-          setReply(event.target.value);
-        }}
+        inputRef={replyRef}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
                 color="primary"
+                disabled={replyLoading || sendLoading}
                 children={<SendIcon />}
                 onClick={handleReplySend}
               />
@@ -445,16 +459,22 @@ const CommentCard = (props) => {
     setExpandedId,
     avatar,
     handleReplySend,
-    reply,
-    setReply,
     handleCommentDelete,
+    replyLoading,
+    sendLoading,
+    replyRef,
   } = props;
   const pageContextValue = useContext(PageContext);
 
-  let deleteIcon = null;
-  if (getUser()?.admin) {
-    deleteIcon = (
-      <IconButton
+  let isAdmin = getUser()?.admin;
+  let deleteIcon = (
+    <ActionEnd>
+      <Typography
+        sx={{ mr: 1 }}
+        variant="body2"
+        children="#114514"
+      />
+      {isAdmin && <IconButton
         color="primary"
         onClick={() => {
           handleCommentDelete(commentData.id);
@@ -462,13 +482,13 @@ const CommentCard = (props) => {
       >
         {" "}
         <ClearIcon />{" "}
-      </IconButton>
-    );
-  }
+      </IconButton>}
+    </ActionEnd>
+  );
 
   return (
     <Comment variant="outlined">
-      <CardHeader
+      <CardHeading
         avatar={<RoundAvatar displayName={commentData.userName} src={avatar} />}
         title={commentData.userName}
         subheader={commentData.time}
@@ -488,7 +508,13 @@ const CommentCard = (props) => {
         }}
       >
         {refData ? replyAt(refData.userName) : null}
-        <Typography sx={{ fontSize: "1.5rem" }}>{commentData.text}</Typography>
+        {commentData.text.split("\n").map((para, index) => (
+          <Typography
+            key={index}
+            sx={{ fontSize: "1.5rem", minHeight: "1.5rem" }}
+            children={para}
+          />
+        ))}
       </PointerContent>
       <Collapse in={expanded} unmountOnExit>
         <CollapseField>
@@ -497,8 +523,9 @@ const CommentCard = (props) => {
             handleReplySend={() => {
               handleReplySend(commentData.id);
             }}
-            reply={reply}
-            setReply={setReply}
+            replyLoading={replyLoading}
+            sendLoading={sendLoading}
+            replyRef={replyRef}
           />
         </CollapseField>
       </Collapse>
@@ -544,15 +571,19 @@ async function getComments(courseId) {
 
 export default function CourseDetailPage({ subcategoryList }) {
   const { courseId } = useParams();
+  const commentRef = useRef();
+  const replyRef = useRef();
+
   const [courseData, setCourseData] = useState(null);
   const pageContextValue = useContext(PageContext);
   const [comments, setComments] = useState([]);
   const [avatars, setAvatars] = useState({});
-  const [myComment, setMyComment] = useState("");
   const [ratingDistribution, setRatingDistribution] = useState([]);
   const [myRating, setMyRating] = useState(0);
   const [favorite, setFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [sendLoading, setSendLoading] = useState(false);
+  const [replyLoading, setReplyLoading] = useState(false);
   const [relatedCourses, setRelatedCourses] = useState(null);
   const [recRelatedCourses, setRecRelatedCourses] = useState(null);
   const {
@@ -651,9 +682,8 @@ export default function CourseDetailPage({ subcategoryList }) {
     idToComment[comment.id] = comment;
   });
   const [expandedId, setExpandedId] = useState(0);
-  const [reply, setReply] = useState("");
   useEffect(() => {
-    setReply("");
+    replyRef.current && (replyRef.current.value = "")
   }, [expandedId]);
 
   const showComments = (commentResult) => {
@@ -670,7 +700,7 @@ export default function CourseDetailPage({ subcategoryList }) {
 
   const handleCommentSend = (refCommentId) => {
     const sendCommentURL = joinPaths([backend, apiPath.comment.add]);
-    const commentToSend = refCommentId ? reply : myComment;
+    const commentToSend = (refCommentId ? replyRef : commentRef).current.value;
     if (commentToSend.length === 0) {
       pageContextValue.handler.setErrorBox("You haven't type anything");
       return;
@@ -680,7 +710,7 @@ export default function CourseDetailPage({ subcategoryList }) {
       refCommentId: refCommentId,
       text: commentToSend,
     };
-    pageContextValue.handler.setLoading(true);
+    refCommentId ? setReplyLoading(true) : setSendLoading(true);
     postRequest(reStylizeObject(commentBody), sendCommentURL)
       .then((json) => {
         if (json.state === true) {
@@ -697,9 +727,9 @@ export default function CourseDetailPage({ subcategoryList }) {
         showComments(result);
         if (result !== false) {
           setExpandedId(0);
-          setMyComment("");
+          commentRef.current.value = "";
         }
-        pageContextValue.handler.setLoading(false);
+        refCommentId ? setReplyLoading(false) : setSendLoading(false);
       })
       .catch((e) => {
         console.log(e);
@@ -748,10 +778,11 @@ export default function CourseDetailPage({ subcategoryList }) {
         expanded={expandedId === comment.id}
         expandedId={expandedId}
         setExpandedId={setExpandedId}
-        reply={reply}
-        setReply={setReply}
         handleReplySend={handleCommentSend}
         handleCommentDelete={handleCommentDelete}
+        replyLoading={replyLoading}
+        sendLoading={sendLoading}
+        replyRef={replyRef}
       />
     );
   });
@@ -982,7 +1013,7 @@ export default function CourseDetailPage({ subcategoryList }) {
           <CommentField>
             <RoundAvatar sx={{ mr: "8px", mt: "12px" }} />
             <ReplyInput
-              disabled={!pageContextValue.state.login}
+              disabled={!pageContextValue.state.login || replyLoading || sendLoading}
               multiline
               variant="outlined"
               placeholder={
@@ -990,17 +1021,16 @@ export default function CourseDetailPage({ subcategoryList }) {
                   ? "Leave Some Comments Here"
                   : "Pleasr Login First"
               }
-              value={myComment}
-              onChange={(event) => {
-                setMyComment(event.target.value);
-              }}
+              inputRef={commentRef}
             />
           </CommentField>
           <Tail>
-            <Button
-              disabled={!pageContextValue.state.login}
+            <LoadingButton
+              disabled={!pageContextValue.state.login || replyLoading}
               children={"SEND"}
               variant="contained"
+              loading={sendLoading}
+              loadingPosition="end"
               endIcon={<SendIcon />}
               sx={{ borderRadius: "12rem", marginTop: 1 }}
               onClick={() => {
