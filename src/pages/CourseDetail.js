@@ -286,11 +286,11 @@ const CardHeading = styled(CardHeader)(({ theme }) => ({
   },
 }));
 
-const replyAt = (name, link = true) => {
+const replyAt = (name, link=true, floor=0) => {
   if (link) {
     return (
       <Caption>
-        Reply <Link underline="none">{`@${name}`}</Link>:{" "}
+        Reply {` #${floor} `}<Link underline="none" sx={{ userSelect: "none" }}>{`@${name}`}</Link>:
       </Caption>
     );
   } else {
