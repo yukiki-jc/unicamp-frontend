@@ -429,6 +429,7 @@ const CommentBox = (props) => {
       <RoundAvatar sx={{ mr: "8px" }} />
       <InnerReplyInput
         multiline
+        disabled={replyLoading || sendLoading}
         variant="outlined"
         placeholder={replyAt(replyName, false)}
         inputRef={replyRef}
@@ -507,7 +508,13 @@ const CommentCard = (props) => {
         }}
       >
         {refData ? replyAt(refData.userName) : null}
-        <Typography sx={{ fontSize: "1.5rem" }}>{commentData.text}</Typography>
+        {commentData.text.split("\n").map((para, index) => (
+          <Typography
+            key={index}
+            sx={{ fontSize: "1.5rem", minHeight: "1.5rem" }}
+            children={para}
+          />
+        ))}
       </PointerContent>
       <Collapse in={expanded} unmountOnExit>
         <CollapseField>
@@ -676,9 +683,7 @@ export default function CourseDetailPage({ subcategoryList }) {
   });
   const [expandedId, setExpandedId] = useState(0);
   useEffect(() => {
-    if (replyRef.current) {
-      replyRef.current.value = "";
-    }
+    replyRef.current && (replyRef.current.value = "")
   }, [expandedId]);
 
   const showComments = (commentResult) => {
@@ -1008,7 +1013,7 @@ export default function CourseDetailPage({ subcategoryList }) {
           <CommentField>
             <RoundAvatar sx={{ mr: "8px", mt: "12px" }} />
             <ReplyInput
-              disabled={!pageContextValue.state.login}
+              disabled={!pageContextValue.state.login || replyLoading || sendLoading}
               multiline
               variant="outlined"
               placeholder={
