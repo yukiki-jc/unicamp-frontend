@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useState,
+  useRef,
   useLayoutEffect,
 } from "react";
 import { PageContext } from "../App";
@@ -421,7 +422,7 @@ const RatingChart = ({
 };
 
 const CommentBox = (props) => {
-  const { replyName, handleReplySend, reply, setReply, replyLoading, sendLoading } = props;
+  const { replyName, handleReplySend, replyLoading, sendLoading, replyRef } = props;
 
   return (
     <ReplyField>
@@ -430,10 +431,7 @@ const CommentBox = (props) => {
         multiline
         variant="outlined"
         placeholder={replyAt(replyName, false)}
-        value={reply}
-        onChange={(event) => {
-          setReply(event.target.value);
-        }}
+        inputRef={replyRef}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -460,11 +458,10 @@ const CommentCard = (props) => {
     setExpandedId,
     avatar,
     handleReplySend,
-    reply,
-    setReply,
     handleCommentDelete,
     replyLoading,
     sendLoading,
+    replyRef,
   } = props;
   const pageContextValue = useContext(PageContext);
 
@@ -519,10 +516,9 @@ const CommentCard = (props) => {
             handleReplySend={() => {
               handleReplySend(commentData.id);
             }}
-            reply={reply}
-            setReply={setReply}
             replyLoading={replyLoading}
             sendLoading={sendLoading}
+            replyRef={replyRef}
           />
         </CollapseField>
       </Collapse>
@@ -568,11 +564,13 @@ async function getComments(courseId) {
 
 export default function CourseDetailPage({ subcategoryList }) {
   const { courseId } = useParams();
+  const commentRef = useRef();
+  const replyRef = useRef();
+
   const [courseData, setCourseData] = useState(null);
   const pageContextValue = useContext(PageContext);
   const [comments, setComments] = useState([]);
   const [avatars, setAvatars] = useState({});
-  const [myComment, setMyComment] = useState("");
   const [ratingDistribution, setRatingDistribution] = useState([]);
   const [myRating, setMyRating] = useState(0);
   const [favorite, setFavorite] = useState(false);
@@ -677,9 +675,10 @@ export default function CourseDetailPage({ subcategoryList }) {
     idToComment[comment.id] = comment;
   });
   const [expandedId, setExpandedId] = useState(0);
-  const [reply, setReply] = useState("");
   useEffect(() => {
-    setReply("");
+    if (replyRef.current) {
+      replyRef.current.value = "";
+    }
   }, [expandedId]);
 
   const showComments = (commentResult) => {
@@ -696,7 +695,7 @@ export default function CourseDetailPage({ subcategoryList }) {
 
   const handleCommentSend = (refCommentId) => {
     const sendCommentURL = joinPaths([backend, apiPath.comment.add]);
-    const commentToSend = refCommentId ? reply : myComment;
+    const commentToSend = (refCommentId ? replyRef : commentRef).current.value;
     if (commentToSend.length === 0) {
       pageContextValue.handler.setErrorBox("You haven't type anything");
       return;
@@ -723,7 +722,7 @@ export default function CourseDetailPage({ subcategoryList }) {
         showComments(result);
         if (result !== false) {
           setExpandedId(0);
-          setMyComment("");
+          commentRef.current.value = "";
         }
         refCommentId ? setReplyLoading(false) : setSendLoading(false);
       })
@@ -774,12 +773,11 @@ export default function CourseDetailPage({ subcategoryList }) {
         expanded={expandedId === comment.id}
         expandedId={expandedId}
         setExpandedId={setExpandedId}
-        reply={reply}
-        setReply={setReply}
         handleReplySend={handleCommentSend}
         handleCommentDelete={handleCommentDelete}
         replyLoading={replyLoading}
         sendLoading={sendLoading}
+        replyRef={replyRef}
       />
     );
   });
@@ -1018,10 +1016,7 @@ export default function CourseDetailPage({ subcategoryList }) {
                   ? "Leave Some Comments Here"
                   : "Pleasr Login First"
               }
-              value={myComment}
-              onChange={(event) => {
-                setMyComment(event.target.value);
-              }}
+              inputRef={commentRef}
             />
           </CommentField>
           <Tail>
