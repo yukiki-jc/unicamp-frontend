@@ -272,6 +272,20 @@ const Tail = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
+const ActionEnd = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  color: theme.palette.text.secondary,
+}));
+
+const CardHeading = styled(CardHeader)(({ theme }) => ({
+  "& .MuiCardHeader-action": {
+    alignSelf: "center",
+    margin: theme.spacing(0),
+  },
+}));
+
 const replyAt = (name, link = true) => {
   if (link) {
     return (
@@ -451,10 +465,15 @@ const CommentCard = (props) => {
   } = props;
   const pageContextValue = useContext(PageContext);
 
-  let deleteIcon = null;
-  if (getUser()?.admin) {
-    deleteIcon = (
-      <IconButton
+  let isAdmin = getUser()?.admin;
+  let deleteIcon = (
+    <ActionEnd>
+      <Typography
+        sx={{ mr: 1 }}
+        variant="body2"
+        children="#114514"
+      />
+      {isAdmin && <IconButton
         color="primary"
         onClick={() => {
           handleCommentDelete(commentData.id);
@@ -462,13 +481,13 @@ const CommentCard = (props) => {
       >
         {" "}
         <ClearIcon />{" "}
-      </IconButton>
-    );
-  }
+      </IconButton>}
+    </ActionEnd>
+  );
 
   return (
     <Comment variant="outlined">
-      <CardHeader
+      <CardHeading
         avatar={<RoundAvatar displayName={commentData.userName} src={avatar} />}
         title={commentData.userName}
         subheader={commentData.time}
