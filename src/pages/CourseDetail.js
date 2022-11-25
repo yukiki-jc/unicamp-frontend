@@ -421,7 +421,7 @@ const RatingChart = ({
 };
 
 const CommentBox = (props) => {
-  const { replyName, handleReplySend, reply, setReply } = props;
+  const { replyName, handleReplySend, reply, setReply, replyLoading, sendLoading } = props;
 
   return (
     <ReplyField>
@@ -439,6 +439,7 @@ const CommentBox = (props) => {
             <InputAdornment position="end">
               <IconButton
                 color="primary"
+                disabled={replyLoading || sendLoading}
                 children={<SendIcon />}
                 onClick={handleReplySend}
               />
@@ -462,6 +463,8 @@ const CommentCard = (props) => {
     reply,
     setReply,
     handleCommentDelete,
+    replyLoading,
+    sendLoading,
   } = props;
   const pageContextValue = useContext(PageContext);
 
@@ -518,6 +521,8 @@ const CommentCard = (props) => {
             }}
             reply={reply}
             setReply={setReply}
+            replyLoading={replyLoading}
+            sendLoading={sendLoading}
           />
         </CollapseField>
       </Collapse>
@@ -572,6 +577,8 @@ export default function CourseDetailPage({ subcategoryList }) {
   const [myRating, setMyRating] = useState(0);
   const [favorite, setFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [sendLoading, setSendLoading] = useState(false);
+  const [replyLoading, setReplyLoading] = useState(false);
   const [relatedCourses, setRelatedCourses] = useState(null);
   const [recRelatedCourses, setRecRelatedCourses] = useState(null);
   const {
@@ -699,7 +706,7 @@ export default function CourseDetailPage({ subcategoryList }) {
       refCommentId: refCommentId,
       text: commentToSend,
     };
-    pageContextValue.handler.setLoading(true);
+    refCommentId ? setReplyLoading(true) : setSendLoading(true);
     postRequest(reStylizeObject(commentBody), sendCommentURL)
       .then((json) => {
         if (json.state === true) {
@@ -718,7 +725,7 @@ export default function CourseDetailPage({ subcategoryList }) {
           setExpandedId(0);
           setMyComment("");
         }
-        pageContextValue.handler.setLoading(false);
+        refCommentId ? setReplyLoading(false) : setSendLoading(false);
       })
       .catch((e) => {
         console.log(e);
@@ -771,6 +778,8 @@ export default function CourseDetailPage({ subcategoryList }) {
         setReply={setReply}
         handleReplySend={handleCommentSend}
         handleCommentDelete={handleCommentDelete}
+        replyLoading={replyLoading}
+        sendLoading={sendLoading}
       />
     );
   });
@@ -1016,10 +1025,12 @@ export default function CourseDetailPage({ subcategoryList }) {
             />
           </CommentField>
           <Tail>
-            <Button
-              disabled={!pageContextValue.state.login}
+            <LoadingButton
+              disabled={!pageContextValue.state.login || replyLoading}
               children={"SEND"}
               variant="contained"
+              loading={sendLoading}
+              loadingPosition="end"
               endIcon={<SendIcon />}
               sx={{ borderRadius: "12rem", marginTop: 1 }}
               onClick={() => {
