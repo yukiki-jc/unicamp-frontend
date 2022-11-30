@@ -1,5 +1,15 @@
-import { Typography } from '@mui/material'
+import { styled } from "@mui/material/styles";
+import { Typography, Pagination } from '@mui/material'
 import { Container } from '@mui/system'
+import {
+  Radio,
+  RadioGroup,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel
+} from '@mui/material';
 import React, { useContext, useLayoutEffect as useEffect, useState } from 'react'
 import CourseCard from '../components/CourseCard'
 import { useParams, useSearchParams } from 'react-router-dom'
@@ -11,6 +21,19 @@ import { joinPaths } from '@remix-run/router';
 import { backend, apiPath } from '../utils/urls'
 import { errorHandler } from '../utils/functions'
 
+const FilterPad = styled(Container)(({ theme }) => ({
+  paddingBottom: 12,
+  display: "flex",
+  flexDirection: "column",
+}));
+
+const PageEnd = styled(Container)(({ theme }) => ({
+  paddingTop: 16,
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-evenly",
+}));
+
 const CourseListPage = props => {
   const { title, courseList = [], subcategoryList = [] } = props
   const { subcategoryId } = useParams()
@@ -18,6 +41,7 @@ const CourseListPage = props => {
   const pageContextValue = useContext(PageContext);
   const [newTitle, setNewTitle] = useState(title);
   const [courseListShow, setCourseListShow] = useState([]);
+  const [sorting, setSorting] = useState("all");
 
   useEffect(() => {
     if (title === 'Category') {
@@ -72,6 +96,18 @@ const CourseListPage = props => {
     )
   })
 
+  // Why using this control function?
+  //   - When a checked radio is clicked, its state of checked become false
+  //   - When there's no radio checked, it is sorted by inner course ID
+  const handleRadio = (event) => {
+    let clicked = event.target.value;
+    setSorting((sorting) => {
+      return sorting === clicked
+        ? "all"
+        : clicked
+    });
+  }
+
   return (
     <div>
       <main>
@@ -88,9 +124,53 @@ const CourseListPage = props => {
             </Typography>
           </Container>
         </TitleBox>
+        <FilterPad>
+          <FormControl>
+            <FormLabel> Difficulty Filter </FormLabel>
+            <FormGroup row>
+              <FormControlLabel control={<Checkbox />} label="All Level" />
+              <FormControlLabel control={<Checkbox />} label="Beginner" />
+              <FormControlLabel control={<Checkbox />} label="Intermediate" />
+              <FormControlLabel control={<Checkbox />} label="Advanced" />
+              <FormControlLabel control={<Checkbox />} label="Expert" />
+            </FormGroup>
+          </FormControl>
+          <FormControl>
+            <FormLabel> Sorted by </FormLabel>
+            <RadioGroup row value={sorting}>
+              <FormControlLabel
+                onClick={handleRadio}
+                value="alphabet"
+                control={<Radio />}
+                label="Alphabet"
+              />
+              <FormControlLabel
+                onClick={handleRadio}
+                value="time"
+                control={<Radio />}
+                label="Time"
+              />
+              <FormControlLabel
+                onClick={handleRadio}
+                value="difficulty"
+                control={<Radio />}
+                label="Difficulty"
+              />
+              <FormControlLabel
+                onClick={handleRadio}
+                value="rating"
+                control={<Radio />}
+                label="Rating"
+              />
+            </RadioGroup>
+          </FormControl>
+        </FilterPad>
         <Container maxWidth='lg'>
           {courseCards}
         </Container>
+        <PageEnd maxWidth='lg'>
+          <Pagination count={114514} color="primary" />
+        </PageEnd>
       </main>
     </div>
   )
