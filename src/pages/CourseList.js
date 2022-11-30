@@ -1,4 +1,5 @@
-import { Typography } from '@mui/material'
+import { styled } from "@mui/material/styles";
+import { Typography, Pagination } from '@mui/material'
 import { Container } from '@mui/system'
 import React, { useContext, useLayoutEffect as useEffect, useState } from 'react'
 import CourseCard from '../components/CourseCard'
@@ -10,6 +11,13 @@ import { getRequest } from '../utils/requests'
 import { joinPaths } from '@remix-run/router';
 import { backend, apiPath } from '../utils/urls'
 import { errorHandler } from '../utils/functions'
+
+const PageEnd = styled(Container)(({ theme }) => ({
+  paddingTop: 16,
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-evenly",
+}));
 
 const CourseListPage = props => {
   const { title, courseList = [], subcategoryList = [] } = props
@@ -91,6 +99,9 @@ const CourseListPage = props => {
         <Container maxWidth='lg'>
           {courseCards}
         </Container>
+        <PageEnd maxWidth='lg'>
+          <Pagination count={114514} color="primary" />
+        </PageEnd>
       </main>
     </div>
   )
