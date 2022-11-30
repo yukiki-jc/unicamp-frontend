@@ -96,6 +96,9 @@ const CourseListPage = props => {
     )
   })
 
+  // Why using this control function?
+  //   - When a checked radio is clicked, its state of checked become false
+  //   - When there's no radio checked, it is sorted by inner course ID
   const handleRadio = (event) => {
     let clicked = event.target.value;
     setSorting((sorting) => {
