@@ -1,7 +1,15 @@
 import { styled } from "@mui/material/styles";
 import { Typography, Pagination } from '@mui/material'
 import { Container } from '@mui/system'
-import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
+import {
+  Radio,
+  RadioGroup,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel
+} from '@mui/material';
 import React, { useContext, useLayoutEffect as useEffect, useState } from 'react'
 import CourseCard from '../components/CourseCard'
 import { useParams, useSearchParams } from 'react-router-dom'
@@ -33,6 +41,7 @@ const CourseListPage = props => {
   const pageContextValue = useContext(PageContext);
   const [newTitle, setNewTitle] = useState(title);
   const [courseListShow, setCourseListShow] = useState([]);
+  const [sorting, setSorting] = useState("all");
 
   useEffect(() => {
     if (title === 'Category') {
@@ -87,6 +96,15 @@ const CourseListPage = props => {
     )
   })
 
+  const handleRadio = (event) => {
+    let clicked = event.target.value;
+    setSorting((sorting) => {
+      return sorting === clicked
+        ? "all"
+        : clicked
+    });
+  }
+
   return (
     <div>
       <main>
@@ -105,12 +123,42 @@ const CourseListPage = props => {
         </TitleBox>
         <FilterPad>
           <FormControl>
+            <FormLabel> Difficulty Filter </FormLabel>
+            <FormGroup row>
+              <FormControlLabel control={<Checkbox />} label="All Level" />
+              <FormControlLabel control={<Checkbox />} label="Beginner" />
+              <FormControlLabel control={<Checkbox />} label="Intermediate" />
+              <FormControlLabel control={<Checkbox />} label="Advanced" />
+              <FormControlLabel control={<Checkbox />} label="Expert" />
+            </FormGroup>
+          </FormControl>
+          <FormControl>
             <FormLabel> Sorted by </FormLabel>
-            <RadioGroup row>
-              <FormControlLabel value="alphabet" control={<Radio />} label="Alphabet" />
-              <FormControlLabel value="time" control={<Radio />} label="Time" />
-              <FormControlLabel value="difficulty" control={<Radio />} label="Difficulty" />
-              <FormControlLabel value="rating" control={<Radio />} label="Rating" />
+            <RadioGroup row value={sorting}>
+              <FormControlLabel
+                onClick={handleRadio}
+                value="alphabet"
+                control={<Radio />}
+                label="Alphabet"
+              />
+              <FormControlLabel
+                onClick={handleRadio}
+                value="time"
+                control={<Radio />}
+                label="Time"
+              />
+              <FormControlLabel
+                onClick={handleRadio}
+                value="difficulty"
+                control={<Radio />}
+                label="Difficulty"
+              />
+              <FormControlLabel
+                onClick={handleRadio}
+                value="rating"
+                control={<Radio />}
+                label="Rating"
+              />
             </RadioGroup>
           </FormControl>
         </FilterPad>
