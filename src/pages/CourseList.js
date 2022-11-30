@@ -137,28 +137,32 @@ const CourseListPage = props => {
           </FormControl>
           <FormControl>
             <FormLabel> Sorted by </FormLabel>
-            <RadioGroup row value={sorting}>
+            <RadioGroup row>
               <FormControlLabel
                 onClick={handleRadio}
                 value="alphabet"
+                checked={sorting === "alphabet"}
                 control={<Radio />}
                 label="Alphabet"
               />
               <FormControlLabel
                 onClick={handleRadio}
                 value="time"
+                checked={sorting === "time"}
                 control={<Radio />}
                 label="Time"
               />
               <FormControlLabel
                 onClick={handleRadio}
                 value="difficulty"
+                checked={sorting === "difficulty"}
                 control={<Radio />}
                 label="Difficulty"
               />
               <FormControlLabel
                 onClick={handleRadio}
                 value="rating"
+                checked={sorting === "rating"}
                 control={<Radio />}
                 label="Rating"
               />
