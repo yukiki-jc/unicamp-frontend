@@ -1,6 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { Typography, Pagination } from '@mui/material'
 import { Container } from '@mui/system'
+import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
 import React, { useContext, useLayoutEffect as useEffect, useState } from 'react'
 import CourseCard from '../components/CourseCard'
 import { useParams, useSearchParams } from 'react-router-dom'
@@ -11,6 +12,12 @@ import { getRequest } from '../utils/requests'
 import { joinPaths } from '@remix-run/router';
 import { backend, apiPath } from '../utils/urls'
 import { errorHandler } from '../utils/functions'
+
+const FilterPad = styled(Container)(({ theme }) => ({
+  paddingBottom: 12,
+  display: "flex",
+  flexDirection: "column",
+}));
 
 const PageEnd = styled(Container)(({ theme }) => ({
   paddingTop: 16,
@@ -96,6 +103,17 @@ const CourseListPage = props => {
             </Typography>
           </Container>
         </TitleBox>
+        <FilterPad>
+          <FormControl>
+            <FormLabel> Sorted by </FormLabel>
+            <RadioGroup row>
+              <FormControlLabel value="alphabet" control={<Radio />} label="Alphabet" />
+              <FormControlLabel value="time" control={<Radio />} label="Time" />
+              <FormControlLabel value="difficulty" control={<Radio />} label="Difficulty" />
+              <FormControlLabel value="rating" control={<Radio />} label="Rating" />
+            </RadioGroup>
+          </FormControl>
+        </FilterPad>
         <Container maxWidth='lg'>
           {courseCards}
         </Container>
