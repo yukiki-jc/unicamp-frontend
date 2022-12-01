@@ -27,7 +27,9 @@ const CourseListPage = props => {
     if (title === 'Category') {
       for (let i = 0; i < subcategoryList.length; i++) {
         if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
+        {
           setNewTitle(subcategoryList[i].subcategoryName);
+        }
       }
       
       cardPostBody.filter = {
@@ -62,7 +64,7 @@ const CourseListPage = props => {
       const favoriteURL = joinPaths([backend, apiPath.favorite.query]);
       getRequest(favoriteURL)
         .then((data) => {
-          setCourseListShow(stylizeObject(data))
+          setCourseListShow(stylizeObject(data));
           pageContextValue.handler.setLoading(false);
         })
         .catch((e) => {
