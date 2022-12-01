@@ -463,6 +463,7 @@ const CommentCard = (props) => {
     replyLoading,
     sendLoading,
     replyRef,
+    id
   } = props;
   const pageContextValue = useContext(PageContext);
 
@@ -472,7 +473,7 @@ const CommentCard = (props) => {
       <Typography
         sx={{ mr: 1 }}
         variant="body2"
-        children="#114514"
+        children={id}
       />
       {isAdmin && <IconButton
         color="primary"
@@ -767,10 +768,11 @@ export default function CourseDetailPage({ subcategoryList }) {
         pageContextValue.handler.setLoading(false);
       });
   };
-  const CommentCards = comments.map((comment) => {
+  const CommentCards = comments.map((comment, idx) => {
     const refData = idToComment[comment.refCommentId];
     return (
       <CommentCard
+        id={idx}
         key={comment.id}
         commentData={comment}
         refData={refData}
