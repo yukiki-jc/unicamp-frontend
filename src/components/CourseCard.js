@@ -91,7 +91,7 @@ export default function CourseCard({
                 marginBottom: 1.5,
             }}>
                 <Typography sx={{
-                    fontSize: "1.5rem",
+                    fontSize: "1.3rem",
                     fontWeight: 600,
                     color: "#666",
                 }}>

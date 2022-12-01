@@ -7,7 +7,8 @@ export const apiPath = {
         delete: '/course/delete',
         add: '/course/add',
         update: '/course/update',
-        relation: '/course/relation'
+        relation: '/course/relation',
+        card: '/course/card'
     },
     category: {
         list: '/category/list',
