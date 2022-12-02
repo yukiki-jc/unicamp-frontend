@@ -13,7 +13,8 @@ import { emptyCourse, emptyCourseThumbnail } from '../utils/commonData'
 import { getRequest } from '../utils/requests'
 import { reStylizeObject, stylizeObject } from '../utils/functions'
 import { errorHandler } from '../utils/functions'
-
+import { useLayoutEffect } from 'react'
+import { emptyCourseCardPost } from '../utils/commonData'
 const columns = [
   {
     field: 'id',
@@ -74,10 +75,10 @@ const columns = [
 ]
 
 export default function CourseManagementPage (props) {
-  const { subcategoryList, courseList, setCourseList } = props
+  const { subcategoryList } = props
 
   const [selectedCourses, setSelectedCourses] = React.useState([])
- 
+  const [courseList, setCourseList] = React.useState([]);
   const pageContextValue = React.useContext(PageContext)
 
   const [courseInfoModal, setCourseInfoModal] = React.useState({
@@ -91,6 +92,21 @@ export default function CourseManagementPage (props) {
       show: false
     })
   }
+
+  useLayoutEffect(() => {
+    pageContextValue.handler.setLoading(true);
+    const cardPostBody = { ...emptyCourseCardPost };
+    const courseCardURL = joinPaths([backend, apiPath.course.card])
+    postRequest(reStylizeObject(cardPostBody), courseCardURL)
+        .then(data => {
+          setCourseList(stylizeObject(data));
+          pageContextValue.handler.setLoading(false);
+        }
+      ).catch((e) => {
+        errorHandler(e, pageContextValue);
+      });
+  }, [])
+
   const handleAddCourse = () => {
     setCourseInfoModal({
       show: true,
@@ -193,18 +209,21 @@ export default function CourseManagementPage (props) {
     postRequest(todoCourse, addEditURL)
       .then(json => {
         if (json.state === true) {
-          const courseListURL = joinPaths([backend, apiPath.course.list]);
+          const cardPostBody = { ...emptyCourseCardPost };
+          const courseCardURL = joinPaths([backend, apiPath.course.card])
           pageContextValue.handler.setSuccessBox(json.message);
-          return getRequest(courseListURL)
+          setCourseInfoModal({
+            ...courseInfoModal,
+            show: false
+          })
+          return postRequest(reStylizeObject(cardPostBody), courseCardURL);
         } else {
-          pageContextValue.handler.setErrorBox(json.message)
+          pageContextValue.handler.setErrorBox(json.message);
+          return false;
         }
-      }).then(json => {
-        setCourseList(stylizeObject(json));
-        setCourseInfoModal({
-          ...courseInfoModal,
-          show: false
-        })
+      }).then(result => {
+        if (result !== false)
+            setCourseList(stylizeObject(result));
         pageContextValue.handler.setLoading(false)
       })
       .catch(e => {

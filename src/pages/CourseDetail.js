@@ -463,6 +463,7 @@ const CommentCard = (props) => {
     replyLoading,
     sendLoading,
     replyRef,
+    id
   } = props;
   const pageContextValue = useContext(PageContext);
 
@@ -472,7 +473,7 @@ const CommentCard = (props) => {
       <Typography
         sx={{ mr: 1 }}
         variant="body2"
-        children="#114514"
+        children={id}
       />
       {isAdmin && <IconButton
         color="primary"
@@ -600,7 +601,7 @@ export default function CourseDetailPage({ subcategoryList }) {
 
   useLayoutEffect(() => {
     const courseDataURL = joinPaths([backend, apiPath.course.info, courseId]);
-    const ratingDetailURL = joinPaths([backend, apiPath.grade.get, courseId]);
+    const myRatingURL = joinPaths([backend, apiPath.grade.get, courseId]);
     const relatedCourseURL = joinPaths([
       backend,
       apiPath.course.relation,
@@ -650,12 +651,18 @@ export default function CourseDetailPage({ subcategoryList }) {
         pageContextValue.handler.setLoading(false);
       });
 
-    Promise.all([getRequest(courseDataURL), getRequest(ratingDetailURL)])
-      .then((datas) => {
-        const courseData = stylizeObject(datas[0]);
-        const ratings = stylizeObject(datas[1]);
-        setRatingDistribution(ratings.ratingDetail);
-        setMyRating(ratings.myRating);
+    if (pageContextValue.state.login)
+    {
+      getRequest(myRatingURL)
+        .then(data => {
+          const myRating = stylizeObject(data);
+          setMyRating(myRating.myRating);
+        })
+    }
+    getRequest(courseDataURL)
+      .then((data) => {
+        const courseData = stylizeObject(data);
+        setRatingDistribution(courseData.ratings);
         setCourseData(courseData);
         if (pageContextValue.state.login) {
           return getRequest(favoriteQueryURL);
@@ -767,10 +774,11 @@ export default function CourseDetailPage({ subcategoryList }) {
         pageContextValue.handler.setLoading(false);
       });
   };
-  const CommentCards = comments.map((comment) => {
+  const CommentCards = comments.map((comment, idx) => {
     const refData = idToComment[comment.refCommentId];
     return (
       <CommentCard
+        id={idx}
         key={comment.id}
         commentData={comment}
         refData={refData}
@@ -793,7 +801,7 @@ export default function CourseDetailPage({ subcategoryList }) {
       return;
     }
     if (pageContextValue.state.login === false) {
-      pageContextValue.handler.setErrorBox("Login to Rate");
+      pageContextValue.handler.setWarningBox("Login to Rate");
       return;
     }
     const ratingURL = joinPaths([backend, apiPath.grade.set]);
@@ -1019,7 +1027,7 @@ export default function CourseDetailPage({ subcategoryList }) {
               placeholder={
                 pageContextValue.state.login
                   ? "Leave Some Comments Here"
-                  : "Pleasr Login First"
+                  : "Login to Comment"
               }
               inputRef={commentRef}
             />

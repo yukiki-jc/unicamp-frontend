@@ -31,28 +31,25 @@ export default function Panel (props) {
             <CourseListPage
               title='Category'
               subcategoryList={state.subcategoryList}
-              courseList={state.courseList}
             />
           }
         />
         <Route
           path='/search'
           element={
-            <CourseListPage title='Search Results' courseList={state.courseList} />
+            <CourseListPage title='Search Results' />
           }
         />
         <Route
           path='/favorites'
           element={
-            <CourseListPage title='My Favorites' courseList={state.courseList} />
+            <CourseListPage title='My Favorites' />
           }
         />
         <Route
           path='/coursemanagement'
           element={
             <CourseManagementPage
-              courseList={state.courseList}
-              setCourseList={handler.setCourseList}
               subcategoryList={state.subcategoryList}
             />
           }
@@ -60,7 +57,7 @@ export default function Panel (props) {
         <Route
           path='/allcourses'
           element={
-            <CourseListPage title='All Courses' courseList={state.courseList} />
+            <CourseListPage title='All Courses' />
           }
         />
       </Routes>

@@ -1,8 +1,4 @@
-import MainPage from './pages/Main'
-import LoginPage from './pages/Login'
-
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import CourseListPage from './pages/CourseList'
 import {
   ThemeProvider,
   Snackbar,
@@ -37,10 +33,6 @@ export default function App() {
   const [admin, setAdmin] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [subcategoryList, setSubcategoryList] = useState([]);
-  const [courseList, setCourseList] = useState([]);
-  // const [pageNo, setPageNo] = useState(0);
-  // 0: mainpage
-  // 1:
   const [messageBox, setMessageBox] = useState({
     show: false,
     type: 'success',
@@ -106,20 +98,15 @@ export default function App() {
       setAdmin(user.admin);
     }
     const categoryListURL = joinPaths([backend, apiPath.category.list]);
-    const courseListURL = joinPaths([backend, apiPath.course.list]);
     setLoading(true);
-    Promise.all([
-      getRequest(categoryListURL),
-      getRequest(courseListURL)
-    ])
-      .then(datas => {
-        const stylizedCategoryList = stylizeObject(datas[0]);
+    getRequest(categoryListURL)
+      .then(data => {
+        const stylizedCategoryList = stylizeObject(data);
         let stylizedSubcategoryList = [];
         for (let i = 0; i < stylizedCategoryList.length; i++) {
           stylizedSubcategoryList = stylizedSubcategoryList.concat(stylizedCategoryList[i].subcategory);
         }
         setCategoryList(stylizedCategoryList);
-        setCourseList(stylizeObject(datas[1]));
         setSubcategoryList(stylizedSubcategoryList);
         setLoading(false);
       })
@@ -156,11 +143,9 @@ export default function App() {
 
         <Panel state={{
           subcategoryList: subcategoryList,
-          categoryList: categoryList,
-          courseList: courseList
+          categoryList: categoryList
         }} handler={{
-          handleLoginSuccess: handleLoginSuccess,
-          setCourseList: setCourseList
+          handleLoginSuccess: handleLoginSuccess
         }} />
 
         <Snackbar

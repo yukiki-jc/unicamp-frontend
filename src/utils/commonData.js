@@ -46,3 +46,8 @@ export const emptyCourseThumbnail = {
   subcategoryId: '',
   id: ''
 }
+
+export const emptyCourseCardPost = {
+  "description": true,
+  "ascending": true
+}

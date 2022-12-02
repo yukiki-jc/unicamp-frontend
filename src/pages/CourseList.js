@@ -15,11 +15,12 @@ import CourseCard from '../components/CourseCard'
 import { useParams, useSearchParams } from 'react-router-dom'
 import TitleBox from '../components/TitleBox'
 import { PageContext } from '../App'
-import { stylizeObject } from '../utils/functions'
-import { getRequest } from '../utils/requests'
+import { average, reStylizeObject, stylizeObject, sumArr } from '../utils/functions'
+import { getRequest, postRequest } from '../utils/requests'
 import { joinPaths } from '@remix-run/router';
 import { backend, apiPath } from '../utils/urls'
 import { errorHandler } from '../utils/functions'
+import { emptyCourseCardPost } from '../utils/commonData'
 
 const FilterPad = styled(Container)(({ theme }) => ({
   paddingBottom: 12,
@@ -35,7 +36,7 @@ const PageEnd = styled(Container)(({ theme }) => ({
 }));
 
 const CourseListPage = props => {
-  const { title, courseList = [], subcategoryList = [] } = props
+  const { title, subcategoryList = [] } = props
   const { subcategoryId } = useParams()
   const [searchParams, setSearchParams] = useSearchParams();
   const pageContextValue = useContext(PageContext);
@@ -44,54 +45,82 @@ const CourseListPage = props => {
   const [sorting, setSorting] = useState("all");
 
   useEffect(() => {
+    pageContextValue.handler.setLoading(true);
+    const cardPostBody = { ...emptyCourseCardPost };
+    const courseCardURL = joinPaths([backend, apiPath.course.card])
     if (title === 'Category') {
       for (let i = 0; i < subcategoryList.length; i++) {
         if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
+        {
           setNewTitle(subcategoryList[i].subcategoryName);
+        }
       }
-      const toShow = courseList.filter(course => {
-        return (course.subcategoryId.toString() === subcategoryId)
-      })
-      setCourseListShow(toShow);
+      
+      cardPostBody.filter = {
+        'subcategoryIds': [parseInt(subcategoryId)]
+      }
+      console.log('Here');
+      postRequest(reStylizeObject(cardPostBody), courseCardURL)
+        .then(data => {
+          console.log('posted');
+          console.log(reStylizeObject(cardPostBody));
+          setCourseListShow(stylizeObject(data));
+          pageContextValue.handler.setLoading(false);
+        }
+      ).catch((e) => {
+        errorHandler(e, pageContextValue);
+      });
+      
     }
     else if (title === 'Search Results') {
       const searchValue = searchParams.get('value');
-      const searchReg = RegExp(searchValue.toLowerCase());
-      const searchResults = courseList.filter(course => {
-        const courseString = JSON.stringify(course).toLowerCase();
-        return searchReg.test(courseString);
-      })
-      setCourseListShow(searchResults);
+      cardPostBody.key = searchValue.toLowerCase()
+      postRequest(reStylizeObject(cardPostBody), courseCardURL)
+        .then(data => {
+          setCourseListShow(stylizeObject(data));
+          pageContextValue.handler.setLoading(false);
+        }
+      ).catch((e) => {
+        errorHandler(e, pageContextValue);
+      });
     }
     else if (title === 'My Favorites') {
       const favoriteURL = joinPaths([backend, apiPath.favorite.query]);
-      pageContextValue.handler.setLoading(true);
       getRequest(favoriteURL)
         .then((data) => {
-          setCourseListShow(stylizeObject(data))
-          console.log(courseListShow)
+          setCourseListShow(stylizeObject(data));
           pageContextValue.handler.setLoading(false);
         })
         .catch((e) => {
           errorHandler(e, pageContextValue);
         });
+      
     }
     else if (title === 'All Courses') {
-      setCourseListShow(courseList);
+      postRequest(reStylizeObject(cardPostBody), courseCardURL)
+        .then(data => {
+          setCourseListShow(stylizeObject(data));
+          pageContextValue.handler.setLoading(false);
+        }
+      ).catch((e) => {
+        errorHandler(e, pageContextValue);
+      });
     }
-  }, [subcategoryId, searchParams, courseList])
+  }, [subcategoryId, searchParams])
   const courseCards = courseListShow.map(course => {
+
     return (
       <CourseCard
         src='https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg'
         name={course.name}
-        rating={3.7}
-        voters={2023}
+        rating={average(course.ratings)}
+        voters={sumArr(course.ratings)}
         difficulty={course.difficulty}
         time={course.estHour}
         description={course.description}
         provider={course.provider}
         id={course.id}
+        key={course.id}
       />
     )
   })

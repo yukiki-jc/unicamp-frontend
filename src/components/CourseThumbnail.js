@@ -1,5 +1,5 @@
 
-import { Card, Chip, Divider, Typography, Skeleton } from '@mui/material';
+import { Card, Chip, Divider, Typography, Skeleton, Rating } from '@mui/material';
 import { styled } from '@mui/material/styles'
 import { Link as MUILink } from '@mui/material'
 import SchoolIcon from '@mui/icons-material/School';
@@ -9,6 +9,7 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import { apiPath } from '../utils/urls'
 import { joinPaths } from '@remix-run/router'
 import { LevelMappings } from "../utils/commonData";
+import { average, sumArr } from '../utils/functions';
 
 const ThumbnailCard = styled((props) => (
     <Card variant='outlined' component={MUILink} underline="none" {...props} />
@@ -55,8 +56,10 @@ const InfoItem = styled(({ icon, title, ...props }) => (
 const LevelColor = ["", "default", "info", "secondary", "warning", "error"];
 
 export default function CourseThumbnail({
-    name, href, subcategoryId, provider, voters, estHour, difficulty, subcategoryList, id
+    name, href, subcategoryId, provider, estHour, difficulty, subcategoryList, id, ratingDetail = []
 }) {
+    const voters = sumArr(ratingDetail);
+    const rating = average(ratingDetail);
     return (
         <ThumbnailCard href={joinPaths([apiPath.course.info, id.toString()])}>
             <InfoStack direction="row" spacing={1}>
@@ -110,6 +113,39 @@ export default function CourseThumbnail({
                 <InfoItem title={`${voters || 0} camper${voters > 1 ? "s" : ""}`} icon={<SupervisorAccountIcon />} />
                 <InfoItem title={`${estHour} hrs.`} icon={<AccessAlarmIcon />} />
             </InfoStack>
+            <Box sx={{
+                marginTop: 1.5,
+                display: "flex",
+                alignItems: "center",
+                fontWeight: 600,
+            }}>
+                <Typography sx={{
+                    fontSize: "1.3rem",
+                    fontWeight: 500,
+                    color: "#6a6a6a",
+                }}>
+                    {rating}
+                </Typography>
+                <Rating
+                    size="small"
+                    value={rating}
+                    precision={0.5}
+                    readOnly
+                    sx={(theme) => ({
+                        marginLeft: 0.5,
+                        "& .MuiRating-iconFilled": {
+                            color: theme.palette.secondary.main,
+                        },
+                    })}
+                />
+                {/* <Typography sx={{
+                    fontSize: "1.1rem",
+                    color: "#666",
+                    marginLeft: 0.25,
+                }}>
+                    ({voters})
+                </Typography> */}
+            </Box>
         </ThumbnailCard>
     );
 };
