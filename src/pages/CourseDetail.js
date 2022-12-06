@@ -662,7 +662,7 @@ export default function CourseDetailPage({ subcategoryList }) {
     getRequest(courseDataURL)
       .then((data) => {
         const courseData = stylizeObject(data);
-        setRatingDistribution(courseData.ratings);
+        setRatingDistribution(courseData.ratingDetail);
         setCourseData(courseData);
         if (pageContextValue.state.login) {
           return getRequest(favoriteQueryURL);
