@@ -7,8 +7,9 @@ import CourseDetailPage from './pages/CourseDetail'
 import SignUpPage from './pages/SignUp'
 import SettingPage from './pages/Setting'
 import CourseManagementPage from './pages/CourseManagement'
+import Roadmap from './pages/Roadmap'
 
-export default function Panel (props) {
+export default function Panel(props) {
   const { state, handler } = props;
   return (
     <div>
@@ -58,6 +59,12 @@ export default function Panel (props) {
           path='/allcourses'
           element={
             <CourseListPage title='All Courses' />
+          }
+        />
+        <Route
+          path="/roadmap"
+          element={
+            <Roadmap title="Example Roadmap" />
           }
         />
       </Routes>
