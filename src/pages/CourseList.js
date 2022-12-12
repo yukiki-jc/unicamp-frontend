@@ -122,7 +122,6 @@ const CourseListPage = (props) => {
   };
   const requestCourseCard = () => {
     const cardPostBody = getCardPostBody();
-    
     postRequest(reStylizeObject(cardPostBody), courseCardURL)
       .then((data) => {
         const result = stylizeObject(data)
@@ -147,6 +146,12 @@ const CourseListPage = (props) => {
           errorHandler(e, pageContextValue);
         });
     } else {
+      requestCourseCard();
+    }
+  }, [subcategoryId, searchParams]);
+
+  useLayoutEffect(() => {
+    pageContextValue.handler.setLoading(true);
       if (title === "Category") {
         for (let i = 0; i < subcategoryList.length; i++) {
           if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
@@ -155,10 +160,8 @@ const CourseListPage = (props) => {
           }
         }
       }
-      
-      requestCourseCard();
-    }
-  }, [subcategoryId, searchParams, subcategoryList]);
+    pageContextValue.handler.setLoading(false);
+  }, [subcategoryList]);
 
   const courseCards = courseListShow.map((course) => {
     return (
@@ -179,6 +182,7 @@ const CourseListPage = (props) => {
 
   useEffect(() => {
     pageContextValue.handler.setLoading(true);
+    console.log("Page changing")
     requestCourseCard();
   }, [page, sorting, difficultyFilter]);
   // Why using this control function?
