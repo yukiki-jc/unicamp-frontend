@@ -314,6 +314,11 @@ const NavBar = (props) => {
             </NestedMenuItem>
             {collectionMenuForXs}
             {managementForXs}
+            <MenuItem onClick={handleCloseMenuCategory}>
+              <MUILink href="/roadmap" underline="none">
+                <Typography textAlign="center"> Learning Roadmap </Typography>
+              </MUILink>
+            </MenuItem>
           </Menu>
         </Box>
         <MUILink href="/" children={<CenterLogo src={UnicampIcon} alt="" />} />
@@ -331,6 +336,11 @@ const NavBar = (props) => {
           </NavbarLinkButton>
           {collectionMenuForMd}
           {managementForMd}
+          <MenuItem onClick={handleCloseMenuCategory}>
+              <MUILink href="/roadmap" underline="none">
+                <Typography textAlign="center"> Learning Roadmap </Typography>
+              </MUILink>
+            </MenuItem>
         </Box>
         <Menu
           open={!!anchorElMenuCategory}

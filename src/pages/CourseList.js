@@ -150,11 +150,13 @@ const CourseListPage = (props) => {
         });
     } else {
       if (title === "Category") {
+        console.log(title)
         for (let i = 0; i < subcategoryList.length; i++) {
           if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
-            subcategoryName = subcategoryList[i].subcategoryName;
+          {
+            setNewTitle(subcategoryList[i].subcategoryName);
+          }
         }
-        setNewTitle(subcategoryName);
       }
       
       requestCourseCard();
