@@ -131,12 +131,12 @@ const AlignMenuItem = styled(MenuItem)(({ theme }) => ({
 const NavbarLinkButton = styled((props) => (
   <Button disableFocusRipple disableTouchRipple {...props} />
 ))(({ theme }) => ({
-  color: theme.palette.text.secondary,
   fontWeight: 700,
   fontSize: "1.6rem",
   fontFamily: LatoFont,
   textTransform: "capitalize",
   margin: theme.spacing(0, 1),
+  color: "#808080",
 }));
 
 const NavBar = (props) => {
@@ -170,35 +170,35 @@ const NavBar = (props) => {
   const pageContextValue = React.useContext(PageContext);
   const loginMenuItem = pageContextValue.state.login
     ? [
-        <MenuItem key={"1"} onClick={handleCloseUser}>
-          <MUILink href={"/setting"} underline="none">
-            <Typography textAlign="center" color="black">
-              Profile & Setting
-            </Typography>
-          </MUILink>
-        </MenuItem>,
-        <MenuItem key={"2"} onClick={handleLogout}>
-          <Typography textAlign="center"> Logout </Typography>
-        </MenuItem>,
-      ]
+      <MenuItem key={"1"} onClick={handleCloseUser}>
+        <MUILink href={"/setting"} underline="none">
+          <Typography textAlign="center" color="black">
+            Profile & Setting
+          </Typography>
+        </MUILink>
+      </MenuItem>,
+      <MenuItem key={"2"} onClick={handleLogout}>
+        <Typography textAlign="center"> Logout </Typography>
+      </MenuItem>,
+    ]
     : [
-        <MenuItem key={"3"} onClick={handleCloseUser}>
-          <MUILink href="/login" underline="none">
-            <Typography textAlign="center" color="gray">
-              {" "}
-              Sign In{" "}
-            </Typography>
-          </MUILink>
-        </MenuItem>,
-        <MenuItem key={"4"} onClick={handleCloseUser}>
-          <MUILink href="/signup" underline="none">
-            <Typography textAlign="center" color="gray">
-              {" "}
-              Sign Up{" "}
-            </Typography>
-          </MUILink>
-        </MenuItem>,
-      ];
+      <MenuItem key={"3"} onClick={handleCloseUser}>
+        <MUILink href="/login" underline="none">
+          <Typography textAlign="center" color="gray">
+            {" "}
+            Sign In{" "}
+          </Typography>
+        </MUILink>
+      </MenuItem>,
+      <MenuItem key={"4"} onClick={handleCloseUser}>
+        <MUILink href="/signup" underline="none">
+          <Typography textAlign="center" color="gray">
+            {" "}
+            Sign Up{" "}
+          </Typography>
+        </MUILink>
+      </MenuItem>,
+    ];
 
   const categoryMenuItems = (parentOpen) =>
     categoryList.map((category, idx) => {
@@ -230,28 +230,28 @@ const NavBar = (props) => {
   const managementForXs = admin ? (
     <MenuItem onClick={handleCloseMenuCategory}>
       <MUILink href="/coursemanagement" underline="none">
-        <Typography textAlign="center"> Course Management</Typography>
+        <Typography textAlign="center" color="grey"> Course Management</Typography>
       </MUILink>
     </MenuItem>
   ) : null;
   const managementForMd = admin ? (
     <NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
-      <MUILink href="/coursemanagement" underline="none">
+      <MUILink href="/coursemanagement" underline="none" color="grey">
         Course Management
       </MUILink>
     </NavbarLinkButton>
   ) : null;
-    
+
   const collectionMenuForXs = pageContextValue.state.login ? (
     <AlignMenuItem onClick={handleCloseMenuCategory}>
-      <MUILink href="/favorites" underline="none">
+      <MUILink href="/favorites" underline="none" color="grey">
         <Typography textAlign="center"> My Favorites </Typography>
       </MUILink>
     </AlignMenuItem>
   ) : null;
   const collectionMenuForMd = pageContextValue.state.login ? (
     <NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
-      <MUILink href="/favorites" underline="none">
+      <MUILink href="/favorites" underline="none" color="grey">
         My Favorites
       </MUILink>
     </NavbarLinkButton>
@@ -264,7 +264,7 @@ const NavBar = (props) => {
     }
   };
   const handleSearchDialogSubmit = () => {
-      navigate("/search?value=" + searchValue);
+    navigate("/search?value=" + searchValue);
   };
   return (
     <AppBar
@@ -315,7 +315,7 @@ const NavBar = (props) => {
             {collectionMenuForXs}
             {managementForXs}
             <MenuItem onClick={handleCloseMenuCategory}>
-              <MUILink href="/roadmap" underline="none">
+              <MUILink href="/roadmap" underline="none" color="grey">
                 <Typography textAlign="center"> Learning Roadmap </Typography>
               </MUILink>
             </MenuItem>
@@ -337,11 +337,11 @@ const NavBar = (props) => {
           {collectionMenuForMd}
           {managementForMd}
           <NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
-            <MUILink href="/roadmap" underline="none">
+            <MUILink href="/roadmap" underline="none" color="grey">
               Learning Roadmap
             </MUILink>
           </NavbarLinkButton>
- 
+
         </Box>
         <Menu
           open={!!anchorElMenuCategory}
@@ -353,27 +353,27 @@ const NavBar = (props) => {
         </Menu>
         <Search>
           <Button onClick={() => {
-              setSearchDialogOpen(true);
-            }}
+            setSearchDialogOpen(true);
+          }}
             color="inherit"
           >
-            <SearchIcon  sx={{display: {'xs': 'flex', 'sm': 'none'}}}/>
+            <SearchIcon sx={{ display: { 'xs': 'flex', 'sm': 'none' } }} />
           </Button>
           <SearchDialog
             searchDialogOpen={searchDialogOpen}
             handleCloseSearch={() => {
               setSearchDialogOpen(false);
-            }} 
+            }}
             searchValue={searchValue}
             setSearchValue={setSearchValue}
             handleSearchSubmit={() => {
               setSearchDialogOpen(false);
               handleSearchDialogSubmit();
             }
-          }
+            }
           />
         </Search>
-        <Search sx={{display: {'xs': 'none', 'sm': 'flex'}}}>
+        <Search sx={{ display: { 'xs': 'none', 'sm': 'flex' } }}>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
