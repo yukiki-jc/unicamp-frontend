@@ -74,7 +74,6 @@ const CourseListPage = (props) => {
       };
     }
     if (sorting !== "all") {
-      console.log(sorting)
       switch (sorting) {
         case "alphabetAscending": {
           cardPostBody.sort = "alphabet";
@@ -137,7 +136,6 @@ const CourseListPage = (props) => {
   };
   useLayoutEffect(() => {
     pageContextValue.handler.setLoading(true);
-    let subcategoryName = newTitle;
     if (title === "My Favorites") {
       const favoriteURL = joinPaths([backend, apiPath.favorite.query]);
       getRequest(favoriteURL)
@@ -150,7 +148,6 @@ const CourseListPage = (props) => {
         });
     } else {
       if (title === "Category") {
-        console.log(title)
         for (let i = 0; i < subcategoryList.length; i++) {
           if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
           {
@@ -161,7 +158,7 @@ const CourseListPage = (props) => {
       
       requestCourseCard();
     }
-  }, [subcategoryId, searchParams]);
+  }, [subcategoryId, searchParams, subcategoryList]);
 
   const courseCards = courseListShow.map((course) => {
     return (
