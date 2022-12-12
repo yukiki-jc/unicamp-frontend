@@ -124,10 +124,10 @@ const CourseListPage = (props) => {
     const cardPostBody = getCardPostBody();
     postRequest(reStylizeObject(cardPostBody), courseCardURL)
       .then((data) => {
-        const result = stylizeObject(data)
+        const result = stylizeObject(data);
         setCourseNumber(result.num);
         setCourseListShow(result.courseDaoWithGradeList);
-        pageContextValue.handler.setLoading(false); 
+        pageContextValue.handler.setLoading(false);
       })
       .catch((e) => {
         errorHandler(e, pageContextValue);
@@ -152,14 +152,13 @@ const CourseListPage = (props) => {
 
   useLayoutEffect(() => {
     pageContextValue.handler.setLoading(true);
-      if (title === "Category") {
-        for (let i = 0; i < subcategoryList.length; i++) {
-          if (subcategoryList[i].subcategoryId.toString() === subcategoryId)
-          {
-            setNewTitle(subcategoryList[i].subcategoryName);
-          }
+    if (title === "Category") {
+      for (let i = 0; i < subcategoryList.length; i++) {
+        if (subcategoryList[i].subcategoryId.toString() === subcategoryId) {
+          setNewTitle(subcategoryList[i].subcategoryName);
         }
       }
+    }
     pageContextValue.handler.setLoading(false);
   }, [subcategoryList]);
 
@@ -182,7 +181,7 @@ const CourseListPage = (props) => {
 
   useEffect(() => {
     pageContextValue.handler.setLoading(true);
-    console.log("Page changing")
+    if (title === "My Favorites") return;
     requestCourseCard();
   }, [page, sorting, difficultyFilter]);
   // Why using this control function?
@@ -200,7 +199,10 @@ const CourseListPage = (props) => {
     return (
       <Checkbox
         checked={difficultyFilter === idx}
-        onChange={() => { if (difficultyFilter === idx) setDifficultyFilter(0); else setDifficultyFilter(idx)}}
+        onChange={() => {
+          if (difficultyFilter === idx) setDifficultyFilter(0);
+          else setDifficultyFilter(idx);
+        }}
       />
     );
   };
@@ -231,65 +233,70 @@ const CourseListPage = (props) => {
             </Typography>
           </Container>
         </TitleBox>
-        <FilterPad>
-          <FormControl>
-            <FormLabel> Difficulty Filter </FormLabel>
-            <FormGroup row>{difficultyCheckboxes}</FormGroup>
-          </FormControl>
-          <FormControl>
-            <FormLabel> Sorted by </FormLabel>
-            <RadioGroup row>
-              <FormControlLabel
-                onClick={handleRadio}
-                value="alphabetAscending"
-                checked={sorting === "alphabetAscending"}
-                control={<Radio />}
-                label="A-Z"
-              />
-              <FormControlLabel
-                onClick={handleRadio}
-                value="alphabetDescending"
-                checked={sorting === "alphabetDescending"}
-                control={<Radio />}
-                label="Z-A"
-              />
-              <FormControlLabel
-                onClick={handleRadio}
-                value="latest"
-                checked={sorting === "latest"}
-                control={<Radio />}
-                label="Latest"
-              />
-              <FormControlLabel
-                onClick={handleRadio}
-                value="oldest"
-                checked={sorting === "oldest"}
-                control={<Radio />}
-                label="Oldest"
-              />
-              <FormControlLabel
-                onClick={handleRadio}
-                value="difficulty"
-                checked={sorting === "difficulty"}
-                control={<Radio />}
-                label="Difficulty"
-              />
-              <FormControlLabel
-                onClick={handleRadio}
-                value="rating"
-                checked={sorting === "rating"}
-                control={<Radio />}
-                label="Rating"
-              />
-            </RadioGroup>
-          </FormControl>
-        </FilterPad>
+        {title === "My Favorites" ? null : (
+          <FilterPad>
+            <FormControl>
+              <FormLabel> Difficulty Filter </FormLabel>
+              <FormGroup row>{difficultyCheckboxes}</FormGroup>
+            </FormControl>
+            <FormControl>
+              <FormLabel> Sorted by </FormLabel>
+              <RadioGroup row>
+                <FormControlLabel
+                  onClick={handleRadio}
+                  value="alphabetAscending"
+                  checked={sorting === "alphabetAscending"}
+                  control={<Radio />}
+                  label="A-Z"
+                />
+                <FormControlLabel
+                  onClick={handleRadio}
+                  value="alphabetDescending"
+                  checked={sorting === "alphabetDescending"}
+                  control={<Radio />}
+                  label="Z-A"
+                />
+                <FormControlLabel
+                  onClick={handleRadio}
+                  value="latest"
+                  checked={sorting === "latest"}
+                  control={<Radio />}
+                  label="Latest"
+                />
+                <FormControlLabel
+                  onClick={handleRadio}
+                  value="oldest"
+                  checked={sorting === "oldest"}
+                  control={<Radio />}
+                  label="Oldest"
+                />
+                <FormControlLabel
+                  onClick={handleRadio}
+                  value="difficulty"
+                  checked={sorting === "difficulty"}
+                  control={<Radio />}
+                  label="Difficulty"
+                />
+                <FormControlLabel
+                  onClick={handleRadio}
+                  value="rating"
+                  checked={sorting === "rating"}
+                  control={<Radio />}
+                  label="Rating"
+                />
+              </RadioGroup>
+            </FormControl>
+          </FilterPad>
+        )}
+
         <Container maxWidth="lg">{courseCards}</Container>
         {title === "All Courses" ? (
           <PageEnd maxWidth="lg">
             <Pagination
               count={
-                courseNumber ? Math.floor((courseNumber - 1) / perPageNumber) + 1 : 1 
+                courseNumber
+                  ? Math.floor((courseNumber - 1) / perPageNumber) + 1
+                  : 1
               }
               color="primary"
               onChange={(event, value) => {
