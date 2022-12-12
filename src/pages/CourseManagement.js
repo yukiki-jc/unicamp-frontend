@@ -99,7 +99,7 @@ export default function CourseManagementPage (props) {
     const courseCardURL = joinPaths([backend, apiPath.course.card])
     postRequest(reStylizeObject(cardPostBody), courseCardURL)
         .then(data => {
-          setCourseList(stylizeObject(data));
+          setCourseList(stylizeObject(data).courseDaoWithGradeList);
           pageContextValue.handler.setLoading(false);
         }
       ).catch((e) => {
