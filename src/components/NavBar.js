@@ -241,7 +241,7 @@ const NavBar = (props) => {
       </MUILink>
     </NavbarLinkButton>
   ) : null;
-
+    
   const collectionMenuForXs = pageContextValue.state.login ? (
     <AlignMenuItem onClick={handleCloseMenuCategory}>
       <MUILink href="/favorites" underline="none">
@@ -336,11 +336,12 @@ const NavBar = (props) => {
           </NavbarLinkButton>
           {collectionMenuForMd}
           {managementForMd}
-          <MenuItem onClick={handleCloseMenuCategory}>
-              <MUILink href="/roadmap" underline="none">
-                <Typography textAlign="center"> Learning Roadmap </Typography>
-              </MUILink>
-            </MenuItem>
+          <NavbarLinkButton onMouseOver={handleCloseMenuCategory}>
+            <MUILink href="/roadmap" underline="none">
+              Learning Roadmap
+            </MUILink>
+          </NavbarLinkButton>
+ 
         </Box>
         <Menu
           open={!!anchorElMenuCategory}
